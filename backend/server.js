@@ -5,7 +5,12 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import protect from "./middleware/authMiddleware.js";
-import categoryRoutes from "./routes/categoryRoutes.js"
+import categoryRoutes from "./routes/categoryRoutes.js";
+import "./routes/transactionRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import insuranceRoutes from "./routes/insuranceRoutes.js";
+import loanRoutes from "./routes/loanRoutes.js";
+import retirementRoutes from "./routes/retirementRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -21,6 +26,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/dashboard")
+app.use("/api/insurance", insuranceRoutes);
+app.use("/api/loans", loanRoutes);
+app.use("/api/retirement", retirementRoutes);
 
 app.get("/", (req, res) => {
     res.json({
