@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import protect from "./middleware/authMiddleware.js";
+import categoryRoutes from "./routes/categoryRoutes.js"
 
 dotenv.config();
 connectDB();
@@ -19,6 +20,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.get("/", (req, res) => {
     res.json({
