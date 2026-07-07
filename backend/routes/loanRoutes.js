@@ -3,6 +3,7 @@ import express from "express";
 import {
     createLoan,
     getLoans,
+    getLoan,
     updateLoan,
     deleteLoan,
 }
@@ -24,6 +25,12 @@ router.get(
     "/",
     protect,
     getLoans
+);
+
+router.get(
+    "/:id",
+    protect,
+    getLoan
 );
 
 router.put(

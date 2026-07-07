@@ -57,6 +57,32 @@ export const getLoans =
         }
 };
 
+// GET SINGLE LOAN
+export const getLoan = async (req, res) => {
+    try {
+
+        const loan = await Loan.findOne({
+            _id: req.params.id,
+            user: req.user.id,
+        });
+
+        if (!loan) {
+            return res.status(404).json({
+                message: "Loan not found",
+            });
+        }
+
+        res.json(loan);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message,
+        });
+
+    }
+};
+
 // UPDATE
 export const updateLoan =
     async (req, res) => {

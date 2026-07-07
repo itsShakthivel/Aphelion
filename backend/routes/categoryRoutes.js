@@ -3,6 +3,7 @@ import express from "express";
 import {
     createCategory,
     getCategories,
+    getCategory,
     updateCategory,
     deleteCategory,
 } from "../controllers/categoryController.js";
@@ -21,6 +22,12 @@ router.get(
     "/",
     protect,
     getCategories
+);
+
+router.get(
+    "/:id",
+    protect,
+    getCategory
 );
 
 router.put(

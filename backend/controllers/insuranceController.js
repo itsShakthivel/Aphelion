@@ -57,6 +57,32 @@ export const getInsurances =
         }
 };
 
+// GET SINGLE INSURANCE
+export const getInsurance = async (req, res) => {
+    try {
+
+        const insurance = await Insurance.findOne({
+            _id: req.params.id,
+            user: req.user.id,
+        });
+
+        if (!insurance) {
+            return res.status(404).json({
+                message: "Insurance not found",
+            });
+        }
+
+        res.json(insurance);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message,
+        });
+
+    }
+};
+
 // UPDATE
 export const updateInsurance =
     async (req, res) => {

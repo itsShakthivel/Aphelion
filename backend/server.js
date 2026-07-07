@@ -11,6 +11,7 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import insuranceRoutes from "./routes/insuranceRoutes.js";
 import loanRoutes from "./routes/loanRoutes.js";
 import retirementRoutes from "./routes/retirementRoutes.js";
+import investmentRoutes from "./routes/invetmentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -31,6 +32,7 @@ app.use("/api/dashboard")
 app.use("/api/insurance", insuranceRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/retirement", retirementRoutes);
+app.use("/api/investments", investmentRoutes);
 
 app.get("/", (req, res) => {
     res.json({

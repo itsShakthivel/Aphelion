@@ -3,6 +3,7 @@ import express from "express";
 import {
     createInsurance,
     getInsurances,
+    getInsurance,
     updateInsurance,
     deleteInsurance,
 }
@@ -24,6 +25,12 @@ router.get(
     "/",
     protect,
     getInsurances
+);
+
+router.get(
+    "/:id",
+    protect,
+    getInsurance
 );
 
 router.put(

@@ -27,7 +27,7 @@ export const createTransaction = async (req, res) => {
 
 //GET All
 
-export const getTransaction = async (req, res) => {
+export const getTransactions = async (req, res) => {
     try {
         const transaction = await Transaction.find({
             user: req.user.id
@@ -56,13 +56,16 @@ export const getTransaction = async (req, res) => {
 
 export const getTransaction = async (req, res) => {
     try {
-        const transaction = await Transaction
-                                .findById(
-                                    req.params.id
-                                )
-                                .populate(
-                                    "category"
-                                );
+        const transaction = await Transaction.findOne({
+            _id: req.params.id,
+            user: req.user.id,
+        }).populate("category");
+
+        if(!transaction) {
+            return res.status(404).json({
+                message: "Transaction not found",
+            });
+        }
         res.json(
             transaction
         );
@@ -76,49 +79,79 @@ export const getTransaction = async (req, res) => {
     }
 };
 
-//UPDATE
-
+// UPDATE
 export const updateTransaction = async (req, res) => {
+
     try {
-        const transaction = await Transaction
-                                .findByIdAndUpdate(
-                                    req.params.id,
-                                    req.body,
-                                    {
-                                        new: true
-                                    }
-                                );
-            
-        res.json(
-            transaction
-        );
-    } catch (error) {
-        res
-            .status(500)
-            .json({
-                message: error.message,
+
+        const transaction =
+            await Transaction.findOneAndUpdate(
+
+                {
+                    _id: req.params.id,
+                    user: req.user.id,
+                },
+
+                req.body,
+
+                {
+                    new: true,
+                }
+
+            );
+
+        if (!transaction) {
+
+            return res.status(404).json({
+                message: "Transaction not found",
             });
+
+        }
+
+        res.json(transaction);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message,
+        });
+
     }
+
 };
 
-//DELETE
-
+// DELETE
 export const deleteTransaction = async (req, res) => {
+
     try {
-        await Transaction
-            .findByIdAndDelete(
-                req.params.id
-            );
+
+        const transaction =
+            await Transaction.findOneAndDelete({
+
+                _id: req.params.id,
+
+                user: req.user.id,
+
+            });
+
+        if (!transaction) {
+
+            return res.status(404).json({
+                message: "Transaction not found",
+            });
+
+        }
 
         res.json({
             message: "Transaction deleted",
         });
-        
+
     } catch (error) {
-        res
-            .status(500)
-            .json({
-                message: error.message,
-            });
+
+        res.status(500).json({
+            message: error.message,
+        });
+
     }
+
 };
