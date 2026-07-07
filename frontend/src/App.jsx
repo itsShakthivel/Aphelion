@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
 import Dashboard from "./Pages/dashboard/Dashboard";
@@ -7,7 +7,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
   return (
-    <BrowserRouter>
+    
       <Routes>
 
         <Route
@@ -34,7 +34,6 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
   );
 }
 
