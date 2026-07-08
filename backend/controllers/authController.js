@@ -22,7 +22,7 @@ export const register = async (req, res) => {
             password: hashedPassword,
         });
 
-        res.status(210).json({
+        res.status(201).json({
             success: true,
             message: "User registered Successfully",
             user: {
@@ -42,7 +42,7 @@ export const register = async (req, res) => {
 export const login = async(req,res) => {
     try{
         const {email,password} = req.body;
-        const user = await User.findone({email});
+        const user = await User.findOne({email});
 
         if(!user){
             return res.status(400).json({
@@ -85,7 +85,28 @@ export const login = async(req,res) => {
     } catch (error){
         res.status(500).json({
             success: false,
-            messgae: error.message,
+            message: error.message,
+        });
+    }
+};
+
+export const getProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        res.status(200).json(user);
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
         });
     }
 };

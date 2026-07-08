@@ -11,7 +11,9 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import insuranceRoutes from "./routes/insuranceRoutes.js";
 import loanRoutes from "./routes/loanRoutes.js";
 import retirementRoutes from "./routes/retirementRoutes.js";
-import investmentRoutes from "./routes/invetmentRoutes.js";
+import investmentRoutes from "./routes/investmentRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
+import goalRoutes from "./routes/goalRoutes.js"
 
 dotenv.config();
 connectDB();
@@ -28,11 +30,13 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/transactions", transactionRoutes);
-app.use("/api/dashboard")
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/insurance", insuranceRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/retirement", retirementRoutes);
 app.use("/api/investments", investmentRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/goals", goalRoutes);
 
 app.get("/", (req, res) => {
     res.json({
