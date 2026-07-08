@@ -1,5 +1,4 @@
-import Retirement
-from "../models/Retirement.js";
+import Retirement from "../models/Retirement.js";
 
 export const saveRetirement =
     async (req, res) => {

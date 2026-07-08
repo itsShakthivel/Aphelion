@@ -1,10 +1,10 @@
-import Transaction from "../models/Transaction";
-import Investment from "../models/Investment";
-import Goal from "../models/Goal";
-import Insurance from "../models/Insurance";
-import Loan from "../models/Loan";
-import Retirement from "../models/Retirement";
-import { calculateFinancialHealthV2 } from "../utils/financialHealthEngine";
+import Transaction from "../models/Transaction.js";
+import Investment from "../models/Investment.js";
+import Goal from "../models/Goal.js";
+import Insurance from "../models/Insurance.js";
+import Loan from "../models/Loan.js";
+import Retirement from "../models/Retirement.js";
+import { calculateFinancialHealthV2 } from "../utils/financialHealthEngine.js";
 
 export const getDashboardAnalytics = async (req, res) => {
     try {
