@@ -2,11 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getDashboard } from "../../api/dashboardApi.js";
 
 export const fetchDashboard = createAsyncThunk(
-
     "dashboard/fetch",
 
     async (_, thunkAPI) => {
-
         try {
 
             const response = await getDashboard();
@@ -16,53 +14,53 @@ export const fetchDashboard = createAsyncThunk(
         } catch (error) {
 
             return thunkAPI.rejectWithValue(
-
                 error.response?.data?.message ||
-
                 "Dashboard fetch failed"
-
             );
 
         }
-
     }
-
 );
 
 const initialState = {
-
     data: null,
-
     loading: false,
-
     error: null,
-
 };
 
-export const fetchDashboard = createAsyncThunk(
+const dashboardSlice = createSlice({
+    name: "dashboard",
 
-    "dashboard/fetch",
+    initialState,
 
-    async (_, thunkAPI) => {
+    reducers: {},
 
-        try {
+    extraReducers: (builder) => {
 
-            const response = await getDashboard();
+        builder
 
-            return response.data;
+            .addCase(fetchDashboard.pending, (state) => {
 
-        } catch (error) {
+                state.loading = true;
+                state.error = null;
 
-            return thunkAPI.rejectWithValue(
+            })
 
-                error.response?.data?.message ||
+            .addCase(fetchDashboard.fulfilled, (state, action) => {
 
-                "Dashboard fetch failed"
+                state.loading = false;
+                state.data = action.payload;
 
-            );
+            })
 
-        }
+            .addCase(fetchDashboard.rejected, (state, action) => {
 
-    }
+                state.loading = false;
+                state.error = action.payload;
 
-);
+            });
+
+    },
+});
+
+export default dashboardSlice.reducer;

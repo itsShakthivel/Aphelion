@@ -28,6 +28,9 @@ export const getDashboardAnalytics = async (req, res) => {
         const loans = await Loan.find({
             user: userId,
         });
+        const retirement = await Retirement.findOne({
+            user: userId,
+        });
 
         //Income
         const totalIncome = transactions
@@ -79,7 +82,7 @@ export const getDashboardAnalytics = async (req, res) => {
         ).length;
 
         const totalOutstandingDebt = loans.reduce(
-            (sum, loan) => sum = loan.outstandingAmount, 0
+            (sum, loan) => sum + loan.outstandingAmount, 0
         );
 
         const monthlyEMI = loans.reduce(
@@ -92,7 +95,7 @@ export const getDashboardAnalytics = async (req, res) => {
             (sum, insurance) => sum + insurance.coverageAmount, 0
         );
 
-        const financialHealth = calculateFinancialHealthV2({
+        const financeHealth = calculateFinancialHealthV2({
             totalIncome,
             totalExpense,
             totalSavings,
@@ -118,7 +121,7 @@ export const getDashboardAnalytics = async (req, res) => {
             totalOutstandingDebt,
             monthlyEMI,
             debttoIncomeRatio,
-            insuranceCount: insurance.length,
+            insurancesCount: insurance.length,
             loanCount: loans.length,
             retirementPlan: retirement,
         });
