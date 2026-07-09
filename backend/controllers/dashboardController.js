@@ -95,7 +95,7 @@ export const getDashboardAnalytics = async (req, res) => {
             (sum, insurance) => sum + insurance.coverageAmount, 0
         );
 
-        const financeHealth = calculateFinancialHealthV2({
+        const financialHealth = calculateFinancialHealthV2({
             totalIncome,
             totalExpense,
             totalSavings,

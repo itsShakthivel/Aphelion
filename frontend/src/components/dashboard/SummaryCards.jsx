@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 
-
 import {
   FaWallet,
   FaArrowUp,
@@ -79,7 +78,6 @@ function SummaryCards() {
             shadow-lg
           "
         >
-          {/* Header */}
           <div className="flex justify-between items-center">
             <div>
               <p className="text-slate-400 text-sm">
@@ -88,19 +86,20 @@ function SummaryCards() {
 
               <h2
                 className={`
-                    text-3xl
-                    font-bold
-                    mt-3
-                    ${card.color}
-                `}>
-                    {card.prefix}
-                    {card.value.toLocaleString()}
-                    {card.suffix}
+                  text-3xl
+                  font-bold
+                  mt-3
+                  ${card.color}
+                `}
+              >
+                {card.prefix}
+                {card.value.toLocaleString()}
+                {card.suffix}
               </h2>
             </div>
 
             <div
-                className={`
+              className={`
                 h-12
                 w-12
                 rounded-xl
@@ -116,7 +115,6 @@ function SummaryCards() {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="mt-5">
             <span
               className={
