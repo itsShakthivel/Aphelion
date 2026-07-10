@@ -5,7 +5,7 @@ import { getProfile } from "./features/auth/authSlice";
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
 import Dashboard from "./Pages/dashboard/Dashboard";
-
+import Transactions from "./Pages/Transactions/Transactions";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
@@ -48,6 +48,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <Transactions />
+              </ProtectedRoute>
+            }
+          />    
+
       </Routes>
   );
 }

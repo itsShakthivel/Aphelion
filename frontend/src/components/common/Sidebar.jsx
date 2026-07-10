@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 import {
   FaBars,
@@ -11,28 +12,32 @@ import {
 
 function Sidebar() {
   const [open, setOpen] = useState(true);
-  const [active, setActive] = useState("Dashboard");
 
   const menus = [
     {
       title: "Dashboard",
       icon: <FaHome />,
+      path: "/dashboard",
     },
     {
-      title: "Expenses",
+      title: "Transactions",
       icon: <FaWallet />,
+      path: "/transactions",
     },
     {
       title: "Investments",
       icon: <FaChartPie />,
+      path: "/investments",
     },
     {
       title: "Goals",
       icon: <FaBullseye />,
+      path: "/goals",
     },
     {
       title: "Settings",
       icon: <FaCog />,
+      path: "/settings",
     },
   ];
 
@@ -81,36 +86,41 @@ function Sidebar() {
       {/* Menu Items */}
       <ul className="mt-6 space-y-2 px-2">
         {menus.map((menu) => (
-          <li
-            key={menu.title}
-            onClick={() => setActive(menu.title)}
-            className={`
-              flex
-              items-center
-              gap-4
-              p-4
-              rounded-xl
-              cursor-pointer
-              transition-all
-              duration-200
+            <li key={menu.title}>
 
-              ${
-                active === menu.title
-                  ? "bg-emerald-500 text-black shadow-lg"
-                  : "hover:bg-slate-800"
-              }
-            `}
-          >
-            <span className="text-lg">
-              {menu.icon}
-            </span>
+                <NavLink
+                    to = {menu.path}
+                    className={({ isActive }) =>
+                    `
+                    flex
+                    items-center
+                    gap-4
+                    p-4
+                    rounded-x1
+                    transition-all
+                    duration-200
 
-            {open && (
-              <span className="font-medium">
-                {menu.title}
-              </span>
-            )}
-          </li>
+                    ${
+                        isActive
+                            ? "bg-emerald-500 text-black shadow-lg"
+                            : "hover:bg-slate-800"
+                    }
+                    `
+                    }
+                >
+                    
+                    <span className="text-lg">
+                        {menu.icon}
+                    </span>
+
+                    {open && (
+                        <span className="font-medium">
+                            {menu.title}
+                        </span>
+                    )}
+
+                </NavLink>
+            </li>
         ))}
       </ul>
 

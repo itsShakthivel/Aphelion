@@ -18,7 +18,7 @@ export const createTransaction = async (req, res) => {
 
     } catch (error) {
         res
-            .status(201)
+            .status(500)
             .json({
                 message: error.message,
             });

@@ -18,7 +18,8 @@ const transactionSchema = new mongoose.Schema({
         enum: [
             "income",
             "expense",
-            "saving"
+            "saving",
+            "investment"
         ],
         required: true,
     },
@@ -26,6 +27,7 @@ const transactionSchema = new mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
+        required: true,
     },
 
     description: {
