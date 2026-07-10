@@ -6,6 +6,7 @@ import Loan from "../models/Loan.js";
 import Retirement from "../models/Retirement.js";
 import { calculateFinancialHealthV2 } from "../utils/financialHealthEngine.js";
 
+
 export const getDashboardAnalytics = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -109,24 +110,46 @@ export const getDashboardAnalytics = async (req, res) => {
         
 
         res.json({
-            financeHealth,
-            totalIncome,
-            totalExpense,
-            totalSavings,
-            totalInvestments,
-            netWorth,
-            savingsRate,
-            totalGoals: goals.length,
-            totalTransactions: transactions.length,
-            totalOutstandingDebt,
-            monthlyEMI,
-            debttoIncomeRatio,
-            insurancesCount: insurance.length,
-            loanCount: loans.length,
-            retirementPlan: retirement,
+            financialHealth,
+            
+            summary: {
+                income: totalIncome,
+                expenses: totalExpense,
+                savings: totalSavings,
+                investments: totalInvestments,
+                netWorth,
+                savingsRate,
+            },
+
+            loans: {
+                count: loans.length,
+                monthlyEMI,
+                outstandingDebt: totalOutstandingDebt,
+                debtToIncomeRatio: debttoIncomeRatio,
+            },
+
+            insurance: {
+                count: insurances.length,
+                coverage: totalInsuranceCoverage,
+            },
+
+            goals: {
+                completed: completedGoals,
+                total: goals.length,
+            },
+
+            recentTransactions: transactions.sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 5),
+
+            retirement,
         });
     } catch (error) {
+        console.error("========== DASHBOARD ERROR ==========");
+        console.error(error);
+        console.error("=====================================");
+
         res.status(500).json({
+            success: false,
             message: error.message,
         });
     }
