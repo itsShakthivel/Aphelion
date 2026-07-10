@@ -2,66 +2,72 @@ import {
     PieChart,
     Pie,
     Cell,
+    Tooltip,
     ResponsiveContainer,
-    Tooltip
+    Legend,
 } from "recharts";
 
-const data = [
-    { name: "Mutual Funds", value: 45 },
-    { name: "Stocks", value: 20 },
-    { name: "Gold", value: 10 },
-    { name: "Emergency", value: 15 },
-    { name: "Cash", value: 10 }
-];
-
 const COLORS = [
-    "#10B981",
-    "#0EA5E9",
-    "#EAB308",
-    "#A855F7",
-    "#F43F5E"
+    "#2563eb",
+    "#22c55e",
+    "#f59e0b",
+    "#ef4444",
+    "#8b5cf6",
+    "#06b6d4",
+    "#ec4899",
 ];
 
-function SavingsChart() {
+function SavingsChart({ data }) {
+
+    if (!data || !data.charts)
+        return null;
+
+    const investmentData =
+        data.charts.investmentAllocation;
 
     return (
-        <div
-            className="
-                bg-slate-900
-                rounded-2xl
-                p-6
-                border
-                border-slate-800
-            "
-        >
 
-            <h2
-                className="
-                    text-white
-                    text-xl
-                    font-semibold
-                    mb-6
-                "
-            >
-                Savings Allocation
+        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+
+            <h2 className="text-white text-xl font-semibold mb-6">
+
+                Investment Allocation
+
             </h2>
 
-            <div className="h-80">
+            {investmentData.length === 0 ? (
 
-                <ResponsiveContainer>
+                <div className="h-80 flex items-center justify-center text-slate-500">
+
+                    No Investment Data
+
+                </div>
+
+            ) : (
+
+                <ResponsiveContainer
+                    width="100%"
+                    height={320}
+                >
 
                     <PieChart>
 
                         <Pie
-                            data={data}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={70}
-                            outerRadius={110}
+
+                            data={investmentData}
+
                             dataKey="value"
+
+                            nameKey="name"
+
+                            outerRadius={110}
+
+                            label
+
                         >
 
-                            {data.map((entry, index) => (
+                            {investmentData.map((entry, index) => (
+
                                 <Cell
                                     key={index}
                                     fill={
@@ -71,20 +77,25 @@ function SavingsChart() {
                                         ]
                                     }
                                 />
+
                             ))}
 
                         </Pie>
 
                         <Tooltip />
 
+                        <Legend />
+
                     </PieChart>
 
                 </ResponsiveContainer>
 
-            </div>
+            )}
 
         </div>
+
     );
+
 }
 
 export default SavingsChart;

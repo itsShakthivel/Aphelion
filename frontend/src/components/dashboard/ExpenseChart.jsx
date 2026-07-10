@@ -2,89 +2,103 @@ import {
     PieChart,
     Pie,
     Cell,
+    Tooltip,
     ResponsiveContainer,
-    Tooltip
+    Legend,
 } from "recharts";
 
-const data = [
-    { name: "Food", value: 12000 },
-    { name: "Rent", value: 15000 },
-    { name: "Travel", value: 5000 },
-    { name: "Shopping", value: 7000 },
-    { name: "Bills", value: 3000 }
-];
-
 const COLORS = [
-    "#10B981",
-    "#3B82F6",
-    "#F59E0B",
-    "#EF4444",
-    "#8B5CF6"
+    "#22c55e",
+    "#3b82f6",
+    "#f59e0b",
+    "#ef4444",
+    "#8b5cf6",
+    "#06b6d4",
+    "#ec4899",
 ];
 
-function ExpenseChart() {
+function ExpenseChart({ data }) {
+
+    if (!data || !data.charts)
+        return null;
+
+    const expenseData =
+        data.charts.expenseDistribution;
 
     return (
-        <div
-            className="
-                bg-slate-900
-                rounded-2xl
-                p-6
-                border
-                border-slate-800
-            "
-        >
 
-            <h2
-                className="
-                    text-white
-                    text-xl
-                    font-semibold
-                    mb-6
-                "
-            >
+        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+
+            <h2 className="text-white text-xl font-semibold mb-6">
+
                 Expense Distribution
+
             </h2>
 
-            <div className="h-80">
+            {expenseData.length === 0 ? (
 
-                <ResponsiveContainer>
+                <div className="h-80 flex items-center justify-center text-slate-500">
+
+                    No Expense Data
+
+                </div>
+
+            ) : (
+
+                <ResponsiveContainer
+                    width="100%"
+                    height={320}
+                >
 
                     <PieChart>
 
                         <Pie
-                            data={data}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={70}
-                            outerRadius={110}
+
+                            data={expenseData}
+
                             dataKey="value"
+
+                            nameKey="name"
+
+                            outerRadius={110}
+
+                            label
+
                         >
 
-                            {data.map((entry, index) => (
+                            {expenseData.map((entry, index) => (
+
                                 <Cell
+
                                     key={index}
+
                                     fill={
                                         COLORS[
                                             index %
                                             COLORS.length
                                         ]
                                     }
+
                                 />
+
                             ))}
 
                         </Pie>
 
                         <Tooltip />
 
+                        <Legend />
+
                     </PieChart>
 
                 </ResponsiveContainer>
 
-            </div>
+            )}
 
         </div>
+
     );
+
 }
 
 export default ExpenseChart;

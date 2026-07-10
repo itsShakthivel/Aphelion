@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { motion } from "framer-motion";
 import { fetchDashboard } from "../../features/dashboard/dashboardSlice";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
@@ -11,6 +11,8 @@ import SavingsChart from "../../components/dashboard/SavingsChart";
 import NetWorthChart from "../../components/dashboard/NetWorthChart";
 import DashboardWidgets from "../../components/dashboard/DashboardWidgets";
 import RecentTransactions from "../../components/dashboard/RecentTransactions";
+import DashboardSkeleton from "../../components/dashboard/DashboardSkeleton";
+import ErrorState from "../../components/common/ErrorState";
 
 function Dashboard() {
 
@@ -30,17 +32,21 @@ function Dashboard() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
-                Loading Dashboard...
-            </div>
+            <DashboardLayout>
+                <DashboardSkeleton />
+            </DashboardLayout>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-950 text-red-500">
-                {error}
-            </div>
+            <DashboardLayout>
+                <ErrorState
+                    title="Dashboard Failed"
+                    message={error}
+                    onRetry={() => dispatch(fetchDashboard())}
+                />
+            </DashboardLayout>
         );
     }
 
@@ -48,23 +54,30 @@ function Dashboard() {
 
         <DashboardLayout>
 
-            <FinancialHealth data={data} />
+            <motion.div 
+                initial={{ opacity: 0, y: 20,}}
+                animate={{ opacity: 1, y: 0,}}
+                transition={{ duration: 0.4}}
+            >
 
-            <SummaryCards data={data} />
+                <FinancialHealth data={data} />
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <SummaryCards data={data} />
 
-                <ExpenseChart data={data} />
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
 
-                <SavingsChart data={data} />
+                    <ExpenseChart data={data} />
 
-            </div>
+                    <SavingsChart data={data} />
 
-            <NetWorthChart data={data} />
+                </div>
 
-            <DashboardWidgets data={data} />
+                <NetWorthChart data={data} />
 
-            <RecentTransactions data={data} />
+                <DashboardWidgets data={data} />
+
+                <RecentTransactions data={data} />
+            </motion.div>
 
         </DashboardLayout>
 

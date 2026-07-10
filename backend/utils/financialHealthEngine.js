@@ -217,6 +217,9 @@ calculateFinancialHealthV2({
     insurances,
     loans,
 
+    monthlyEMI,
+    debtToIncomeRatio,
+
     completedGoals,
     totalGoals,
 
@@ -294,6 +297,11 @@ calculateFinancialHealthV2({
             goals,
             cashflow,
             fire,
+        },
+
+        metrics: {
+            monthlyEMI,
+            debtToIncomeRatio,
         },
     };
 }

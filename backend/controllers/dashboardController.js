@@ -14,9 +14,50 @@ export const getDashboardAnalytics = async (req, res) => {
             user: userId,
         }).populate("category");
 
+        const expenseChartData = transactions.filter((transaction) => transaction.type === "expemse")
+        .reduce((acc, transaction) => {
+            const category = transaction.category?.name || "Others";
+
+            const existing = acc.find(
+                (item) => item.name === category
+            );
+
+            if(existing) {
+                existing.value += transaction.amount;
+            } else{
+                acc.push({
+                    name: category,
+                    value: transaction.amount,
+                });
+            }
+            return acc;
+
+        }, []);
+
         const investments = await Investment.find({
             user: userId,
         });
+
+        const investmentChartData = investments.reduce(
+            (acc, investment) => {
+                const existing = acc.find(
+                    (item) => item.name === investment.type
+                );
+
+                if(existing){
+                    existing.value += investment.currentValue;
+                }
+                else{
+                    acc.push({
+                        name: investment.type,
+                        value: investment.currentValue,
+                    });
+                }
+
+                return acc;
+            },
+            []
+        );
 
         const goals = await Goal.find({
             user: userId,
@@ -96,6 +137,59 @@ export const getDashboardAnalytics = async (req, res) => {
             (sum, insurance) => sum + insurance.coverageAmount, 0
         );
 
+        //Expense Distribution Chart
+
+        const expenseDistribution = transactions.filter((transaction) => transaction.type === "expense")
+        .reduce((acc, transaction) => {
+
+            const category = transaction.category?.name || "Others";
+
+            const existingCategory = acc.find(
+                (item) => item.name === category
+            );
+
+            if(existingCategory) {
+                existingCategory.value += transaction.amount;
+            } else{
+                acc.push({
+                    name: category,
+                    value: transaction.amount,
+                });
+            }
+            return acc;
+        }, []);
+
+        //Investment Allocation Chart
+
+        const investmentAllocation = investments.reduce(
+            (acc, investment) => {
+                const existingInvestment = acc.find(
+                    (item) => item.name === investment.type
+                );
+
+                if(existingInvestment) {
+                    existingInvestment.value += investment.currentValue;
+                } else{
+                    acc.push({
+                        name: investment.type,
+                        value: investment.currentValue,
+                    });
+                }
+
+                return acc;
+            },
+            []
+        );
+
+        //Net Worth Timeline
+
+        const netWorthTimeline = [
+            {
+                month: "Current",
+                netWorth,
+            },
+        ];
+
         const financialHealth = calculateFinancialHealthV2({
             totalIncome,
             totalExpense,
@@ -103,6 +197,8 @@ export const getDashboardAnalytics = async (req, res) => {
             totalInvestments,
             insurances,
             loans,
+            monthlyEMI,
+            debtToIncomeRatio: debttoIncomeRatio,
             completedGoals,
             totalGoals: goals.length,
             retirement
@@ -128,6 +224,15 @@ export const getDashboardAnalytics = async (req, res) => {
                 debtToIncomeRatio: debttoIncomeRatio,
             },
 
+            financialMetrics: {
+                savingsRate,
+                debtToIncomeRatio: debttoIncomeRatio,
+                monthlyEMI,
+                outstandingDebt: totalOutstandingDebt,
+                insuranceCoverage: totalInsuranceCoverage,
+                netWorth,
+            },
+
             insurance: {
                 count: insurances.length,
                 coverage: totalInsuranceCoverage,
@@ -136,6 +241,12 @@ export const getDashboardAnalytics = async (req, res) => {
             goals: {
                 completed: completedGoals,
                 total: goals.length,
+            },
+
+            charts: {
+                expenseDistribution,
+                investmentAllocation,
+                netWorthTimeline,
             },
 
             recentTransactions: transactions.sort((a, b) => new Date(b.date) - new Date(a.date))

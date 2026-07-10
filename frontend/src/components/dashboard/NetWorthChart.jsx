@@ -1,93 +1,101 @@
 import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
+    PieChart,
+    Pie,
+    Cell,
     Tooltip,
     ResponsiveContainer,
-    CartesianGrid
+    Legend,
 } from "recharts";
 
-const data = [
-    { month: "Jan", worth: 100000 },
-    { month: "Feb", worth: 120000 },
-    { month: "Mar", worth: 145000 },
-    { month: "Apr", worth: 180000 },
-    { month: "May", worth: 210000 },
-    { month: "Jun", worth: 250000 }
+const COLORS = [
+    "#2563eb",
+    "#22c55e",
+    "#f59e0b",
+    "#ef4444",
+    "#8b5cf6",
+    "#06b6d4",
+    "#ec4899",
 ];
 
-function NetWorthChart() {
+function SavingsChart({ data }) {
+
+    if (!data || !data.charts)
+        return null;
+
+    const investmentData =
+        data.charts.investmentAllocation;
 
     return (
-        <div
-            className="
-                bg-slate-900
-                rounded-2xl
-                p-6
-                border
-                border-slate-800
-                mt-6
-            "
-        >
 
-            <div className="mb-6">
+        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
 
-                <h2
-                    className="
-                        text-white
-                        text-xl
-                        font-semibold
-                    "
-                >
-                    Net Worth Growth
-                </h2>
+            <h2 className="text-white text-xl font-semibold mb-6">
 
-                <p className="text-slate-400">
-                    Last 6 Months
-                </p>
+                Investment Allocation
 
-            </div>
+            </h2>
 
-            <div className="h-80">
+            {investmentData.length === 0 ? (
+
+                <div className="h-80 flex items-center justify-center text-slate-500">
+
+                    No Investment Data
+
+                </div>
+
+            ) : (
 
                 <ResponsiveContainer
                     width="100%"
-                    height="100%"
+                    height={320}
                 >
 
-                    <LineChart data={data}>
+                    <PieChart>
 
-                        <CartesianGrid
-                            stroke="#1e293b"
-                        />
+                        <Pie
 
-                        <XAxis
-                            dataKey="month"
-                            stroke="#94a3b8"
-                        />
+                            data={investmentData}
 
-                        <YAxis
-                            stroke="#94a3b8"
-                        />
+                            dataKey="value"
+
+                            nameKey="name"
+
+                            outerRadius={110}
+
+                            label
+
+                        >
+
+                            {investmentData.map((entry, index) => (
+
+                                <Cell
+                                    key={index}
+                                    fill={
+                                        COLORS[
+                                            index %
+                                            COLORS.length
+                                        ]
+                                    }
+                                />
+
+                            ))}
+
+                        </Pie>
 
                         <Tooltip />
 
-                        <Line
-                            type="monotone"
-                            dataKey="worth"
-                            stroke="#10B981"
-                            strokeWidth={3}
-                        />
+                        <Legend />
 
-                    </LineChart>
+                    </PieChart>
 
                 </ResponsiveContainer>
 
-            </div>
+            )}
 
         </div>
+
     );
+
 }
 
-export default NetWorthChart;
+export default SavingsChart;
