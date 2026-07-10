@@ -18,7 +18,7 @@ function RecentTransactions({ data }) {
 
             {transactions.length === 0 ? (
 
-                <p className="text-slate-500">
+                <div className="text-slate-500">
 
                     <EmptyState
                         icon="💸"
@@ -26,7 +26,7 @@ function RecentTransactions({ data }) {
                         message="Add your first transaction to start tracking your finances."
                     />
 
-                </p>
+                </div>
 
             ) : (
 

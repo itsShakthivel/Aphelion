@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { fetchDashboard } from "../../features/dashboard/dashboardSlice";
-
+import AnimatedSection from "../../components/common/AnimatedSection";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import FinancialHealth from "../../components/dashboard/FinancialHealth";
 import SummaryCards from "../../components/dashboard/SummaryCards";
@@ -54,15 +54,19 @@ function Dashboard() {
 
         <DashboardLayout>
 
-            <motion.div 
-                initial={{ opacity: 0, y: 20,}}
-                animate={{ opacity: 1, y: 0,}}
-                transition={{ duration: 0.4}}
-            >
+            <AnimatedSection>
 
                 <FinancialHealth data={data} />
 
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.1}>
+
                 <SummaryCards data={data} />
+
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.2}>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
 
@@ -72,12 +76,25 @@ function Dashboard() {
 
                 </div>
 
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.3}>
+
                 <NetWorthChart data={data} />
+
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.4}>
 
                 <DashboardWidgets data={data} />
 
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.5}>
+
                 <RecentTransactions data={data} />
-            </motion.div>
+
+            </AnimatedSection>
 
         </DashboardLayout>
 

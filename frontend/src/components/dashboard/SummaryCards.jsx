@@ -68,11 +68,7 @@ function SummaryCards({ data }) {
 
               <h2 className={`text-3xl font-bold mt-3 ${card.color}`}>
                 {card.prefix}
-                <CountUp
-                    end={Number(card.value)}
-                    duration={2}
-                    separator=","
-                />
+                {Number(card.value).toLocaleString()}
                 {card.suffix}
               </h2>
             </div>
