@@ -35,7 +35,6 @@ app.use("/api/insurance", insuranceRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/retirement", retirementRoutes);
 app.use("/api/investments", investmentRoutes);
-app.use("/api/transactions", transactionRoutes);
 app.use("/api/goals", goalRoutes);
 
 app.get("/", (req, res) => {
@@ -45,13 +44,6 @@ app.get("/", (req, res) => {
     });
 });
 
-app.get("/api/dashboard", protect, (req, res) => {
-    res.json({
-        success: true,
-        message: "Protected Dashboard",
-        user: req.user,
-    });
-});
 
 const PORT = process.env.PORT || 5000;
 

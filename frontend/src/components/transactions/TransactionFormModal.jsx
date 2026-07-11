@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 
 import {
     addTransaction,
     editTransaction,
 } from "../../features/transaction/transactionSlice";
+import { fetchCategories } from "../../features/category/categorySlice";
 
 const TransactionFormModal = ({
     open,
@@ -16,6 +17,10 @@ const TransactionFormModal = ({
 
     const dispatch = useDispatch();
 
+    const { categories } = useSelector(
+        (state) => state.category
+    );
+
     const [formData, setFormData] = useState({
         amount: "",
         type: "expense",
@@ -23,6 +28,24 @@ const TransactionFormModal = ({
         description: "",
         date: new Date().toISOString().split("T")[0],
     });
+
+    useEffect(() => {
+        if(categories.length === 0) {
+            dispatch(fetchCategories());
+        }
+    }, [dispatch, categories.length]);
+
+    useEffect(() => {
+        if(mode === "add" && open) {
+            setFormData({
+                amount: "",
+                type: "expense",
+                category: "",
+                description: "",
+                date: new Date().toISOString().split("T")[0],
+            });
+        }
+    }, [open, mode]);
 
     useEffect(() => {
 
@@ -44,9 +67,21 @@ const TransactionFormModal = ({
 
     const handleChange = (e) => {
 
+        const { name, value } = e.target;
+
+        if(name === "type")  {
+            setFormData({
+                ...formData,
+                type: value,
+                category: "",
+            });
+
+            return;
+        }
+
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
 
     };
@@ -61,6 +96,16 @@ const TransactionFormModal = ({
 
             return;
 
+        }
+
+        if(!formData.category) {
+            toast.error("Please select a category");
+            return;
+        }
+
+        if(!formData.description.trim()) {
+            toast.error("Description is required");
+            return;
         }
 
         try {
@@ -119,6 +164,8 @@ const TransactionFormModal = ({
 
                     <input
                         type="number"
+                        min="0"
+                        step="0.01"
                         name="amount"
                         placeholder="Amount"
                         value={formData.amount}
@@ -147,18 +194,37 @@ const TransactionFormModal = ({
                             Saving
                         </option>
 
+                        <option value="investment">
+                            Investment
+                        </option>
+
                     </select>
 
                     {/* Category */}
 
-                    <input
-                        type="text"
+                    <select
                         name="category"
-                        placeholder="Category ID (Temporary)"
-                        value={formData.category}
+                        value={form.Data.category}
                         onChange={handleChange}
                         className="w-full border rounded-lg p-3"
-                    />
+                    >
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        {categories.filter(
+                            (category) =>
+                                category.type === form.Data.type
+                        ).map((category) => (
+                            <option 
+                            key={category._id}
+                            value={category._id}>
+                                {category.icon} {category.name}
+                            </option>
+                        ))
+                        }
+
+                    </select>
 
                     {/* Description */}
 

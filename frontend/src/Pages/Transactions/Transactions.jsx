@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { exportCSV, exportExcel, } from "../../utils/exportTransactions";
 import { fetchTransactions } from "../../features/transaction/transactionSlice";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
@@ -11,6 +11,7 @@ import TransactionTable from "../../components/transactions/TransactionTable";
 import TransactionFormModal from "../../components/transactions/TransactionFormModal";
 import DeleteTransactionModal from "../../components/transactions/DeleteTransactionModal";
 import TransactionPagination from "../../components/transactions/TransactionPagination";
+import TransactionDetailsModal from "../../components/transactions/TransactionDetailsModal";
 
 const Transactions = () => {
     const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const Transactions = () => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [detailsOpen, setDetailsOpen] = useState(false);
 
     // ==========================
     // Fetch Transactions
@@ -76,7 +78,8 @@ const Transactions = () => {
     };
 
     const handleView = (transaction) => {
-        console.log("View Transaction:", transaction);
+        setSelectedTransaction(transaction);
+        setDetailsOpen(true);
     };
 
     const handleDelete = (transaction) => {
@@ -91,6 +94,11 @@ const Transactions = () => {
 
     const handleCloseDeleteModal = () => {
         setDeleteModalOpen(false);
+        setSelectedTransaction(null);
+    };
+
+    const handleCloseDetails = () => {
+        setDetailsOpen(false);
         setSelectedTransaction(null);
     };
 
@@ -233,6 +241,14 @@ const Transactions = () => {
         }
     };
 
+    const handleExportCSV = () => {
+        exportCSV(filteredTransactions);
+    };
+
+    const handleExportExcel = () => {
+        exportExcel(filteredTransactions);
+    }
+
     return (
         <DashboardLayout>
 
@@ -240,15 +256,33 @@ const Transactions = () => {
 
                 {/* Header */}
 
-                <div>
+                <div className="flex justify-between items-center">
 
-                    <h1 className="text-3xl font-bold">
-                        Transactions
-                    </h1>
+                    <div>
+                        <h1 className="text-3xl font-bold">
+                            Transactions
+                        </h1>
 
-                    <p className="text-gray-500 mt-1">
-                        Manage all your financial transactions.
-                    </p>
+                        <p className="text-gray-500 mt-1">
+                            Manage all your financial transactions.
+                        </p>
+                    </div>
+
+                    <div className="flex gap-3">
+                        <button
+                            onClick={handleExportCSV}
+                            className="bg-green-600 text-white px-4 py-2 rounded-lg"
+                        >
+                            Export CSV
+                        </button>
+
+                        <button
+                            onClick={handleExportExcel}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+                        >
+                            Export Excel
+                        </button>
+                    </div>
 
                 </div>
 
@@ -344,6 +378,12 @@ const Transactions = () => {
                 <DeleteTransactionModal
                     open={deleteModalOpen}
                     onClose={handleCloseDeleteModal}
+                    transaction={selectedTransaction}
+                />
+
+                <TransactionDetailsModal
+                    open={detailsOpen}
+                    onClose={handleCloseDetails}
                     transaction={selectedTransaction}
                 />
 

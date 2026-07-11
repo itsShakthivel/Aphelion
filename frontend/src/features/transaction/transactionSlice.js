@@ -5,6 +5,7 @@ import {
     updateTransaction,
     deleteTransaction,
 } from "../../api/transactionApi";
+import { fetchDashboard } from "../dashboard/dashboardSlice";
 
 // ===============================
 // Async Thunks
@@ -31,6 +32,7 @@ export const addTransaction = createAsyncThunk(
     async (transactionData, thunkAPI) => {
         try {
             const response = await createTransaction(transactionData);
+            thunkAPI.dispatch(fetchDashboard());
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(
@@ -46,6 +48,7 @@ export const editTransaction = createAsyncThunk(
     async ({ id, data }, thunkAPI) => {
         try {
             const response = await updateTransaction(id, data);
+            thunkAPI.dispatch(fetchDashboard());
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(
@@ -61,6 +64,7 @@ export const removeTransaction = createAsyncThunk(
     async (id, thunkAPI) => {
         try {
             await deleteTransaction(id);
+            thunkAPI.dispatch(fetchDashboard());
             return id;
         } catch (error) {
             return thunkAPI.rejectWithValue(

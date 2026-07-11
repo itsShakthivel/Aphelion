@@ -8,6 +8,7 @@ import {
   FaChartPie,
   FaBullseye,
   FaCog,
+  FaFolderOpen,
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -23,6 +24,11 @@ function Sidebar() {
       title: "Transactions",
       icon: <FaWallet />,
       path: "/transactions",
+    },
+    {
+        title: "Categories",
+        icon: <FaFolderOpen />,
+        path: "/categories",
     },
     {
       title: "Investments",

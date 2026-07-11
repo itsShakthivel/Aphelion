@@ -11,6 +11,8 @@ const categorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        trim: true,
+        lowercase: true,
     },
 
     type: {
@@ -42,6 +44,17 @@ const categorySchema = new mongoose.Schema({
 }, {
     timestamps: true,
 });
+
+categorySchema.index(
+    {
+        user: 1,
+        name: 1,
+        type: 1,
+    },
+    {
+        unique: true,
+    }
+);
 
 export default mongoose.model(
     "Category",

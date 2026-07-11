@@ -7,6 +7,7 @@ import Signup from "./Pages/auth/Signup";
 import Dashboard from "./Pages/dashboard/Dashboard";
 import Transactions from "./Pages/Transactions/Transactions";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import Categories from "./Pages/Categories/Categories";
 
 function App() {
 
@@ -54,6 +55,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Transactions />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/categories"
+            element={
+              <ProtectedRoute>
+                <Categories />
               </ProtectedRoute>
             }
           />    

@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { createDefaultCategories } from "../services/categoryService.js";
 
 export const register = async (req, res) => {
     try {
@@ -21,6 +22,8 @@ export const register = async (req, res) => {
             email,
             password: hashedPassword,
         });
+
+        await createDefaultCategories(user._id);
 
         res.status(201).json({
             success: true,
