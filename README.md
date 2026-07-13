@@ -1105,3 +1105,492 @@ The primary goals of Aphelion are:
 > **"Great software isn't just about writing code. It's about creating systems that scale, solve problems, and inspire confidence."**
 
 ---
+
+# 📡 REST API Documentation
+
+Aphelion follows RESTful API design principles, ensuring a clean, scalable, and maintainable backend architecture.
+
+**Base URL (Development)**
+
+```http
+http://localhost:5000/api
+```
+
+---
+
+# 🔐 Authentication APIs
+
+### Register
+
+```http
+POST /api/auth/register
+```
+
+#### Request Body
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "********"
+}
+```
+
+---
+
+### Login
+
+```http
+POST /api/auth/login
+```
+
+#### Request Body
+
+```json
+{
+  "email": "john@example.com",
+  "password": "********"
+}
+```
+
+---
+
+### Get Current User
+
+```http
+GET /api/auth/me
+```
+
+Authorization
+
+```text
+Bearer <JWT_TOKEN>
+```
+
+---
+
+# 💳 Transaction APIs
+
+### Get All Transactions
+
+```http
+GET /api/transactions
+```
+
+---
+
+### Get Transaction By ID
+
+```http
+GET /api/transactions/:id
+```
+
+---
+
+### Create Transaction
+
+```http
+POST /api/transactions
+```
+
+---
+
+### Update Transaction
+
+```http
+PUT /api/transactions/:id
+```
+
+---
+
+### Delete Transaction
+
+```http
+DELETE /api/transactions/:id
+```
+
+---
+
+# 📂 Category APIs
+
+```http
+GET /api/categories
+POST /api/categories
+PUT /api/categories/:id
+DELETE /api/categories/:id
+```
+
+---
+
+# 🎯 Goal APIs
+
+```http
+GET /api/goals
+POST /api/goals
+PUT /api/goals/:id
+DELETE /api/goals/:id
+```
+
+---
+
+# 💰 Investment APIs
+
+```http
+GET /api/investments
+POST /api/investments
+PUT /api/investments/:id
+DELETE /api/investments/:id
+```
+
+---
+
+# 🛡 Insurance APIs
+
+```http
+GET /api/insurance
+POST /api/insurance
+PUT /api/insurance/:id
+DELETE /api/insurance/:id
+```
+
+---
+
+# 🏦 Loan APIs
+
+```http
+GET /api/loans
+POST /api/loans
+PUT /api/loans/:id
+DELETE /api/loans/:id
+```
+
+---
+
+# 📈 Analytics APIs (Planned)
+
+```http
+GET /api/analytics/overview
+GET /api/analytics/monthly
+GET /api/analytics/networth
+GET /api/analytics/categories
+```
+
+---
+
+# 🤖 AI APIs (Future)
+
+```http
+POST /api/ai/analyze
+
+POST /api/ai/recommend
+
+POST /api/ai/forecast
+```
+
+---
+
+# 📦 Example Response
+
+```json
+{
+  "success": true,
+  "message": "Transaction created successfully",
+  "data": {
+    "_id": "...",
+    "title": "Salary",
+    "amount": 50000,
+    "category": "Income",
+    "date": "2026-07-13"
+  }
+}
+```
+
+---
+
+# 🗄️ Database Design
+
+Core collections used by Aphelion:
+
+```text
+Users
+
+Transactions
+
+Categories
+
+Goals
+
+Investments
+
+Insurance
+
+Loans
+```
+
+Future collections:
+
+```text
+Notifications
+
+Budgets
+
+Analytics
+
+Reports
+
+AI Insights
+
+Settings
+```
+
+---
+
+# 🔄 Backend Request Lifecycle
+
+```text
+Client
+
+   │
+
+   ▼
+
+Express Route
+
+   │
+
+   ▼
+
+Authentication Middleware
+
+   │
+
+   ▼
+
+Validation
+
+   │
+
+   ▼
+
+Controller
+
+   │
+
+   ▼
+
+Database
+
+   │
+
+   ▼
+
+JSON Response
+```
+
+---
+
+# 🧪 Testing Strategy
+
+Testing will be introduced progressively as the project evolves.
+
+### Planned Testing Layers
+
+- Unit Testing
+- Integration Testing
+- API Testing
+- UI Testing
+- End-to-End Testing
+
+### Recommended Tools
+
+- Jest
+- Supertest
+- React Testing Library
+- Cypress
+
+---
+
+# ⚡ Performance Optimizations
+
+Aphelion is designed with performance in mind.
+
+### Frontend
+
+- Lazy Loading
+- Code Splitting
+- Reusable Components
+- Optimized Rendering
+- Memoization where appropriate
+- Efficient Redux State Management
+
+---
+
+### Backend
+
+- Modular Controllers
+- Optimized MongoDB Queries
+- JWT Authentication
+- Centralized Error Handling
+- Middleware-Based Architecture
+- Scalable REST APIs
+
+---
+
+# 🚀 Deployment
+
+## Frontend
+
+Recommended platforms
+
+- Vercel
+- Netlify
+
+---
+
+## Backend
+
+Recommended platforms
+
+- Render
+- Railway
+
+---
+
+## Database
+
+- MongoDB Atlas
+
+---
+
+# 🌍 Production Architecture
+
+```text
+User
+
+   │
+
+   ▼
+
+Vercel
+
+   │
+
+   ▼
+
+React Application
+
+   │
+
+   ▼
+
+Render
+
+   │
+
+   ▼
+
+Express API
+
+   │
+
+   ▼
+
+MongoDB Atlas
+```
+
+---
+
+# 📈 Scalability
+
+Aphelion is built with scalability in mind.
+
+Current architecture supports:
+
+- Feature-Based Frontend
+- Modular Backend
+- RESTful APIs
+- Independent Controllers
+- Reusable Components
+- Centralized State Management
+
+Future enhancements:
+
+- Microservices
+- Docker
+- Redis Caching
+- WebSockets
+- Background Jobs
+- AI Services
+- Multi-Tenant Support
+
+---
+
+# 🔄 CI/CD Ready
+
+The project structure is prepared for future continuous integration and deployment pipelines.
+
+Potential workflow:
+
+```text
+GitHub Push
+
+      │
+
+      ▼
+
+GitHub Actions
+
+      │
+
+      ▼
+
+Build
+
+      │
+
+      ▼
+
+Tests
+
+      │
+
+      ▼
+
+Deploy Frontend
+
+      │
+
+      ▼
+
+Deploy Backend
+```
+
+---
+
+# 📚 Coding Standards
+
+Aphelion follows a consistent engineering philosophy:
+
+- Feature-based architecture
+- Modular components
+- Reusable business logic
+- RESTful API design
+- Clean folder organization
+- Meaningful naming conventions
+- Scalable project structure
+
+---
+
+# 💡 Engineering Philosophy
+
+> "Every module should be independent.
+>
+> Every component should be reusable.
+>
+> Every API should be predictable.
+>
+> Every feature should be scalable."
+
+This philosophy guides the development of Aphelion as it evolves into a complete AI-powered personal finance operating system.
+
+---
