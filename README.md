@@ -219,10 +219,435 @@ Aphelion is my journey toward building a production-ready fintech platform using
 
 This project reflects my passion for software engineering, modern web development, and solving real-world problems through technology.
 
+
 ---
 
 > *"Every transaction tells a story. Aphelion helps you understand the story your money is telling."*
 
 ---
 
+
+# 🖥️ Dashboard Showcase
+
+> **Aphelion is designed around a visual-first dashboard experience.**
+>
+> Every important financial metric is available at a glance, helping users understand their financial health without digging through endless tables.
+
+---
+
+## 🌌 Dashboard Overview
+
+> **Replace the placeholders below with actual screenshots once the application is complete.**
+
+<div align="center">
+
+| Dashboard |
+|------------|
+| <img src="./assets/screenshots/dashboard.png" alt="Dashboard" width="100%"> |
+
+</div>
+
+---
+
+## 📊 Expense Distribution
+
+Visualize exactly where your money goes.
+
+<div align="center">
+
+<img src="./assets/screenshots/expense-chart.png" width="80%">
+
+</div>
+
+### Highlights
+
+- Interactive Pie Chart
+- Category Breakdown
+- Monthly Comparison
+- Spending Insights
+
+---
+
+## 💰 Investment Portfolio
+
+Monitor all your investments from one place.
+
+<div align="center">
+
+<img src="./assets/screenshots/investment-chart.png" width="80%">
+
+</div>
+
+### Supported Assets
+
+- 📈 Stocks
+- 💹 Mutual Funds
+- 🥇 Gold
+- 🪙 Cryptocurrency
+- 🏦 Fixed Deposits
+
+---
+
+## 💳 Transaction Management
+
+<div align="center">
+
+<img src="./assets/screenshots/transactions.png" width="100%">
+
+</div>
+
+### Features
+
+- Add Transactions
+- Edit Transactions
+- Delete Transactions
+- Search
+- Filters
+- Categories
+- Date Range
+- Income Tracking
+- Expense Tracking
+
+---
+
+## 🎯 Goal Tracking
+
+<div align="center">
+
+<img src="./assets/screenshots/goals.png" width="100%">
+
+</div>
+
+Track financial goals such as:
+
+- Emergency Fund
+- Dream Vacation
+- Car
+- House
+- Retirement
+- Education
+
+---
+
+## 📈 Financial Analytics
+
+<div align="center">
+
+<img src="./assets/screenshots/analytics.png" width="100%">
+
+</div>
+
+Gain meaningful insights with:
+
+- Monthly Spending Trends
+- Income Analysis
+- Savings Rate
+- Financial Health Score
+- Net Worth Timeline
+- Investment Allocation
+
+---
+
+# ✨ Key Features
+
+## 🔐 Authentication
+
+- JWT Authentication
+- Secure Login
+- User Registration
+- Protected Routes
+- Persistent Sessions
+
+---
+
+## 📊 Smart Dashboard
+
+- Financial Overview
+- Net Worth
+- Monthly Income
+- Monthly Expenses
+- Savings Rate
+- Recent Transactions
+
+---
+
+## 💳 Transactions
+
+- CRUD Operations
+- Category Support
+- Search & Filter
+- Pagination
+- Monthly Reports
+
+---
+
+## 📂 Categories
+
+Create custom categories with:
+
+- Icons
+- Colors
+- Expense Types
+- Income Types
+
+---
+
+## 💰 Investments
+
+Manage your complete portfolio.
+
+- Mutual Funds
+- Stocks
+- Gold
+- Crypto
+- SIP Tracking
+- Portfolio Value
+
+---
+
+## 🏦 Loans
+
+Track every liability.
+
+- Outstanding Balance
+- EMI
+- Interest Rate
+- Due Date
+
+---
+
+## 🛡 Insurance
+
+Manage every policy.
+
+- Health
+- Life
+- Vehicle
+- Home
+- Renewal Reminders
+
+---
+
+## 🎯 Goals
+
+Track savings progress.
+
+- Target Amount
+- Current Savings
+- Remaining Amount
+- Progress Bar
+- Deadline
+
+---
+
+## 📈 Analytics
+
+Powerful financial reports.
+
+- Expense Analysis
+- Income Analysis
+- Monthly Trends
+- Category Insights
+- Savings Ratio
+
+---
+
+## 🤖 AI Ready
+
+Future-ready architecture for:
+
+- Financial Assistant
+- Budget Forecasting
+- AI Reports
+- Personalized Insights
+- Spending Predictions
+
+---
+
+# 🛠️ Technology Stack
+
+## Frontend
+
+| Technology | Purpose |
+|------------|----------|
+| React | UI Library |
+| Vite | Build Tool |
+| Redux Toolkit | State Management |
+| React Router | Routing |
+| Tailwind CSS | Styling |
+| Framer Motion | Animations |
+| Axios | API Requests |
+| React Icons | Icons |
+
+---
+
+## Backend
+
+| Technology | Purpose |
+|------------|----------|
+| Node.js | Runtime |
+| Express.js | REST API |
+| JWT | Authentication |
+| bcrypt | Password Hashing |
+| Mongoose | ODM |
+
+---
+
+## Database
+
+| Technology | Purpose |
+|------------|----------|
+| MongoDB Atlas | Cloud Database |
+| MongoDB | NoSQL Database |
+
+---
+
+## Development Tools
+
+- Git
+- GitHub
+- VS Code
+- Postman
+- npm
+
+---
+
+# 🏛️ System Architecture
+
+```text
+                    Browser
+                        │
+                        ▼
+              React + Vite Frontend
+                        │
+                        ▼
+             Redux Toolkit Store
+                        │
+                        ▼
+                 Axios Services
+                        │
+                        ▼
+              Express REST API
+                        │
+        ┌───────────────┴───────────────┐
+        ▼                               ▼
+JWT Authentication              Business Logic
+        │                               │
+        └───────────────┬───────────────┘
+                        ▼
+                 MongoDB Atlas
+```
+
+---
+
+# 📂 Project Structure
+
+```text
+Aphelion
+│
+├── client
+│   ├── public
+│   ├── src
+│   │
+│   ├── app
+│   ├── assets
+│   ├── components
+│   ├── features
+│   ├── hooks
+│   ├── layouts
+│   ├── pages
+│   ├── services
+│   ├── utils
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── server
+│   ├── config
+│   ├── controllers
+│   ├── middleware
+│   ├── models
+│   ├── routes
+│   ├── utils
+│   ├── server.js
+│   └── package.json
+│
+├── assets
+├── README.md
+└── LICENSE
+```
+
+---
+
+# 🔄 Application Flow
+
+```text
+User
+
+   │
+
+   ▼
+
+Login / Register
+
+   │
+
+   ▼
+
+JWT Authentication
+
+   │
+
+   ▼
+
+Dashboard
+
+   │
+
+   ├────────► Transactions
+
+   ├────────► Categories
+
+   ├────────► Investments
+
+   ├────────► Goals
+
+   ├────────► Loans
+
+   ├────────► Insurance
+
+   └────────► Analytics
+```
+
+---
+
+# 📱 Responsive Experience
+
+Aphelion is designed with a **mobile-first** approach to ensure a seamless experience across all devices.
+
+### Supported Devices
+
+- 📱 Mobile Phones
+- 📲 Tablets
+- 💻 Laptops
+- 🖥️ Desktop Computers
+- 📺 Large Displays
+
+---
+
+# 🎨 User Interface Highlights
+
+- 🌙 Elegant Dark Theme
+- ✨ Smooth Framer Motion Animations
+- 📊 Interactive Charts
+- 📈 Financial Visualizations
+- 🎯 Clean Dashboard Layout
+- 📱 Responsive Components
+- ⚡ Fast Navigation
+- 🎨 Modern FinTech Design Language
+
+---
+
+> **"Great financial decisions begin with clear insights. Aphelion transforms complex financial data into experiences that are intuitive, actionable, and beautiful."**
+
+---
 
