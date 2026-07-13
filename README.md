@@ -651,3 +651,457 @@ Aphelion is designed with a **mobile-first** approach to ensure a seamless exper
 
 ---
 
+# 🚀 Getting Started
+
+Ready to explore **Aphelion**?
+
+Follow the steps below to set up the project on your local machine.
+
+---
+
+# 📋 Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+| Software | Recommended Version |
+|-----------|---------------------|
+| Node.js | 20+ |
+| npm | Latest |
+| Git | Latest |
+| MongoDB Atlas | Cloud Database |
+| VS Code | Latest |
+| Postman | Latest |
+
+---
+
+# 📦 Clone the Repository
+
+```bash
+git clone https://github.com/itsShakthivel/Aphelion.git
+```
+
+Move into the project directory.
+
+```bash
+cd Aphelion
+```
+
+---
+
+# 📁 Project Structure
+
+```text
+Aphelion/
+
+├── client/
+├── server/
+├── README.md
+└── LICENSE
+```
+
+---
+
+# 📥 Install Dependencies
+
+## Client
+
+```bash
+cd client
+
+npm install
+```
+
+---
+
+## Server
+
+```bash
+cd ../server
+
+npm install
+```
+
+---
+
+# ▶️ Running the Application
+
+Open two terminals.
+
+### Terminal 1
+
+```bash
+cd server
+
+npm run dev
+```
+
+---
+
+### Terminal 2
+
+```bash
+cd client
+
+npm run dev
+```
+
+---
+
+The application will now be available at
+
+```
+http://localhost:5173
+```
+
+---
+
+# ⚙ Environment Variables
+
+Create a `.env` file inside the **server** directory.
+
+```env
+PORT=5000
+
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_super_secret_key
+
+JWT_EXPIRE=7d
+
+NODE_ENV=development
+```
+
+---
+
+If you later integrate additional services, your environment file may look like this:
+
+```env
+PORT=5000
+
+NODE_ENV=development
+
+MONGO_URI=
+
+JWT_SECRET=
+
+JWT_EXPIRE=7d
+
+CLOUDINARY_CLOUD_NAME=
+
+CLOUDINARY_API_KEY=
+
+CLOUDINARY_API_SECRET=
+
+OPENAI_API_KEY=
+```
+
+---
+
+# 🧰 Available Scripts
+
+## Client
+
+| Command | Description |
+|----------|-------------|
+| npm run dev | Starts the Vite development server |
+| npm run build | Builds the production application |
+| npm run preview | Preview the production build |
+
+---
+
+## Server
+
+| Command | Description |
+|----------|-------------|
+| npm run dev | Starts the backend using nodemon |
+| npm start | Runs the production server |
+
+---
+
+# 🔧 Configuration
+
+## Frontend
+
+Technology stack:
+
+- React
+- Vite
+- Redux Toolkit
+- React Router
+- Tailwind CSS
+- Framer Motion
+- Axios
+
+---
+
+## Backend
+
+Technology stack:
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- bcrypt
+
+---
+
+# 🌐 Default Ports
+
+| Service | Port |
+|----------|------|
+| Frontend | 5173 |
+| Backend | 5000 |
+| MongoDB Atlas | Cloud |
+
+---
+
+# 🔑 Authentication Flow
+
+```text
+User
+
+    │
+
+    ▼
+
+Register
+
+    │
+
+    ▼
+
+Password Hashing
+
+    │
+
+    ▼
+
+MongoDB
+
+    │
+
+    ▼
+
+Login
+
+    │
+
+    ▼
+
+JWT Generation
+
+    │
+
+    ▼
+
+Protected Routes
+
+    │
+
+    ▼
+
+Dashboard Access
+```
+
+---
+
+# 📂 Feature Modules
+
+Aphelion follows a feature-based architecture.
+
+```text
+features/
+
+authentication/
+
+dashboard/
+
+transactions/
+
+categories/
+
+goals/
+
+investments/
+
+insurance/
+
+loans/
+
+analytics/
+```
+
+Each feature contains:
+
+- Components
+- Redux Slice
+- API Calls
+- Utilities
+- Pages (if required)
+
+This keeps the project scalable and easy to maintain.
+
+---
+
+# 🧩 State Management
+
+Aphelion uses **Redux Toolkit** for centralized state management.
+
+Current slices include:
+
+```text
+authSlice
+
+dashboardSlice
+
+transactionSlice
+
+categorySlice
+
+goalSlice
+
+investmentSlice
+
+insuranceSlice
+
+loanSlice
+```
+
+Future slices:
+
+```text
+analyticsSlice
+
+notificationSlice
+
+aiSlice
+
+themeSlice
+```
+
+---
+
+# 📊 Data Flow
+
+```text
+React Component
+
+      │
+
+      ▼
+
+Redux Action
+
+      │
+
+      ▼
+
+Redux Slice
+
+      │
+
+      ▼
+
+Axios API Request
+
+      │
+
+      ▼
+
+Express Route
+
+      │
+
+      ▼
+
+Controller
+
+      │
+
+      ▼
+
+MongoDB
+
+      │
+
+      ▼
+
+JSON Response
+
+      │
+
+      ▼
+
+Redux Store Update
+
+      │
+
+      ▼
+
+UI Re-render
+```
+
+---
+
+# 🛠 Development Workflow
+
+```text
+Feature Planning
+
+        │
+
+        ▼
+
+UI Development
+
+        │
+
+        ▼
+
+Redux Integration
+
+        │
+
+        ▼
+
+REST API Development
+
+        │
+
+        ▼
+
+Database Integration
+
+        │
+
+        ▼
+
+Testing
+
+        │
+
+        ▼
+
+Deployment
+```
+
+---
+
+# 🎯 Project Goals
+
+The primary goals of Aphelion are:
+
+- Build a scalable MERN architecture
+- Deliver a premium user experience
+- Simplify personal finance management
+- Encourage healthy financial habits
+- Prepare the platform for AI-powered insights
+- Maintain clean, reusable, and production-ready code
+
+---
+
+> **"Great software isn't just about writing code. It's about creating systems that scale, solve problems, and inspire confidence."**
+
+---
