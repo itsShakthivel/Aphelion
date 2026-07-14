@@ -1,75 +1,109 @@
 import Loan from "../models/Loan.js";
 
-// CREATE
-export const createLoan =
-    async (req, res) => {
+// ==========================
+// Create Loan
+// ==========================
 
-        try {
+export const createLoan = async (req, res) => {
 
-            const loan =
-                await Loan.create({
+    try {
 
-                    ...req.body,
+        const loan = await Loan.create({
 
-                    user:
-                        req.user.id,
-                });
+            user: req.user.id,
 
-            res
-                .status(201)
-                .json(loan);
+            loanName: req.body.loanName,
 
-        } catch (error) {
+            type: req.body.type,
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+            lender: req.body.lender,
 
-        }
+            principalAmount: req.body.principalAmount,
+
+            outstandingAmount: req.body.outstandingAmount,
+
+            interestRate: req.body.interestRate,
+
+            emi: req.body.emi,
+
+            startDate: req.body.startDate,
+
+            endDate: req.body.endDate,
+
+            notes: req.body.notes,
+
+        });
+
+        res.status(201).json(loan);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
 };
 
-// GET
-export const getLoans =
-    async (req, res) => {
+// ==========================
+// Get All Loans
+// ==========================
 
-        try {
+export const getLoans = async (req, res) => {
 
-            const loans =
-                await Loan.find({
-                    user:
-                        req.user.id,
-                });
+    try {
 
-            res.json(loans);
+        const loans = await Loan.find({
 
-        } catch (error) {
+            user: req.user.id,
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+        }).sort({
 
-        }
+            endDate: 1,
+
+        });
+
+        res.json(loans);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
 };
 
-// GET SINGLE LOAN
+// ==========================
+// Get Single Loan
+// ==========================
+
 export const getLoan = async (req, res) => {
+
     try {
 
         const loan = await Loan.findOne({
+
             _id: req.params.id,
+
             user: req.user.id,
+
         });
 
         if (!loan) {
+
             return res.status(404).json({
+
                 message: "Loan not found",
+
             });
+
         }
 
         res.json(loan);
@@ -77,69 +111,109 @@ export const getLoan = async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
+
             message: error.message,
+
         });
 
     }
+
 };
 
-// UPDATE
-export const updateLoan =
-    async (req, res) => {
+// ==========================
+// Update Loan
+// ==========================
 
-        try {
+export const updateLoan = async (req, res) => {
 
-            const loan =
-                await Loan
-                    .findByIdAndUpdate(
+    try {
 
-                        req.params.id,
+        const loan = await Loan.findOneAndUpdate(
 
-                        req.body,
+            {
 
-                        {
-                            new: true,
-                        }
-                    );
+                _id: req.params.id,
 
-            res.json(loan);
+                user: req.user.id,
 
-        } catch (error) {
+            },
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+            req.body,
 
-        }
-};
+            {
 
-// DELETE
-export const deleteLoan =
-    async (req, res) => {
+                new: true,
 
-        try {
+                runValidators: true,
 
-            await Loan
-                .findByIdAndDelete(
-                    req.params.id
-                );
+            }
 
-            res.json({
-                message:
-                    "Loan deleted",
+        );
+
+        if (!loan) {
+
+            return res.status(404).json({
+
+                message: "Loan not found",
+
             });
 
-        } catch (error) {
+        }
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+        res.json(loan);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
+};
+
+// ==========================
+// Delete Loan
+// ==========================
+
+export const deleteLoan = async (req, res) => {
+
+    try {
+
+        const loan = await Loan.findOneAndDelete({
+
+            _id: req.params.id,
+
+            user: req.user.id,
+
+        });
+
+        if (!loan) {
+
+            return res.status(404).json({
+
+                message: "Loan not found",
+
+            });
 
         }
+
+        res.json({
+
+            message: "Loan deleted successfully",
+
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
 };

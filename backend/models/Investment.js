@@ -11,28 +11,40 @@ const investmentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        trim: true,
     },
 
-    amount: {
+    type: {
+        type: String,
+        enum: [
+            "stock",
+            "mutual_fund",
+            "gold",
+            "crypto",
+            "fd",
+            "other",
+        ],
+        required: true,
+    },
+
+    investedAmount: {
         type: Number,
         required: true,
     },
 
     currentValue: {
         type: Number,
-        default: 0,
+        required: true,
     },
 
-    type: {
+    purchaseDate: {
+        type: Date,
+        default: Date.now,
+    },
+
+    notes: {
         type: String,
-        enum: [
-            "mutualfund",
-            "stock",
-            "gold",
-            "crypto",
-            "fd",
-            "other"
-        ],
+        default: "",
     },
 
 }, {

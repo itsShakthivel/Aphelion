@@ -6,14 +6,15 @@ import {
     getLoan,
     updateLoan,
     deleteLoan,
-}
-from "../controllers/loanController.js";
+} from "../controllers/loanController.js";
 
-import protect
-from "../middleware/authMiddleware.js";
+import protect from "../middleware/authMiddleware.js";
 
-const router =
-    express.Router();
+const router = express.Router();
+
+// ==========================
+// Create
+// ==========================
 
 router.post(
     "/",
@@ -21,11 +22,19 @@ router.post(
     createLoan
 );
 
+// ==========================
+// Get All
+// ==========================
+
 router.get(
     "/",
     protect,
     getLoans
 );
+
+// ==========================
+// Get One
+// ==========================
 
 router.get(
     "/:id",
@@ -33,11 +42,19 @@ router.get(
     getLoan
 );
 
+// ==========================
+// Update
+// ==========================
+
 router.put(
     "/:id",
     protect,
     updateLoan
 );
+
+// ==========================
+// Delete
+// ==========================
 
 router.delete(
     "/:id",

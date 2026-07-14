@@ -6,14 +6,15 @@ import {
     getInsurance,
     updateInsurance,
     deleteInsurance,
-}
-from "../controllers/insuranceController.js";
+} from "../controllers/insuranceController.js";
 
-import protect
-from "../middleware/authMiddleware.js";
+import protect from "../middleware/authMiddleware.js";
 
-const router =
-    express.Router();
+const router = express.Router();
+
+// ==========================
+// Create
+// ==========================
 
 router.post(
     "/",
@@ -21,11 +22,19 @@ router.post(
     createInsurance
 );
 
+// ==========================
+// Get All
+// ==========================
+
 router.get(
     "/",
     protect,
     getInsurances
 );
+
+// ==========================
+// Get One
+// ==========================
 
 router.get(
     "/:id",
@@ -33,11 +42,19 @@ router.get(
     getInsurance
 );
 
+// ==========================
+// Update
+// ==========================
+
 router.put(
     "/:id",
     protect,
     updateInsurance
 );
+
+// ==========================
+// Delete
+// ==========================
 
 router.delete(
     "/:id",

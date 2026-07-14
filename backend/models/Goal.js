@@ -11,6 +11,22 @@ const goalSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
+        trim: true,
+    },
+
+    category: {
+        type: String,
+        enum: [
+            "emergency",
+            "house",
+            "car",
+            "vacation",
+            "education",
+            "retirement",
+            "investment",
+            "other",
+        ],
+        default: "other",
     },
 
     targetAmount: {
@@ -23,8 +39,14 @@ const goalSchema = new mongoose.Schema({
         default: 0,
     },
 
-    deadline: {
+    targetDate: {
         type: Date,
+        required: true,
+    },
+
+    notes: {
+        type: String,
+        default: "",
     },
 
 }, {

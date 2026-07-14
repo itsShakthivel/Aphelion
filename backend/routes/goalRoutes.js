@@ -1,17 +1,11 @@
 import express from "express";
 
 import {
-
     createGoal,
-
     getGoals,
-
     getGoal,
-
     updateGoal,
-
     deleteGoal,
-
 } from "../controllers/goalController.js";
 
 import protect from "../middleware/authMiddleware.js";
