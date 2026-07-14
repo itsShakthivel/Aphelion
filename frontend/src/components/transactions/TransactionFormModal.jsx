@@ -214,7 +214,7 @@ const TransactionFormModal = ({
 
                         {categories.filter(
                             (category) =>
-                                category.type === form.Data.type
+                                category.type === formData.type
                         ).map((category) => (
                             <option 
                             key={category._id}
