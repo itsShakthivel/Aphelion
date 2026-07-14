@@ -1,75 +1,105 @@
 import Insurance from "../models/Insurance.js";
 
-// CREATE
-export const createInsurance =
-    async (req, res) => {
+// ==========================
+// Create Insurance
+// ==========================
 
-        try {
+export const createInsurance = async (req, res) => {
 
-            const insurance =
-                await Insurance.create({
+    try {
 
-                    ...req.body,
+        const insurance = await Insurance.create({
 
-                    user:
-                        req.user.id,
-                });
+            user: req.user.id,
 
-            res
-                .status(201)
-                .json(insurance);
+            policyName: req.body.policyName,
 
-        } catch (error) {
+            type: req.body.type,
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+            provider: req.body.provider,
 
-        }
+            premium: req.body.premium,
+
+            coverage: req.body.coverage,
+
+            startDate: req.body.startDate,
+
+            expiryDate: req.body.expiryDate,
+
+            notes: req.body.notes,
+
+        });
+
+        res.status(201).json(insurance);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
 };
 
-// GET ALL
-export const getInsurances =
-    async (req, res) => {
+// ==========================
+// Get All Insurance
+// ==========================
 
-        try {
+export const getInsurances = async (req, res) => {
 
-            const insurances =
-                await Insurance.find({
-                    user:
-                        req.user.id,
-                });
+    try {
 
-            res.json(insurances);
+        const insurances = await Insurance.find({
 
-        } catch (error) {
+            user: req.user.id,
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+        }).sort({
 
-        }
+            expiryDate: 1,
+
+        });
+
+        res.json(insurances);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
 };
 
-// GET SINGLE INSURANCE
+// ==========================
+// Get Single Insurance
+// ==========================
+
 export const getInsurance = async (req, res) => {
+
     try {
 
         const insurance = await Insurance.findOne({
+
             _id: req.params.id,
+
             user: req.user.id,
+
         });
 
         if (!insurance) {
+
             return res.status(404).json({
+
                 message: "Insurance not found",
+
             });
+
         }
 
         res.json(insurance);
@@ -77,69 +107,109 @@ export const getInsurance = async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
+
             message: error.message,
+
         });
 
     }
+
 };
 
-// UPDATE
-export const updateInsurance =
-    async (req, res) => {
+// ==========================
+// Update Insurance
+// ==========================
 
-        try {
+export const updateInsurance = async (req, res) => {
 
-            const insurance =
-                await Insurance
-                    .findByIdAndUpdate(
+    try {
 
-                        req.params.id,
+        const insurance = await Insurance.findOneAndUpdate(
 
-                        req.body,
+            {
 
-                        {
-                            new: true,
-                        }
-                    );
+                _id: req.params.id,
 
-            res.json(insurance);
+                user: req.user.id,
 
-        } catch (error) {
+            },
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+            req.body,
 
-        }
-};
+            {
 
-// DELETE
-export const deleteInsurance =
-    async (req, res) => {
+                new: true,
 
-        try {
+                runValidators: true,
 
-            await Insurance
-                .findByIdAndDelete(
-                    req.params.id
-                );
+            }
 
-            res.json({
-                message:
-                    "Insurance deleted",
+        );
+
+        if (!insurance) {
+
+            return res.status(404).json({
+
+                message: "Insurance not found",
+
             });
 
-        } catch (error) {
+        }
 
-            res
-                .status(500)
-                .json({
-                    message:
-                        error.message,
-                });
+        res.json(insurance);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
+};
+
+// ==========================
+// Delete Insurance
+// ==========================
+
+export const deleteInsurance = async (req, res) => {
+
+    try {
+
+        const insurance = await Insurance.findOneAndDelete({
+
+            _id: req.params.id,
+
+            user: req.user.id,
+
+        });
+
+        if (!insurance) {
+
+            return res.status(404).json({
+
+                message: "Insurance not found",
+
+            });
 
         }
+
+        res.json({
+
+            message: "Insurance deleted successfully",
+
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
 };

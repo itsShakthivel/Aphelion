@@ -1,15 +1,28 @@
 import Investment from "../models/Investment.js";
 
-// CREATE
+// ==========================
+// Create Investment
+// ==========================
+
 export const createInvestment = async (req, res) => {
 
     try {
 
         const investment = await Investment.create({
 
-            ...req.body,
-
             user: req.user.id,
+
+            name: req.body.name,
+
+            type: req.body.type,
+
+            investedAmount: req.body.investedAmount,
+
+            currentValue: req.body.currentValue,
+
+            purchaseDate: req.body.purchaseDate,
+
+            notes: req.body.notes,
 
         });
 
@@ -18,14 +31,19 @@ export const createInvestment = async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
+
             message: error.message,
+
         });
 
     }
 
 };
 
-// GET ALL
+// ==========================
+// Get All Investments
+// ==========================
+
 export const getInvestments = async (req, res) => {
 
     try {
@@ -34,6 +52,10 @@ export const getInvestments = async (req, res) => {
 
             user: req.user.id,
 
+        }).sort({
+
+            purchaseDate: -1,
+
         });
 
         res.json(investments);
@@ -41,14 +63,19 @@ export const getInvestments = async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
+
             message: error.message,
+
         });
 
     }
 
 };
 
-// GET ONE
+// ==========================
+// Get Single Investment
+// ==========================
+
 export const getInvestment = async (req, res) => {
 
     try {
@@ -64,7 +91,9 @@ export const getInvestment = async (req, res) => {
         if (!investment) {
 
             return res.status(404).json({
+
                 message: "Investment not found",
+
             });
 
         }
@@ -74,84 +103,107 @@ export const getInvestment = async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
+
             message: error.message,
+
         });
 
     }
 
 };
 
-// UPDATE
+// ==========================
+// Update Investment
+// ==========================
+
 export const updateInvestment = async (req, res) => {
 
     try {
 
-        const investment =
-            await Investment.findOneAndUpdate(
+        const investment = await Investment.findOneAndUpdate(
 
-                {
-                    _id: req.params.id,
-                    user: req.user.id,
-                },
-
-                req.body,
-
-                {
-                    new: true,
-                }
-
-            );
-
-        if (!investment) {
-
-            return res.status(404).json({
-                message: "Investment not found",
-            });
-
-        }
-
-        res.json(investment);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
-        });
-
-    }
-
-};
-
-// DELETE
-export const deleteInvestment = async (req, res) => {
-
-    try {
-
-        const investment =
-            await Investment.findOneAndDelete({
+            {
 
                 _id: req.params.id,
 
                 user: req.user.id,
 
-            });
+            },
+
+            req.body,
+
+            {
+
+                new: true,
+
+                runValidators: true,
+
+            }
+
+        );
 
         if (!investment) {
 
             return res.status(404).json({
+
                 message: "Investment not found",
+
+            });
+
+        }
+
+        res.json(investment);
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            message: error.message,
+
+        });
+
+    }
+
+};
+
+// ==========================
+// Delete Investment
+// ==========================
+
+export const deleteInvestment = async (req, res) => {
+
+    try {
+
+        const investment = await Investment.findOneAndDelete({
+
+            _id: req.params.id,
+
+            user: req.user.id,
+
+        });
+
+        if (!investment) {
+
+            return res.status(404).json({
+
+                message: "Investment not found",
+
             });
 
         }
 
         res.json({
-            message: "Investment deleted",
+
+            message: "Investment deleted successfully",
+
         });
 
     } catch (error) {
 
         res.status(500).json({
+
             message: error.message,
+
         });
 
     }

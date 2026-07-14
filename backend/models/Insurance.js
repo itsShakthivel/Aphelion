@@ -8,6 +8,12 @@ const insuranceSchema = new mongoose.Schema({
         required: true,
     },
 
+    policyName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+
     type: {
         type: String,
         enum: [
@@ -15,7 +21,7 @@ const insuranceSchema = new mongoose.Schema({
             "term",
             "vehicle",
             "home",
-            "other"
+            "other",
         ],
         required: true,
     },
@@ -25,18 +31,29 @@ const insuranceSchema = new mongoose.Schema({
         required: true,
     },
 
-    coverageAmount: {
-        type: Number,
-        required: true,
-    },
-
     premium: {
         type: Number,
         required: true,
     },
 
+    coverage: {
+        type: Number,
+        required: true,
+    },
+
+    startDate: {
+        type: Date,
+        required: true,
+    },
+
     expiryDate: {
         type: Date,
+        required: true,
+    },
+
+    notes: {
+        type: String,
+        default: "",
     },
 
 }, {

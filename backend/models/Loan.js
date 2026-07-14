@@ -8,16 +8,29 @@ const loanSchema = new mongoose.Schema({
         required: true,
     },
 
+    loanName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+
     type: {
         type: String,
         enum: [
             "home",
             "personal",
-            "vehicle",
             "education",
-            "creditcard",
-            "other"
+            "vehicle",
+            "gold",
+            "credit_card",
+            "other",
         ],
+        required: true,
+    },
+
+    lender: {
+        type: String,
+        required: true,
     },
 
     principalAmount: {
@@ -30,17 +43,29 @@ const loanSchema = new mongoose.Schema({
         required: true,
     },
 
+    interestRate: {
+        type: Number,
+        required: true,
+    },
+
     emi: {
         type: Number,
         required: true,
     },
 
-    interestRate: {
-        type: Number,
+    startDate: {
+        type: Date,
+        required: true,
     },
 
-    tenureMonths: {
-        type: Number,
+    endDate: {
+        type: Date,
+        required: true,
+    },
+
+    notes: {
+        type: String,
+        default: "",
     },
 
 }, {

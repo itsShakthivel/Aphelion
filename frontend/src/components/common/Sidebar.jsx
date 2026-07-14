@@ -9,6 +9,8 @@ import {
   FaBullseye,
   FaCog,
   FaFolderOpen,
+  FaShieldAlt,
+  FaUniversity,
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -34,6 +36,16 @@ function Sidebar() {
       title: "Investments",
       icon: <FaChartPie />,
       path: "/investments",
+    },
+    {
+      title: "Insurance",
+      icon: <FaShieldAlt />,
+      path: "/insurance",
+    },
+    {
+      title: "Loans",
+      icon: <FaUniversity />,
+      path: "/loans",
     },
     {
       title: "Goals",
