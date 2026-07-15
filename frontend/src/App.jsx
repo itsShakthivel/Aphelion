@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { getProfile } from "./features/auth/authSlice";
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
+import ForgotPassword from "./Pages/auth/ForgotPassword";
 import Dashboard from "./Pages/dashboard/Dashboard";
 import Transactions from "./Pages/Transactions/Transactions";
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -44,6 +45,11 @@ function App() {
         <Route
           path="/signup"
           element={<Signup />}
+        />
+
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
         />
 
         <Route 
