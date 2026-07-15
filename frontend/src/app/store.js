@@ -9,6 +9,7 @@ import insuranceReducer from "../features/insurance/insuranceSlice";
 import loanReducer from "../features/loan/loanSlice";
 import retirementReducer from "../features/retirement/retirementSlice";
 import goalReducer from "../features/goal/goalSlice";
+import analyticsReducer from "../features/analytics/analyticsSlice";
 
 export const store = configureStore({
 
@@ -31,6 +32,8 @@ export const store = configureStore({
         retirement: retirementReducer,
 
         goal: goalReducer,
+
+        analytics: analyticsReducer,
 
     },
 

@@ -12,6 +12,7 @@ import Investments from "./Pages/investments/Investments";
 import Insurance from "./Pages/Insurance/Insurance";
 import Loans from "./Pages/Loans/Loans";
 import Goals from "./Pages/goals/Goals";
+import Analytics from "./Pages/Analytics/Analytics";
 
 function App() {
 
@@ -104,6 +105,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Goals />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
               </ProtectedRoute>
             }
           />    

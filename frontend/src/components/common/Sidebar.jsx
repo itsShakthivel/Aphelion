@@ -11,7 +11,9 @@ import {
   FaFolderOpen,
   FaShieldAlt,
   FaUniversity,
+  FaChartLine,
 } from "react-icons/fa";
+
 
 function Sidebar() {
   const [open, setOpen] = useState(true);
@@ -56,6 +58,11 @@ function Sidebar() {
       title: "Settings",
       icon: <FaCog />,
       path: "/settings",
+    },
+    {
+      title: "Analytics",
+      icon: <FaChartLine />,
+      path: "/analytics",
     },
   ];
 
