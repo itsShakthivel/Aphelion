@@ -1,0 +1,80 @@
+import { useSelector } from "react-redux";
+
+import {
+    FaArrowUp,
+    FaArrowDown,
+    FaPiggyBank,
+    FaChartLine,
+} from "react-icons/fa";
+
+import SummaryCard from "../../Common/SummaryCard";
+
+const AnalyticsSummaryCards = () => {
+
+    const { overview } = useSelector(
+        (state) => state.analytics
+    );
+
+    const cards = [
+
+        {
+            title: "Income",
+            value: `₹ ${Number(
+                overview?.income || 0
+            ).toLocaleString("en-IN")}`,
+            icon: <FaArrowUp />,
+            color: "green",
+        },
+
+        {
+            title: "Expenses",
+            value: `₹ ${Number(
+                overview?.expenses || 0
+            ).toLocaleString("en-IN")}`,
+            icon: <FaArrowDown />,
+            color: "red",
+        },
+
+        {
+            title: "Savings",
+            value: `₹ ${Number(
+                overview?.savings || 0
+            ).toLocaleString("en-IN")}`,
+            icon: <FaPiggyBank />,
+            color: "blue",
+        },
+
+        {
+            title: "Investments",
+            value: `₹ ${Number(
+                overview?.investments?.currentValue || 0
+            ).toLocaleString("en-IN")}`,
+            icon: <FaChartLine />,
+            color: "purple",
+        },
+
+    ];
+
+    return (
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+            {cards.map((card) => (
+
+                <SummaryCard
+
+                    key={card.title}
+
+                    {...card}
+
+                />
+
+            ))}
+
+        </div>
+
+    );
+
+};
+
+export default AnalyticsSummaryCards;
