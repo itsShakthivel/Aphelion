@@ -95,6 +95,18 @@ function Login() {
 
                 />
 
+                <div className="flex justify-end mb-4">
+
+                    <button
+                        type="button"
+                        onClick={() => navigate("/forgot-password")}
+                        className="text-sm text-blue-600 hover:underline"
+                    >
+                        Forgot Password?
+                    </button>
+
+                </div>
+
                 {error && (
 
                     <p className="text-red-400 mb-4">
