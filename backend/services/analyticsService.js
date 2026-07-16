@@ -479,3 +479,409 @@ export const getIncomeAnalytics = async (userId, query) => {
     return incomeAnalytics;
 
 };
+
+/*
+==========================================
+Cash Flow Analytics
+GET /api/analytics/cash-flow
+==========================================
+*/
+
+export const getCashFlowAnalytics = async (userId, query) => {
+
+    const { start, end } = getDateRange(query);
+
+    const cashFlow = await Transaction.aggregate([
+
+        {
+            $match: {
+                user: new mongoose.Types.ObjectId(userId),
+                date: {
+                    $gte: start,
+                    $lte: end,
+                },
+            },
+        },
+
+        {
+            $group: {
+
+                _id: {
+
+                    year: {
+                        $year: "$date",
+                    },
+
+                    month: {
+                        $month: "$date",
+                    },
+
+                },
+
+                income: {
+
+                    $sum: {
+
+                        $cond: [
+
+                            { $eq: ["$type", "income"] },
+
+                            "$amount",
+
+                            0,
+
+                        ],
+
+                    },
+
+                },
+
+                expense: {
+
+                    $sum: {
+
+                        $cond: [
+
+                            { $eq: ["$type", "expense"] },
+
+                            "$amount",
+
+                            0,
+
+                        ],
+
+                    },
+
+                },
+
+            },
+
+        },
+
+        {
+            $project: {
+
+                _id: 0,
+
+                month: {
+
+                    $concat: [
+
+                        {
+
+                            $arrayElemAt: [
+
+                                [
+
+                                    "",
+
+                                    "Jan",
+
+                                    "Feb",
+
+                                    "Mar",
+
+                                    "Apr",
+
+                                    "May",
+
+                                    "Jun",
+
+                                    "Jul",
+
+                                    "Aug",
+
+                                    "Sep",
+
+                                    "Oct",
+
+                                    "Nov",
+
+                                    "Dec",
+
+                                ],
+
+                                "$_id.month",
+
+                            ],
+
+                        },
+
+                        " ",
+
+                        {
+
+                            $toString: "$_id.year",
+
+                        },
+
+                    ],
+
+                },
+
+                income: 1,
+
+                expense: 1,
+
+                cashFlow: {
+
+                    $subtract: [
+
+                        "$income",
+
+                        "$expense",
+
+                    ],
+
+                },
+
+            },
+
+        },
+
+        {
+            $sort: {
+
+                month: 1,
+
+            },
+
+        },
+
+    ]);
+
+    return cashFlow;
+
+};
+
+/*
+==========================================
+Net Worth Analytics
+GET /api/analytics/net-worth
+==========================================
+*/
+
+export const getNetWorthAnalytics = async (userId) => {
+
+    const investments = await Investment.find({
+        user: userId,
+    });
+
+    const loans = await Loan.find({
+        user: userId,
+    });
+
+    const savingsTransactions = await Transaction.find({
+        user: userId,
+        type: "saving",
+    });
+
+    /*
+    ==========================================
+    Assets
+    ==========================================
+    */
+
+    const savings = savingsTransactions.reduce(
+
+        (total, transaction) =>
+
+            total + transaction.amount,
+
+        0
+
+    );
+
+    const investmentsValue = investments.reduce(
+
+        (total, investment) =>
+
+            total + investment.currentValue,
+
+        0
+
+    );
+
+    const totalAssets =
+
+        savings +
+
+        investmentsValue;
+
+    /*
+    ==========================================
+    Liabilities
+    ==========================================
+    */
+
+    const liabilities = loans.reduce(
+
+        (total, loan) =>
+
+            total + loan.outstandingAmount,
+
+        0
+
+    );
+
+    /*
+    ==========================================
+    Net Worth
+    ==========================================
+    */
+
+    const netWorth =
+
+        totalAssets -
+
+        liabilities;
+
+    return {
+
+        assets: roundAmount(totalAssets),
+
+        liabilities: roundAmount(liabilities),
+
+        netWorth: roundAmount(netWorth),
+
+    };
+
+};
+
+/*
+==========================================
+Net Worth Timeline
+GET /api/analytics/net-worth/timeline
+==========================================
+*/
+
+export const getNetWorthTimeline = async (userId) => {
+
+    const investments = await Investment.find({
+        user: userId,
+    });
+
+    const loans = await Loan.find({
+        user: userId,
+    });
+
+    const savings = await Transaction.aggregate([
+
+        {
+            $match: {
+                user: new mongoose.Types.ObjectId(userId),
+                type: "saving",
+            },
+        },
+
+        {
+            $group: {
+
+                _id: {
+
+                    year: {
+                        $year: "$date",
+                    },
+
+                    month: {
+                        $month: "$date",
+                    },
+
+                },
+
+                savings: {
+
+                    $sum: "$amount",
+
+                },
+
+            },
+
+        },
+
+        {
+            $sort: {
+
+                "_id.year": 1,
+
+                "_id.month": 1,
+
+            },
+
+        },
+
+    ]);
+
+    const investmentValue = investments.reduce(
+
+        (total, investment) =>
+
+            total + investment.currentValue,
+
+        0
+
+    );
+
+    const liabilities = loans.reduce(
+
+        (total, loan) =>
+
+            total + loan.outstandingAmount,
+
+        0
+
+    );
+
+    return savings.map((item) => ({
+
+        month:
+
+            [
+
+                "",
+
+                "Jan",
+
+                "Feb",
+
+                "Mar",
+
+                "Apr",
+
+                "May",
+
+                "Jun",
+
+                "Jul",
+
+                "Aug",
+
+                "Sep",
+
+                "Oct",
+
+                "Nov",
+
+                "Dec",
+
+            ][item._id.month] +
+
+            " " +
+
+            item._id.year,
+
+        netWorth:
+
+            roundAmount(
+
+                item.savings +
+
+                investmentValue -
+
+                liabilities
+
+            ),
+
+    }));
+
+};

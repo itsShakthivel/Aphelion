@@ -128,3 +128,117 @@ export const getIncome = async (req, res) => {
     }
 
 };
+
+export const getCashFlow = async (req, res) => {
+
+    try {
+
+        const data =
+            await analyticsService.getCashFlowAnalytics(
+                req.user.id,
+                req.query
+            );
+
+        res.status(200).json({
+
+            success: true,
+
+            data,
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Failed to fetch cash flow analytics.",
+
+        });
+
+    }
+
+};
+
+/*
+==========================================
+Net Worth Analytics
+GET /api/analytics/net-worth
+==========================================
+*/
+
+export const getNetWorth = async (req, res) => {
+
+    try {
+
+        const data =
+            await analyticsService.getNetWorthAnalytics(
+                req.user.id
+            );
+
+        res.status(200).json({
+
+            success: true,
+
+            data,
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Failed to fetch net worth analytics.",
+
+        });
+
+    }
+
+};
+
+/*
+==========================================
+Net Worth Timeline
+GET /api/analytics/net-worth/timeline
+==========================================
+*/
+
+export const getNetWorthTimeline = async (req, res) => {
+
+    try {
+
+        const data =
+            await analyticsService.getNetWorthTimeline(
+                req.user.id
+            );
+
+        res.status(200).json({
+
+            success: true,
+
+            data,
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Failed to fetch net worth timeline.",
+
+        });
+
+    }
+
+};
