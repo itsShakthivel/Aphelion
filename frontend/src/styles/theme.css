@@ -1,0 +1,225 @@
+/* ===========================================
+   APHELION DESIGN SYSTEM
+   Theme v1.0
+=========================================== */
+
+:root {
+
+    /* ========= Colors ========= */
+
+    --bg-primary: #F6F8FC;
+    --bg-secondary: #EEF2FF;
+
+    --surface: #FFFFFF;
+
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+
+    --primary: #4F46E5;
+    --secondary: #7C3AED;
+
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --info: #3B82F6;
+
+    /* ========= Glass ========= */
+
+    --glass-bg: rgba(255,255,255,.72);
+
+    --glass-bg-hover: rgba(255,255,255,.82);
+
+    --glass-border: rgba(255,255,255,.25);
+
+    --glass-blur: blur(20px);
+
+    /* ========= Shadows ========= */
+
+    --shadow-soft:
+        0 8px 20px rgba(15,23,42,.05);
+
+    --shadow-medium:
+        0 12px 30px rgba(15,23,42,.08);
+
+    --shadow-floating:
+        0 30px 60px rgba(15,23,42,.12);
+
+    --shadow-glow:
+        0 0 40px rgba(79,70,229,.20);
+
+    /* ========= Radius ========= */
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    /* ========= Transition ========= */
+
+    --transition-fast: .2s;
+
+    --transition-normal: .35s;
+
+    --transition-slow: .6s;
+
+}
+
+/* ===========================================
+   Utility Classes
+=========================================== */
+
+.glass {
+    background: var(--glass-bg);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid var(--glass-border);
+
+    box-shadow: var(--shadow-medium);
+}
+
+.floating {
+    box-shadow: var(--shadow-floating);
+}
+
+.transition-default {
+    transition: all var(--transition-normal) ease;
+}
+
+.hover-lift{
+
+transition:
+
+transform .3s ease,
+box-shadow .3s ease;
+
+}
+
+.hover-lift:hover{
+
+transform:
+
+translateY(-6px);
+
+box-shadow:
+
+var(--shadow-floating);
+
+}
+
+.app-background {
+
+    background:
+
+        linear-gradient(
+
+            180deg,
+
+            #F8FAFC 0%,
+
+            #EEF2FF 100%
+
+        );
+
+}
+
+.accent-primary {
+    border-top: 4px solid var(--primary);
+}
+
+.accent-success {
+    border-top: 4px solid var(--success);
+}
+
+.accent-danger {
+    border-top: 4px solid var(--danger);
+}
+
+.accent-warning {
+    border-top: 4px solid var(--warning);
+}
+
+.accent-info {
+    border-top: 4px solid var(--info);
+}
+
+.card-shine{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.card-shine::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-120%;
+
+    width:70%;
+
+    height:100%;
+
+    background:
+
+    linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        rgba(255,255,255,.35),
+
+        transparent
+
+    );
+
+    transition:.7s;
+
+}
+
+.card-shine:hover::before{
+
+    left:150%;
+
+}
+
+.icon-box{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:16px;
+
+    background: rgba(255,255,255,.4);
+
+}
+
+.shadow-soft {
+    box-shadow: var(--shadow-soft);
+}
+
+.shadow-medium {
+    box-shadow: var(--shadow-medium);
+}
+
+.shadow-floating {
+    box-shadow: var(--shadow-floating);
+}
+
+.shadow-glow {
+    box-shadow: var(--shadow-glow);
+}
