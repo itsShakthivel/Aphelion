@@ -7,7 +7,7 @@ import {
     FaChartLine,
 } from "react-icons/fa";
 
-import SummaryCard from "../../Common/SummaryCard";
+import SummaryCard from "../../ui/SummaryCard";
 
 const AnalyticsSummaryCards = () => {
 

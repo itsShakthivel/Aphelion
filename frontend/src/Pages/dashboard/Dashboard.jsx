@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { fetchDashboard } from "../../features/dashboard/dashboardSlice";
-import AnimatedSection from "../../components/common/AnimatedSection";
+import AnimatedSection from "../../components/animation/AnimatedSection";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import FinancialHealth from "../../components/dashboard/FinancialHealth";
 import SummaryCards from "../../components/dashboard/SummaryCards";
@@ -12,7 +12,7 @@ import NetWorthChart from "../../components/dashboard/NetWorthChart";
 import DashboardWidgets from "../../components/dashboard/DashboardWidgets";
 import RecentTransactions from "../../components/dashboard/RecentTransactions";
 import DashboardSkeleton from "../../components/dashboard/DashboardSkeleton";
-import ErrorState from "../../components/common/ErrorState";
+import ErrorState from "../../components/ui/ErrorState";
 
 function Dashboard() {
 

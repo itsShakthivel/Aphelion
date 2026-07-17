@@ -1,4 +1,4 @@
-import EmptyState from "../common/EmptyState";
+import EmptyState from "../ui/EmptyState";
 
 function RecentTransactions({ data }) {
 

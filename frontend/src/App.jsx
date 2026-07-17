@@ -7,7 +7,7 @@ import Signup from "./Pages/auth/Signup";
 import ForgotPassword from "./Pages/auth/ForgotPassword";
 import Dashboard from "./Pages/dashboard/Dashboard";
 import Transactions from "./Pages/Transactions/Transactions";
-import ProtectedRoute from "./components/common/ProtectedRoute";
+import ProtectedRoute from "./components/routing/ProtectedRoute";
 import Categories from "./Pages/Categories/Categories";
 import Investments from "./Pages/investments/Investments";
 import Insurance from "./Pages/Insurance/Insurance";

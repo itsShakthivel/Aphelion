@@ -1,4 +1,4 @@
-import LoadingSkeleton from "../common/LoadingSkeleton";
+import LoadingSkeleton from "../ui/LoadingSkeleton";
 
 function DashboardSkeleton() {
     return (

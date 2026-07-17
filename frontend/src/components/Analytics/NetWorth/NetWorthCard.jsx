@@ -1,4 +1,4 @@
-import AnimatedNumber from "../../common/AnimatedNumber";
+import AnimatedNumber from "../../ui/AnimatedNumber";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
