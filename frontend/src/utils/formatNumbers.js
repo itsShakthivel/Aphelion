@@ -1,6 +1,8 @@
-export const formatIndianNumber = (
+export const formatNumber = (
     value,
     {
+        currency = "INR",
+        locale = "en-IN",
         compact = false,
         decimals = 0,
     } = {}
@@ -8,44 +10,18 @@ export const formatIndianNumber = (
 
     const number = Number(value) || 0;
 
-    if (!compact) {
+    return new Intl.NumberFormat(locale, {
 
-        return number.toLocaleString("en-IN", {
+        style: "currency",
 
-            minimumFractionDigits: decimals,
+        currency,
 
-            maximumFractionDigits: decimals,
-
-        });
-
-    }
-
-    const abs = Math.abs(number);
-
-    if (abs >= 10000000) {
-
-        return `${(number / 10000000).toFixed(1)}Cr`;
-
-    }
-
-    if (abs >= 100000) {
-
-        return `${(number / 100000).toFixed(1)}L`;
-
-    }
-
-    if (abs >= 1000) {
-
-        return `${(number / 1000).toFixed(1)}K`;
-
-    }
-
-    return number.toLocaleString("en-IN", {
+        notation: compact ? "compact" : "standard",
 
         minimumFractionDigits: decimals,
 
         maximumFractionDigits: decimals,
 
-    });
+    }).format(number);
 
 };

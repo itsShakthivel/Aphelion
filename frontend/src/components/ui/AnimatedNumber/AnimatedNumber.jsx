@@ -7,7 +7,7 @@ import React, {
 
 import { useInView } from "react-intersection-observer";
 
-import { formatIndianNumber } from "../../utils/formatNumber";
+import { formatNumber } from "../../utils";
 
 const easingFunctions = {
     smooth: (t) => 1 - Math.pow(1 - t, 3),
@@ -18,7 +18,8 @@ const easingFunctions = {
 const AnimatedNumber = ({
     value = 0,
     duration = 1500,
-    prefix = "",
+    currency = "INR",
+    locale = "en-IN",
     suffix = "",
     decimals = 0,
     compact = false,
@@ -97,14 +98,15 @@ const AnimatedNumber = ({
 
         <span ref={ref}>
 
-            {prefix}
+            {formatNumber(displayValue, {
 
-            {formatIndianNumber(displayValue, {
+                currency,
+
+                locale,
 
                 compact,
 
                 decimals,
-
             })}
 
             {suffix}

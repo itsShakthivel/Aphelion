@@ -40,4 +40,10 @@ export const STATUS_COLORS = {
 
     },
 
+    neutral: {
+    text: "text-slate-600",
+    bg: "bg-slate-50",
+    border: "border-slate-200",
+},
+
 };

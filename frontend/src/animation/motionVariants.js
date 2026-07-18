@@ -71,3 +71,15 @@ export const scaleIn = {
     },
 
 };
+
+export const CARD_ANIMATIONS = {
+
+    fade: fadeIn,
+
+    fadeUp: fadeInUp,
+
+    scale: scaleIn,
+
+    none: null,
+
+};

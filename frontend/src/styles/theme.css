@@ -223,3 +223,11 @@ var(--shadow-floating);
 .shadow-glow {
     box-shadow: var(--shadow-glow);
 }
+
+.card-base{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
