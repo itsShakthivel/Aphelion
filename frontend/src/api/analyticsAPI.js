@@ -34,3 +34,13 @@ export const getNetWorthTimeline = (params = {}) =>
     API.get("/analytics/net-worth/timeline", {
         params,
     });
+
+export const getFinancialHealth = (params = {}) => 
+    API.get("/analytics/financial-health", {
+        params,
+    });
+
+export const getInsights = (params = {}) => 
+    API.get("/analytics/insights", {
+        params,
+    });

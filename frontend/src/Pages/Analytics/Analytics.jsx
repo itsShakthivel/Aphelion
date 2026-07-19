@@ -11,6 +11,8 @@ import {
     fetchCashFlowAnalytics,
     fetchNetWorthAnalytics,
     fetchNetWorthTimeline,
+    fetchFinancialHealth,
+    fetchInsights,
 } from "../../features/analytics/analyticsSlice";
 
 import AnalyticsHeader from "../../components/Analytics/Header/AnalyticsHeader";
@@ -22,33 +24,39 @@ import ExpenseBreakdown from "../../components/Analytics/Charts/ExpenseBreakdown
 import MonthlyExpenseTrend from "../../components/Analytics/Charts/MonthlyExpenseTrend";
 import IncomeBarChart from "../../components/Analytics/Charts/IncomeBarCharts";
 import CashFlowChart from "../../components/Analytics/Charts/CashFlowChart";
+
 import NetWorthCard from "../../components/Analytics/NetWorth/NetWorthCard";
 import NetWorthTimeline from "../../components/Analytics/NetWorth/NetWorthTimeline";
+
+import FinancialHealthCard from "../../components/Analytics/FinancialHealth/FinancialHealthCard";
 
 const Analytics = () => {
 
     const dispatch = useDispatch();
 
     const {
+
         loading,
+
         error,
+
+        financialHealth,
+
+        insights,
+
     } = useSelector((state) => state.analytics);
 
     useEffect(() => {
 
         dispatch(fetchOverview());
-
         dispatch(fetchExpenseAnalytics());
-
         dispatch(fetchMonthlyExpenseTrend());
-
         dispatch(fetchIncomeAnalytics());
-
         dispatch(fetchCashFlowAnalytics());
-
         dispatch(fetchNetWorthAnalytics());
-
         dispatch(fetchNetWorthTimeline());
+        dispatch(fetchFinancialHealth());
+        dispatch(fetchInsights());
 
     }, [dispatch]);
 
@@ -62,7 +70,13 @@ const Analytics = () => {
 
         loading.incomeAnalytics ||
 
-        loading.cashFlow;
+        loading.cashFlow ||
+
+        loading.netWorth ||
+
+        loading.netWorthTimeline ||
+
+        loading.financialHealth;
 
     const firstError =
 
@@ -74,33 +88,43 @@ const Analytics = () => {
 
         error.incomeAnalytics ||
 
-        error.cashFlow;
+        error.cashFlow ||
+
+        error.netWorth ||
+
+        error.netWorthTimeline ||
+
+        error.financialHealth;
 
     return (
 
         <DashboardLayout>
 
-            <div className="space-y-8">
+            <div className="space-y-10">
 
-                {/* Header */}
+                {/* ===========================================
+                    Header
+                =========================================== */}
 
                 <AnalyticsHeader />
 
-                {/* Date Filter */}
+                {/* ===========================================
+                    Date Filter
+                =========================================== */}
 
                 <AnalyticsDateFilter />
 
-                {/* Summary Cards */}
+                {/* ===========================================
+                    Summary Cards
+                =========================================== */}
 
                 <AnalyticsSummaryCards />
 
-                <NetWorthCard />
+                {/* ===========================================
+                    Loading
+                =========================================== */}
 
-                <NetWorthTimeline />
-
-                {/* Analytics Content */}
-
-                {isLoading ? (
+                {isLoading && (
 
                     <div className="bg-white rounded-xl shadow-md p-8 text-center">
 
@@ -112,7 +136,13 @@ const Analytics = () => {
 
                     </div>
 
-                ) : firstError ? (
+                )}
+
+                {/* ===========================================
+                    Error
+                =========================================== */}
+
+                {!isLoading && firstError && (
 
                     <div className="bg-red-50 border border-red-200 rounded-xl p-6">
 
@@ -124,11 +154,63 @@ const Analytics = () => {
 
                     </div>
 
-                ) : (
+                )}
 
-                    <div className="space-y-8">
+                {/* ===========================================
+                    Analytics Content
+                =========================================== */}
 
-                        {/* ================= Expense Analytics ================= */}
+                {!isLoading && !firstError && (
+
+                    <div className="space-y-12">
+
+                        {/* =======================================
+                            Net Worth
+                        ======================================= */}
+
+                        <section className="space-y-6">
+
+                            <h2 className="text-2xl font-bold">
+
+                                Net Worth
+
+                            </h2>
+
+                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+                                <NetWorthCard />
+
+                                <NetWorthTimeline />
+
+                            </div>
+
+                        </section>
+
+                        {/* =======================================
+                            Financial Health
+                        ======================================= */}
+
+                        {financialHealth && (
+
+                            <section className="space-y-6">
+
+                                <h2 className="text-2xl font-bold">
+
+                                    Financial Health
+
+                                </h2>
+
+                                <FinancialHealthCard
+                                    data={financialHealth}
+                                />
+
+                            </section>
+
+                        )}
+
+                        {/* =======================================
+                            Expense Analytics
+                        ======================================= */}
 
                         <section className="space-y-6">
 
@@ -150,7 +232,9 @@ const Analytics = () => {
 
                         </section>
 
-                        {/* ================= Income Analytics ================= */}
+                        {/* =======================================
+                            Income Analytics
+                        ======================================= */}
 
                         <section className="space-y-6">
 
@@ -164,7 +248,9 @@ const Analytics = () => {
 
                         </section>
 
-                        {/* ================= Cash Flow Analytics ================= */}
+                        {/* =======================================
+                            Cash Flow Analytics
+                        ======================================= */}
 
                         <section className="space-y-6">
 
@@ -178,7 +264,10 @@ const Analytics = () => {
 
                         </section>
 
-                        {/* ================= AI Insights ================= */}
+                        {/* =======================================
+                            Smart Insights
+                            (Phase 5.2)
+                        ======================================= */}
 
                         <section className="space-y-6">
 
@@ -190,9 +279,42 @@ const Analytics = () => {
 
                             <div className="bg-white rounded-xl shadow-md h-72 flex items-center justify-center">
 
-                                <p className="text-gray-500">
+                                <p className="text-gray-500 text-lg">
 
-                                    AI Financial Insights (Coming Soon)
+                                    Smart Financial Insights
+
+                                    <br />
+
+                                    Coming Soon 🚀
+
+                                </p>
+
+                            </div>
+
+                        </section>
+
+                        {/* =======================================
+                            FIRE Planner
+                            (Phase 5.3)
+                        ======================================= */}
+
+                        <section className="space-y-6">
+
+                            <h2 className="text-2xl font-bold">
+
+                                FIRE Planner
+
+                            </h2>
+
+                            <div className="bg-white rounded-xl shadow-md h-72 flex items-center justify-center">
+
+                                <p className="text-gray-500 text-lg">
+
+                                    FIRE Planner
+
+                                    <br />
+
+                                    Coming Soon 🚀
 
                                 </p>
 

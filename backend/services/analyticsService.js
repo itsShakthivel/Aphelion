@@ -9,6 +9,8 @@ import {
     getDateRange,
     roundAmount,
 } from "../utils/analyticsUtils.js";
+import { calculateFinancialHealth } from "../utils/financialHealthEngine.js";
+import { generateFinancialInsights } from "../utils/financialInsightsEngine.js"
 
 /*
 ===========================================
@@ -883,5 +885,243 @@ export const getNetWorthTimeline = async (userId) => {
             ),
 
     }));
+
+};
+
+/*
+==========================================
+Financial Health
+GET /api/analytics/financial-health
+==========================================
+*/
+
+export const getFinancialHealth = async (userId, query) => {
+
+    const { start, end } = getDateRange(query);
+
+    /*
+    ==========================================
+    Fetch Data
+    ==========================================
+    */
+
+    const transactions = await Transaction.find({
+        user: userId,
+        date: {
+            $gte: start,
+            $lte: end,
+        },
+    });
+
+    const investments = await Investment.find({
+        user: userId,
+    });
+
+    const loans = await Loan.find({
+        user: userId,
+    });
+
+    const insurances = await Insurance.find({
+        user: userId,
+    });
+
+    const goals = await Goal.find({
+        user: userId,
+    });
+
+    /*
+    ==========================================
+    Transaction Totals
+    ==========================================
+    */
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+    let totalSavings = 0;
+
+    transactions.forEach((transaction) => {
+
+        switch (transaction.type) {
+
+            case "income":
+                totalIncome += transaction.amount;
+                break;
+
+            case "expense":
+                totalExpense += transaction.amount;
+                break;
+
+            case "saving":
+                totalSavings += transaction.amount;
+                break;
+
+            default:
+                break;
+
+        }
+
+    });
+
+    /*
+    ==========================================
+    Investments
+    ==========================================
+    */
+
+    const totalInvestments = investments.reduce(
+
+        (sum, investment) =>
+
+            sum + investment.currentValue,
+
+        0
+
+    );
+
+    /*
+    ==========================================
+    Goals
+    ==========================================
+    */
+
+    const completedGoals = goals.filter(
+
+        goal => goal.currentAmount >= goal.targetAmount
+
+    ).length;
+
+    /*
+    ==========================================
+    Debt Metrics
+    ==========================================
+    */
+
+    const monthlyEMI = loans.reduce(
+
+        (sum, loan) =>
+
+            sum + loan.emi,
+
+        0
+
+    );
+
+    const debtToIncomeRatio =
+
+        totalIncome > 0
+
+            ? Number(
+
+                ((monthlyEMI / totalIncome) * 100)
+
+                .toFixed(2)
+
+            )
+
+            : 0;
+
+    /*
+    ==========================================
+    FIRE Placeholder
+    ==========================================
+    */
+
+    const retirement = null;
+
+    /*
+    ==========================================
+    Financial Health Engine
+    ==========================================
+    */
+
+    return calculateFinancialHealth({
+
+        totalIncome,
+
+        totalExpense,
+
+        totalSavings,
+
+        totalInvestments,
+
+        insurances,
+
+        loans,
+
+        monthlyEMI,
+
+        debtToIncomeRatio,
+
+        completedGoals,
+
+        totalGoals: goals.length,
+
+        retirement,
+
+    });
+
+};
+
+export const getFinancialInsights = async (userId, query) => {
+
+    /*
+    ==========================================
+    Existing Analytics Data
+    ==========================================
+    */
+
+    const overview = await getOverview(userId, query);
+
+    const expenseAnalytics = await getExpenseAnalytics(userId, query);
+
+    const incomeAnalytics = await getIncomeAnalytics(userId,query);
+
+    const cashFlow = await getCashFlowAnalytics(userId,query);
+
+    const financialHealth = await getFinancialHealth(userId,query);
+
+    /*
+    ==========================================
+    Prepare Engine Input
+    ==========================================
+    */
+
+    const input = {
+
+        totalIncome: overview.totalIncome,
+
+        totalExpense: overview.totalExpenses,
+
+        totalSavings: overview.totalSavings,
+
+        totalInvestments: overview.totalInvestments,
+
+        netWorth: overview.netWorth,
+
+        savingsRate: overview.savingsRate,
+
+        debtRatio:
+            financialHealth.metrics.debtToIncomeRatio,
+
+        emergencyFund:
+            financialHealth.breakdown.emergency.score,
+
+        completedGoals:
+            overview.completedGoals || 0,
+
+        fireProgress:
+            financialHealth.breakdown.fire.score,
+
+    };
+
+    /*
+    ==========================================
+    Generate Insights
+    ==========================================
+    */
+
+    const insights = generateFinancialInsights(input);
+
+    return insights;
 
 };

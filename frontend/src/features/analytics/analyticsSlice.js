@@ -11,6 +11,8 @@ import {
     getCashFlowAnalytics,
     getNetWorthAnalytics,
     getNetWorthTimeline,
+    getFinancialHealth,
+    getInsights,
 } from "../../api/analyticsAPI";
 
 /*
@@ -182,6 +184,55 @@ export const fetchNetWorthTimeline = createAsyncThunk(
 
     }
 
+);
+
+/*
+==========================================
+Financial Health
+==========================================
+*/
+
+export const fetchFinancialHealth = createAsyncThunk(
+
+        "analytics/fetchFinancialHealth",
+
+        async (params, thunkAPI) => {
+
+            try {
+
+                const response = await getFinancialHealth(params);
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+
+                    error.response?.data?.message ||
+
+                    "Failed to fetch financial health."
+
+                );
+
+            }
+
+        }
+
+    );
+
+export const fetchInsights = createAsyncThunk(
+    "analytics/fetchInsights",
+    async (params, thunkAPI) => {
+        try {
+            const response = await getInsights(params);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message ||
+                "Failed to fetch insights"
+            );
+        }
+    }
 );
 
 /*
@@ -447,6 +498,42 @@ const analyticsSlice = createSlice({
                 state.loading.netWorthTimeline = false;
 
                 state.error.netWorthTimeline = action.payload;
+            })
+
+            .addCase(fetchFinancialHealth.pending, (state) => {
+                state.loading.financialHealth = true;
+
+                state.error.financialHealth = null;
+            })
+
+            .addCase(fetchFinancialHealth.fulfilled, (state, action) => {
+                state.loading.financialHealth = false;
+                
+                state.financialHealth = action.payload.data;
+            })
+
+            .addCase(fetchFinancialHealth.rejected, (state, action) => {
+                state.loading.financialHealth = false;
+
+                state.error.financialHealth = action.payload.data;
+            })
+
+            .addCase(fetchInsights.pending, (state) => {
+                state.loading.insights = true;
+
+                state.error.insights = null;
+            })
+
+            .addCase(fetchInsights.fulfilled, (state, action) => {
+                state.loading.insights = false;
+
+                state.insights = action.payload.data;
+            })
+
+            .addCase(fetchInsights.rejected, (state, action) => {
+                state.loading.insights = false;
+
+                state.error.insights = action.payload;
             })
 
     },

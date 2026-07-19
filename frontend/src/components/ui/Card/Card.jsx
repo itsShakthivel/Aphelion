@@ -21,6 +21,7 @@ const Card = ({
     glass = true,
     hover = true,
     shine = true,
+    clickable = false,
     ...props
 }) => {
     const variants = CARD_ANIMATIONS?.[animation];
@@ -30,8 +31,25 @@ const Card = ({
             variants={variants}
             initial={variants ? "hidden" : false}
             animate={variants ? "visible" : false}
+            whileHover={
+                hover
+                    ? {
+                          y: -4,
+                          scale: 1.01,
+                          transition: {
+                              duration: 0.25,
+                              ease: "easeOut",
+                          },
+                      }
+                    : undefined
+            }
             className={cn(
                 "card-base",
+                "relative overflow-hidden",
+                "transition-all duration-300",
+                "border border-[var(--glass-border)]",
+                "bg-[var(--surface)]",
+                "backdrop-blur-xl",
 
                 paddingVariants?.[padding],
                 roundedVariants?.[rounded],
@@ -40,6 +58,9 @@ const Card = ({
 
                 glass && "glass",
                 hover && "hover-lift",
+
+                clickable && "cursor-pointer",
+
                 shine && "card-shine",
 
                 className

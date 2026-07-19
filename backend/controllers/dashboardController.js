@@ -4,7 +4,7 @@ import Goal from "../models/Goal.js";
 import Insurance from "../models/Insurance.js";
 import Loan from "../models/Loan.js";
 import Retirement from "../models/Retirement.js";
-import { calculateFinancialHealthV2 } from "../utils/financialHealthEngine.js";
+import { calculateFinancialHealth } from "../utils/financialHealthEngine.js";
 
 
 export const getDashboardAnalytics = async (req, res) => {
@@ -190,7 +190,7 @@ export const getDashboardAnalytics = async (req, res) => {
             },
         ];
 
-        const financialHealth = calculateFinancialHealthV2({
+        const financialHealth = calculateFinancialHealth({
             totalIncome,
             totalExpense,
             totalSavings,

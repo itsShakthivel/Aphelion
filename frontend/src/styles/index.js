@@ -1,13 +1,9 @@
-export { default as colors } from "./colors";
-
-export { default as shadows } from "./shadows";
-
-export { default as typography } from "./typography";
-
-export { default as radius } from "./radius";
-
-export { default as glass } from "./glass";
-
-export { default as animations } from "./animations";
-
-export { default as theme } from "./theme";
+export * from "./animations";
+export * from "./colors";
+export * from "./glass";
+export * from "./gradients";
+export * from "./radius";
+export * from "./shadows";
+export * from "./spacing";
+export * from "./theme";
+export * from "./typography";

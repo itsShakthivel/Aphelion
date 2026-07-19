@@ -1,29 +1,29 @@
-const typography = {
-
-    hero:
-
-        "text-5xl font-black tracking-tight",
+export const TYPOGRAPHY = {
 
     h1:
-
-        "text-4xl font-bold",
+        "text-4xl font-bold tracking-tight text-[var(--text-primary)]",
 
     h2:
+        "text-2xl font-semibold text-[var(--text-primary)]",
 
-        "text-3xl font-bold",
+    title:
+        "text-lg font-semibold text-[var(--text-primary)]",
 
-    h3:
-
-        "text-2xl font-semibold",
+    subtitle:
+        "text-sm text-[var(--text-secondary)]",
 
     body:
-
-        "text-base",
+        "text-base text-[var(--text-primary)]",
 
     caption:
+        "text-xs text-[var(--text-muted)]",
 
-        "text-sm text-slate-500",
+    metric:
+        "text-3xl font-bold tracking-tight text-[var(--text-primary)]",
+
+    metricSmall:
+        "text-xl font-semibold text-[var(--text-primary)]",
 
 };
 
-export default typography;
+export default TYPOGRAPHY;

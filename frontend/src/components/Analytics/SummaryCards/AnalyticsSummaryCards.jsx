@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
 
 import {
-    FaArrowUp,
-    FaArrowDown,
+    FaArrowTrendUp,
+    FaArrowTrendDown,
     FaPiggyBank,
     FaChartLine,
-} from "react-icons/fa";
+} from "react-icons/fa6";
 
 import SummaryCard from "../../ui/SummaryCard";
 
@@ -22,7 +22,7 @@ const AnalyticsSummaryCards = () => {
             value: `₹ ${Number(
                 overview?.income || 0
             ).toLocaleString("en-IN")}`,
-            icon: <FaArrowUp />,
+            icon: <FaArrowTrendUp />,
             color: "green",
         },
 
@@ -31,7 +31,7 @@ const AnalyticsSummaryCards = () => {
             value: `₹ ${Number(
                 overview?.expenses || 0
             ).toLocaleString("en-IN")}`,
-            icon: <FaArrowDown />,
+            icon: <FaArrowTrendDown />,
             color: "red",
         },
 

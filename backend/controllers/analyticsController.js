@@ -1,4 +1,7 @@
 import * as analyticsService from "../services/analyticsService.js";
+import {
+    getFinancialInsights,
+} from "../services/analyticsService.js";
 
 /*
 ==========================================
@@ -241,4 +244,68 @@ export const getNetWorthTimeline = async (req, res) => {
 
     }
 
+};
+
+/*
+==========================================
+Financial Health
+GET /api/analytics/financial-health
+==========================================
+*/
+
+export const getFinancialHealth = async (req, res) => {
+
+    try {
+
+        const data =
+            await analyticsService.getFinancialHealth(
+                req.user.id,
+                req.query
+            );
+
+        res.status(200).json({
+
+            success: true,
+
+            message: "Financial health fetched successfully.",
+
+            data,
+
+        });
+
+    } catch (error) {
+
+        console.error("Financial Health Error:", error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Failed to fetch financial health.",
+
+            error: error.message,
+
+        });
+
+    }
+
+};
+
+export const getInsights = async (req, res) => {
+    try {
+        const insights = await getFinancialInsights(req.user.id, req.query);
+
+        res.status(200).json({
+            success: true,
+            data: insights,
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch financial insights.",
+        });
+    }
 };
