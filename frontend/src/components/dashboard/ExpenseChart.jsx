@@ -6,6 +6,7 @@ import {
     ResponsiveContainer,
     Legend,
 } from "recharts";
+import ChartCard from "../ui/ChartCard";
 
 const COLORS = [
     "#22c55e",
@@ -27,13 +28,11 @@ function ExpenseChart({ data }) {
 
     return (
 
-        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
-
-            <h2 className="text-white text-xl font-semibold mb-6">
-
-                Expense Distribution
-
-            </h2>
+        <ChartCard
+            title="Expense Distribution"
+            subtitle="Category-wise spending"
+            accent="danger"
+        >
 
             {expenseData.length === 0 ? (
 
@@ -53,32 +52,22 @@ function ExpenseChart({ data }) {
                     <PieChart>
 
                         <Pie
-
                             data={expenseData}
-
                             dataKey="value"
-
                             nameKey="name"
-
                             outerRadius={110}
-
                             label
-
                         >
 
                             {expenseData.map((entry, index) => (
 
                                 <Cell
-
                                     key={index}
-
                                     fill={
                                         COLORS[
-                                            index %
-                                            COLORS.length
+                                            index % COLORS.length
                                         ]
                                     }
-
                                 />
 
                             ))}
@@ -95,7 +84,7 @@ function ExpenseChart({ data }) {
 
             )}
 
-        </div>
+        </ChartCard>
 
     );
 

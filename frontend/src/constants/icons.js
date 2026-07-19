@@ -1,21 +1,37 @@
+import {
+    FaWallet,
+    FaArrowTrendUp,
+    FaArrowTrendDown,
+    FaBullseye,
+    FaShieldHalved,
+    FaChartPie,
+    FaChartLine,
+    FaCoins,
+    FaPiggyBank,
+    FaHeartPulse,
+    FaBuildingColumns,
+    FaPercent,
+    FaMoneyBillTrendUp,
+    FaSackDollar,
+    FaReceipt,
+    FaCircleDollarToSlot,
+} from "react-icons/fa6";
+
 export {
-
-FaWallet,
-
-FaArrowTrendUp,
-
-FaArrowTrendDown,
-
-FaBullseye,
-
-FaShield,
-
-FaChartPie,
-
-FaChartLine,
-
-FaCoins,
-
-FaPiggyBank,
-
+    FaWallet,
+    FaArrowTrendUp,
+    FaArrowTrendDown,
+    FaBullseye,
+    FaShieldHalved,
+    FaChartPie,
+    FaChartLine,
+    FaCoins,
+    FaPiggyBank,
+    FaHeartPulse,
+    FaBuildingColumns,
+    FaPercent,
+    FaMoneyBillTrendUp,
+    FaSackDollar,
+    FaReceipt,
+    FaCircleDollarToSlot,
 };

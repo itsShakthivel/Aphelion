@@ -1,45 +1,35 @@
 import {
-    PieChart,
-    Pie,
-    Cell,
+    AreaChart,
+    Area,
+    XAxis,
+    YAxis,
+    CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    Legend,
 } from "recharts";
 
-const COLORS = [
-    "#2563eb",
-    "#22c55e",
-    "#f59e0b",
-    "#ef4444",
-    "#8b5cf6",
-    "#06b6d4",
-    "#ec4899",
-];
+import ChartCard from "../ui/ChartCard";
 
-function SavingsChart({ data }) {
+function NetWorthChart({ data }) {
 
     if (!data || !data.charts)
         return null;
 
-    const investmentData =
-        data.charts.investmentAllocation;
+    const netWorthData = data.charts.netWorthTrend || [];
 
     return (
 
-        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+        <ChartCard
+            title="Net Worth Trend"
+            subtitle="Growth of your assets over time"
+            accent="primary"
+        >
 
-            <h2 className="text-white text-xl font-semibold mb-6">
-
-                Investment Allocation
-
-            </h2>
-
-            {investmentData.length === 0 ? (
+            {netWorthData.length === 0 ? (
 
                 <div className="h-80 flex items-center justify-center text-slate-500">
 
-                    No Investment Data
+                    No Net Worth Data
 
                 </div>
 
@@ -50,52 +40,68 @@ function SavingsChart({ data }) {
                     height={320}
                 >
 
-                    <PieChart>
+                    <AreaChart data={netWorthData}>
 
-                        <Pie
+                        <defs>
 
-                            data={investmentData}
+                            <linearGradient
+                                id="netWorthGradient"
+                                x1="0"
+                                y1="0"
+                                x2="0"
+                                y2="1"
+                            >
 
-                            dataKey="value"
-
-                            nameKey="name"
-
-                            outerRadius={110}
-
-                            label
-
-                        >
-
-                            {investmentData.map((entry, index) => (
-
-                                <Cell
-                                    key={index}
-                                    fill={
-                                        COLORS[
-                                            index %
-                                            COLORS.length
-                                        ]
-                                    }
+                                <stop
+                                    offset="5%"
+                                    stopColor="#3b82f6"
+                                    stopOpacity={0.8}
                                 />
 
-                            ))}
+                                <stop
+                                    offset="95%"
+                                    stopColor="#3b82f6"
+                                    stopOpacity={0.05}
+                                />
 
-                        </Pie>
+                            </linearGradient>
+
+                        </defs>
+
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="#334155"
+                        />
+
+                        <XAxis
+                            dataKey="month"
+                            stroke="#94a3b8"
+                        />
+
+                        <YAxis
+                            stroke="#94a3b8"
+                        />
 
                         <Tooltip />
 
-                        <Legend />
+                        <Area
+                            type="monotone"
+                            dataKey="value"
+                            stroke="#3b82f6"
+                            strokeWidth={3}
+                            fill="url(#netWorthGradient)"
+                        />
 
-                    </PieChart>
+                    </AreaChart>
 
                 </ResponsiveContainer>
 
             )}
 
-        </div>
+        </ChartCard>
 
     );
 
 }
 
-export default SavingsChart;
+export default NetWorthChart;

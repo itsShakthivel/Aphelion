@@ -3,7 +3,7 @@ import {
     FaArrowTrendUp,
     FaArrowTrendDown,
     FaBullseye,
-    FaShield,
+    FaShieldHalved,
     FaChartPie,
     FaChartLine,
     FaCoins,
@@ -49,7 +49,7 @@ export const METRIC_TYPES = {
     insurance: {
         title: "Insurance",
         accent: "primary",
-        icon: FaShield,
+        icon: FaShieldHalved,
         compact: true,
     },
 
@@ -71,6 +71,14 @@ export const METRIC_TYPES = {
         title: "Portfolio",
         accent: "info",
         icon: FaChartPie,
+        compact: false,
+        suffix: "%",
+    },
+
+    savingsRate: {
+        title: "Savings Rate",
+        accent: "warning",
+        icon: FaCoins,
         compact: false,
         suffix: "%",
     },

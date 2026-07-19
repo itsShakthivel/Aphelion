@@ -7,7 +7,7 @@ import React, {
 
 import { useInView } from "react-intersection-observer";
 
-import { formatNumber } from "../../utils";
+import { formatNumber } from "../../../utils";
 
 const easingFunctions = {
     smooth: (t) => 1 - Math.pow(1 - t, 3),

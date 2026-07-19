@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { fetchDashboard } from "../../features/dashboard/dashboardSlice";
-import AnimatedSection from "../../animation/AnimatedSection";
+import AnimatedSection from "../../animations/AnimatedSection";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import FinancialHealth from "../../components/dashboard/FinancialHealth";
 import SummaryCards from "../../components/dashboard/SummaryCards";

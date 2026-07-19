@@ -1,15 +1,15 @@
-const radius = {
+export const RADIUS = {
 
-    sm: "8px",
+    sm: "rounded-lg",
 
-    md: "14px",
+    md: "rounded-xl",
 
-    lg: "20px",
+    lg: "rounded-2xl",
 
-    xl: "28px",
+    xl: "rounded-3xl",
 
-    full: "999px",
+    full: "rounded-full",
 
 };
 
-export default radius;
+export default RADIUS;

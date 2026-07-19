@@ -6,6 +6,7 @@ import {
     ResponsiveContainer,
     Legend,
 } from "recharts";
+import ChartCard from "../ui/ChartCard";
 
 const COLORS = [
     "#2563eb",
@@ -27,13 +28,11 @@ function SavingsChart({ data }) {
 
     return (
 
-        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
-
-            <h2 className="text-white text-xl font-semibold mb-6">
-
-                Investment Allocation
-
-            </h2>
+        <ChartCard
+            title="Investment Allocation"
+            subtitle="Portfolio distribution"
+            accent="info"
+        >
 
             {investmentData.length === 0 ? (
 
@@ -53,17 +52,11 @@ function SavingsChart({ data }) {
                     <PieChart>
 
                         <Pie
-
                             data={investmentData}
-
                             dataKey="value"
-
                             nameKey="name"
-
                             outerRadius={110}
-
                             label
-
                         >
 
                             {investmentData.map((entry, index) => (
@@ -72,8 +65,7 @@ function SavingsChart({ data }) {
                                     key={index}
                                     fill={
                                         COLORS[
-                                            index %
-                                            COLORS.length
+                                            index % COLORS.length
                                         ]
                                     }
                                 />
@@ -92,7 +84,7 @@ function SavingsChart({ data }) {
 
             )}
 
-        </div>
+        </ChartCard>
 
     );
 

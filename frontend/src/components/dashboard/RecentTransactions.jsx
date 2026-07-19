@@ -1,6 +1,17 @@
-import EmptyState from "../ui/EmptyState";
+import {
+    FaArrowTrendUp,
+    FaArrowTrendDown,
+} from "../../constants";
 
-function RecentTransactions({ data }) {
+import ChartCard from "../ui/ChartCard";
+import EmptyState from "../ui/EmptyState";
+import { formatNumber } from "../../utils";
+
+function RecentTransactions({
+    data,
+    currency = "INR",
+    locale = "en-IN",
+}) {
 
     if (!data) return null;
 
@@ -8,25 +19,19 @@ function RecentTransactions({ data }) {
 
     return (
 
-        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 mt-6">
-
-            <h2 className="text-xl font-bold text-white mb-5">
-
-                Recent Transactions
-
-            </h2>
+        <ChartCard
+            title="Recent Transactions"
+            subtitle="Latest activity across your accounts"
+            accent="primary"
+        >
 
             {transactions.length === 0 ? (
 
-                <div className="text-slate-500">
-
-                    <EmptyState
-                        icon="💸"
-                        title="No Transactions"
-                        message="Add your first transaction to start tracking your finances."
-                    />
-
-                </div>
+                <EmptyState
+                    icon="💸"
+                    title="No Transactions"
+                    message="Add your first transaction to start tracking your finances."
+                />
 
             ) : (
 
@@ -36,26 +41,74 @@ function RecentTransactions({ data }) {
 
                         <div
                             key={transaction._id}
-                            className="flex justify-between items-center border-b border-slate-800 pb-3"
+                            className="
+                                flex
+                                items-center
+                                justify-between
+                                border-b
+                                border-slate-800/60
+                                pb-4
+                                last:border-0
+                            "
                         >
 
-                            <div>
+                            <div className="flex items-center gap-4">
 
-                                <h3 className="text-white">
+                                <div
+                                    className={`
+                                        w-10
+                                        h-10
+                                        rounded-full
+                                        flex
+                                        items-center
+                                        justify-center
+                                        ${
+                                            transaction.type === "income"
+                                                ? "bg-emerald-500/10 text-emerald-400"
+                                                : "bg-rose-500/10 text-rose-400"
+                                        }
+                                    `}
+                                >
 
-                                    {transaction.description}
+                                    {transaction.type === "income" ? (
+                                        <FaArrowTrendUp />
+                                    ) : (
+                                        <FaArrowTrendDown />
+                                    )}
 
-                                </h3>
+                                </div>
 
-                                <p className="text-slate-500 text-sm">
+                                <div>
 
-                                    {transaction.category?.name || "Uncategorized"}
+                                    <h3 className="text-white font-medium">
 
-                                </p>
+                                        {transaction.description}
+
+                                    </h3>
+
+                                    <p className="text-sm text-slate-400">
+
+                                        {transaction.category?.name || "Uncategorized"}
+
+                                    </p>
+
+                                    {transaction.date && (
+
+                                        <p className="text-xs text-slate-500 mt-1">
+
+                                            {new Date(
+                                                transaction.date
+                                            ).toLocaleDateString(locale)}
+
+                                        </p>
+
+                                    )}
+
+                                </div>
 
                             </div>
 
-                            <div
+                            <span
                                 className={
                                     transaction.type === "income"
                                         ? "text-emerald-400 font-semibold"
@@ -63,9 +116,13 @@ function RecentTransactions({ data }) {
                                 }
                             >
 
-                                ₹{transaction.amount.toLocaleString()}
+                                {formatNumber(transaction.amount, {
+                                    currency:
+                                        transaction.currency || currency,
+                                    locale,
+                                })}
 
-                            </div>
+                            </span>
 
                         </div>
 
@@ -75,9 +132,10 @@ function RecentTransactions({ data }) {
 
             )}
 
-        </div>
+        </ChartCard>
 
     );
+
 }
 
 export default RecentTransactions;

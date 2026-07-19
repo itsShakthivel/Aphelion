@@ -1,14 +1,45 @@
-const glass = {
+export const GLASS = {
+    card: `
+        bg-[var(--surface)]
+        backdrop-blur-xl
+        border
+        border-[var(--glass-border)]
+    `,
 
-    background:
-        "rgba(255,255,255,.72)",
+    elevated: `
+        bg-[var(--surface-hover)]
+        backdrop-blur-xl
+        border
+        border-[var(--glass-border)]
+    `,
 
-    border:
-        "1px solid rgba(255,255,255,.25)",
+    sidebar: `
+        bg-[rgba(2,6,23,.92)]
+        backdrop-blur-2xl
+        border-r
+        border-[var(--glass-border)]
+    `,
 
-    blur:
-        "blur(20px)",
+    navbar: `
+        bg-[rgba(2,6,23,.75)]
+        backdrop-blur-xl
+        border-b
+        border-[var(--glass-border)]
+    `,
 
+    modal: `
+        bg-[rgba(15,23,42,.94)]
+        backdrop-blur-2xl
+        border
+        border-[var(--glass-border)]
+    `,
+
+    popup: `
+        bg-[rgba(15,23,42,.90)]
+        backdrop-blur-xl
+        border
+        border-[var(--glass-border)]
+    `,
 };
 
-export default glass;
+export default GLASS;

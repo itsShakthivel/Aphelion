@@ -1,17 +1,22 @@
-const shadows = {
+export const SHADOWS = {
+
+    none: "",
 
     soft:
-        "0 6px 20px rgba(15,23,42,.05)",
+        "shadow-[0_8px_20px_rgba(0,0,0,.18)]",
 
     medium:
-        "0 10px 30px rgba(15,23,42,.08)",
+        "shadow-[0_12px_30px_rgba(0,0,0,.25)]",
 
     floating:
-        "0 20px 60px rgba(15,23,42,.12)",
+        "shadow-[0_20px_50px_rgba(0,0,0,.35)]",
 
-    glow:
-        "0 0 40px rgba(79,70,229,.20)",
+    glowBlue:
+        "shadow-[0_0_35px_rgba(59,130,246,.18)]",
+
+    glowPurple:
+        "shadow-[0_0_35px_rgba(139,92,246,.18)]",
 
 };
 
-export default shadows;
+export default SHADOWS;

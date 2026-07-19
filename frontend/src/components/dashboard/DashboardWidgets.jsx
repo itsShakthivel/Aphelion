@@ -4,42 +4,68 @@ import {
     FaBullseye,
     FaPercentage,
 } from "react-icons/fa";
+
 import { motion } from "framer-motion";
 
-function DashboardWidgets({ data }) {
+import Card from "../ui/Card";
+import { formatNumber } from "../../utils/formatNumber";
+
+function DashboardWidgets({
+    data,
+    currency = "INR",
+    locale = "en-IN",
+}) {
 
     if (!data) return null;
 
-    const metrics = data.financialMetrics;
-    const goals = data.goals;
+    const metrics = data.financialMetrics || {};
+    const goals = data.goals || {};
 
     const widgets = [
 
         {
             title: "Monthly EMI",
-            value: `₹${metrics.monthlyEMI.toLocaleString()}`,
-            icon: <FaUniversity />,
+            value: formatNumber(
+                metrics.monthlyEMI || 0,
+                {
+                    currency,
+                    locale,
+                }
+            ),
+            icon: FaUniversity,
+            accent: "danger",
             color: "text-red-400",
         },
 
         {
             title: "Insurance Coverage",
-            value: `₹${metrics.insuranceCoverage.toLocaleString()}`,
-            icon: <FaShieldAlt />,
-            color: "text-green-400",
+            value: formatNumber(
+                metrics.insuranceCoverage || 0,
+                {
+                    currency,
+                    locale,
+                }
+            ),
+            icon: FaShieldAlt,
+            accent: "success",
+            color: "text-emerald-400",
         },
 
         {
             title: "Goals Completed",
-            value: `${goals.completed} / ${goals.total}`,
-            icon: <FaBullseye />,
+            value: `${goals.completed || 0} / ${goals.total || 0}`,
+            icon: FaBullseye,
+            accent: "primary",
             color: "text-blue-400",
         },
 
         {
-            title: "Debt to Income",
-            value: `${metrics.debtToIncomeRatio.toFixed(1)}%`,
-            icon: <FaPercentage />,
+            title: "Debt To Income",
+            value: `${(
+                metrics.debtToIncomeRatio || 0
+            ).toFixed(1)}%`,
+            icon: FaPercentage,
+            accent: "warning",
             color: "text-yellow-400",
         },
 
@@ -47,55 +73,75 @@ function DashboardWidgets({ data }) {
 
     return (
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-6 mt-6">
+        <div
+            className="
+                grid
+                grid-cols-1
+                sm:grid-cols-2
+                2xl:grid-cols-4
+                gap-6
+                mt-6
+            "
+        >
 
-            {widgets.map((widget) => (
+            {widgets.map((widget) => {
 
-                <motion.div
-                    key={widget.title}
-                    whileHover={{
-                        y: -5,
-                        scale: 1.03,
-                    }}
-                    whileTap={{
-                        scale: 0.98,
-                    }}
-                    className="bg-slate-900 rounded-2xl border border-slate-800 p-6"
-                >
+                const Icon = widget.icon;
 
-                    <div className="flex justify-between items-center">
+                return (
 
-                        <div>
+                    <motion.div
+                        key={widget.title}
+                        whileHover={{
+                            y: -4,
+                        }}
+                        whileTap={{
+                            scale: 0.98,
+                        }}
+                    >
 
-                            <p className="text-slate-400 text-sm">
+                        <Card accent={widget.accent}>
 
-                                {widget.title}
+                            <div className="flex items-center justify-between">
 
-                            </p>
+                                <div>
 
-                            <h2
-                                className={`text-2xl font-bold mt-3 ${widget.color}`}
-                            >
+                                    <p className="text-slate-400 text-sm">
 
-                                {widget.value}
+                                        {widget.title}
 
-                            </h2>
+                                    </p>
 
-                        </div>
+                                    <h2
+                                        className={`text-2xl font-bold mt-3 ${widget.color}`}
+                                    >
 
-                        <div
-                            className={`text-3xl ${widget.color}`}
-                        >
+                                        {widget.value}
 
-                            {widget.icon}
+                                    </h2>
 
-                        </div>
+                                </div>
 
-                    </div>
+                                <div
+                                    className={`
+                                        icon-box
+                                        ${widget.color}
+                                    `}
+                                >
 
-                </motion.div>
+                                    <Icon size={22} />
 
-            ))}
+                                </div>
+
+                            </div>
+
+                        </Card>
+
+                    </motion.div>
+
+                );
+
+            })}
 
         </div>
 
