@@ -29,6 +29,7 @@ import NetWorthCard from "../../components/Analytics/NetWorth/NetWorthCard";
 import NetWorthTimeline from "../../components/Analytics/NetWorth/NetWorthTimeline";
 
 import FinancialHealthCard from "../../components/Analytics/FinancialHealth/FinancialHealthCard";
+import InsightsSection from "../../components/Analytics/InsightCard/InsightsSection";
 
 const Analytics = () => {
 
@@ -207,6 +208,12 @@ const Analytics = () => {
                             </section>
 
                         )}
+
+                        <InsightsSection
+
+                            insights={insights}
+
+                        />
 
                         {/* =======================================
                             Expense Analytics

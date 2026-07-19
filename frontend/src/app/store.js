@@ -10,6 +10,7 @@ import loanReducer from "../features/loan/loanSlice";
 import retirementReducer from "../features/retirement/retirementSlice";
 import goalReducer from "../features/goal/goalSlice";
 import analyticsReducer from "../features/analytics/analyticsSlice";
+import fireReducer from "../features/fire/fireSlice";
 
 export const store = configureStore({
 
@@ -34,6 +35,8 @@ export const store = configureStore({
         goal: goalReducer,
 
         analytics: analyticsReducer,
+        
+        fire: fireReducer,
 
     },
 

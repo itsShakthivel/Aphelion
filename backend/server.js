@@ -15,6 +15,7 @@ import investmentRoutes from "./routes/investmentRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
+import fireRoutes from "./routes/fireRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -39,6 +40,7 @@ app.use("/api/retirement", retirementRoutes);
 app.use("/api/investments", investmentRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/fire", fireRoutes)
 
 app.get("/", (req, res) => {
     res.json({

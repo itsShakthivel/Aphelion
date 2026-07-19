@@ -15,6 +15,7 @@ import Loans from "./Pages/Loans/Loans";
 import Goals from "./Pages/goals/Goals";
 import Analytics from "./Pages/Analytics/Analytics";
 
+
 function App() {
 
   const dispatch = useDispatch();
@@ -122,7 +123,8 @@ function App() {
                 <Analytics />
               </ProtectedRoute>
             }
-          />    
+          />   
+
 
       </Routes>
   );
