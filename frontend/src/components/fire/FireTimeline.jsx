@@ -14,7 +14,13 @@ import {
 
     YAxis,
 
+    ReferenceLine
+
 } from "recharts";
+
+import FireTimelineTooltip from "./FireTimelineTooltip";
+
+import { formatCurrency } from "../../utils/formatCurrency";
 
 const FireTimeline = ({ timeline }) => {
 
@@ -22,7 +28,7 @@ const FireTimeline = ({ timeline }) => {
 
     return (
 
-        <section className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6">
+        <section className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-8 shadow-x1">
 
             <h2 className="mb-6 text-2xl font-bold text-white">
 
@@ -40,13 +46,36 @@ const FireTimeline = ({ timeline }) => {
 
                     >
 
-                        <CartesianGrid stroke="#27272a" />
+                        <CartesianGrid        stroke="#27272a" 
+                        vertical={false}
+                        />
 
-                        <XAxis dataKey="year" />
+                        <XAxis 
+                            dataKey="age"
+                            tick={{ fill: "#a1a1a1" }}
+                            axisLine={false}
+                            tickLine={false} 
+                        />
 
-                        <YAxis />
+                        <YAxis 
+                            tickFormatter={(value) => formatCurrency(value)}
+                            tick={{ fill: "#a1a1aa" }}
 
-                        <Tooltip />
+                            axisLine={false}
+
+                            tickLine={false}
+                        />
+
+                        <ReferenceLine
+                            y={timeline[0]?.target}
+                            stroke="#ef4444"
+                            strokeDasharray="5 5"
+                            label= "FIRE Target"
+                        />
+
+                        <Tooltip 
+                            content={<FireTimelineTooltip />}
+                        />
 
                         <Line
 
@@ -58,7 +87,11 @@ const FireTimeline = ({ timeline }) => {
 
                             strokeWidth={3}
 
-                            dot={false}
+                            dot={({ payload }) => 
+                                payload.achieved ? { r:7, fill: "#22c55e",} : false
+                            }
+
+                            animationDuration={1200}
 
                         />
 

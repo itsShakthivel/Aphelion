@@ -9,14 +9,18 @@ import {
     getDateRange,
     roundAmount,
 } from "../utils/analyticsUtils.js";
-import { calculateFinancialHealth } from "../utils/financialHealthEngine.js";
-import { generateFinancialInsights } from "../utils/financialInsightsEngine.js"
 
-/*
-===========================================
-Analytics Service
-===========================================
-*/
+import { calculateFinancialHealth } from "../utils/financialHealthEngine.js";
+import { generateFinancialInsights } from "../utils/financialInsightsEngine.js";
+
+import {
+    getTransactionSummary,
+    getInvestmentSummary,
+    getLoanSummary,
+    getInsuranceSummary,
+    getGoalSummary,
+    getNetWorthSummary,
+} from "../utils/financialCalculations/index.js";
 
 export const getOverview = async (userId, query) => {
 
@@ -46,183 +50,73 @@ export const getOverview = async (userId, query) => {
         user: userId,
     });
 
-    /*
-    ===========================================
-    Transactions
-    ===========================================
-    */
+    const transactionSummary =
+        getTransactionSummary(transactions);
 
-    let income = 0;
-    let expenses = 0;
-    let savings = 0;
-    let investmentTransactions = 0;
+    const investmentSummary =
+        getInvestmentSummary(investments);
 
-    transactions.forEach((transaction) => {
+    const loanSummary =
+        getLoanSummary(loans);
 
-        switch (transaction.type) {
+    const insuranceSummary =
+        getInsuranceSummary(insurances);
 
-            case "income":
-                income += transaction.amount;
-                break;
+    const goalSummary =
+        getGoalSummary(goals);
 
-            case "expense":
-                expenses += transaction.amount;
-                break;
+    const netWorthSummary =
+        getNetWorthSummary({
 
-            case "saving":
-                savings += transaction.amount;
-                break;
+            savings:
+                transactionSummary.savings,
 
-            case "investment":
-                investmentTransactions += transaction.amount;
-                break;
+            investmentValue:
+                investmentSummary.currentValue,
 
-            default:
-                break;
+            liabilities:
+                loanSummary.outstanding,
 
-        }
-
-    });
-
-    /*
-    ===========================================
-    Investments
-    ===========================================
-    */
-
-    const totalInvested = investments.reduce(
-
-        (total, investment) =>
-
-            total + investment.investedAmount,
-
-        0
-
-    );
-
-    const currentInvestmentValue = investments.reduce(
-
-        (total, investment) =>
-
-            total + investment.currentValue,
-
-        0
-
-    );
-
-    /*
-    ===========================================
-    Loans
-    ===========================================
-    */
-
-    const outstandingLoans = loans.reduce(
-
-        (total, loan) =>
-
-            total + loan.outstandingAmount,
-
-        0
-
-    );
-
-    /*
-    ===========================================
-    Insurance
-    ===========================================
-    */
-
-    const totalCoverage = insurances.reduce(
-
-        (total, insurance) =>
-
-            total + insurance.coverage,
-
-        0
-
-    );
-
-    /*
-    ===========================================
-    Goals
-    ===========================================
-    */
-
-    const completedGoals = goals.filter(
-
-        goal => goal.currentAmount >= goal.targetAmount
-
-    ).length;
-
-    const activeGoals = goals.length - completedGoals;
-
-    /*
-    ===========================================
-    Response
-    ===========================================
-    */
+        });
 
     return {
 
-        income: roundAmount(income),
+        ...transactionSummary,
 
-        expenses: roundAmount(expenses),
+        assets:
+            netWorthSummary.assets,
 
-        savings: roundAmount(savings),
+        liabilities:
+            netWorthSummary.liabilities,
 
-        investmentTransactions: roundAmount(investmentTransactions),
+        netWorth:
+            netWorthSummary.netWorth,
 
         investments: {
 
-            totalInvested: roundAmount(totalInvested),
+            totalInvested:
+                investmentSummary.totalInvested,
 
-            currentValue: roundAmount(currentInvestmentValue),
+            currentValue:
+                investmentSummary.currentValue,
 
-            gainLoss: roundAmount(
+            gainLoss:
+                investmentSummary.gainLoss,
 
-                currentInvestmentValue - totalInvested
-
-            ),
-
-        },
-
-        loans: {
-
-            outstanding: roundAmount(outstandingLoans),
-
-            totalLoans: loans.length,
+            totalMonthlyContribution:
+                investmentSummary.totalMonthlyContribution,
 
         },
 
-        insurance: {
+        loans: loanSummary,
 
-            totalPolicies: insurances.length,
+        insurance: insuranceSummary,
 
-            totalCoverage: roundAmount(totalCoverage),
-
-        },
-
-        goals: {
-
-            total: goals.length,
-
-            completed: completedGoals,
-
-            active: activeGoals,
-
-        },
+        goals: goalSummary,
 
     };
 
 };
-
-
-/*
-==========================================
-Expense Analytics
-GET /api/analytics/expenses
-==========================================
-*/
 
 export const getExpenseAnalytics = async (userId, query) => {
 
@@ -256,25 +150,39 @@ export const getExpenseAnalytics = async (userId, query) => {
 
         {
             $group: {
+
                 _id: "$category.name",
+
                 amount: {
+
                     $sum: "$amount",
+
                 },
+
             },
+
         },
 
         {
             $project: {
+
                 _id: 0,
+
                 category: "$_id",
-                amount: "$amount",
+
+                amount: 1,
+
             },
+
         },
 
         {
             $sort: {
+
                 amount: -1,
+
             },
+
         },
 
     ]);
@@ -282,13 +190,6 @@ export const getExpenseAnalytics = async (userId, query) => {
     return expenseAnalytics;
 
 };
-
-/*
-==========================================
-Monthly Expense Trend
-GET /api/analytics/expenses/monthly
-==========================================
-*/
 
 export const getMonthlyExpenseTrend = async (userId, query) => {
 
@@ -298,13 +199,21 @@ export const getMonthlyExpenseTrend = async (userId, query) => {
 
         {
             $match: {
+
                 user: new mongoose.Types.ObjectId(userId),
+
                 type: "expense",
+
                 date: {
+
                     $gte: start,
+
                     $lte: end,
+
                 },
+
             },
+
         },
 
         {
@@ -313,11 +222,15 @@ export const getMonthlyExpenseTrend = async (userId, query) => {
                 _id: {
 
                     year: {
+
                         $year: "$date",
+
                     },
 
                     month: {
+
                         $month: "$date",
+
                     },
 
                 },
@@ -416,13 +329,6 @@ export const getMonthlyExpenseTrend = async (userId, query) => {
 
 };
 
-/*
-==========================================
-Income Analytics
-GET /api/analytics/income
-==========================================
-*/
-
 export const getIncomeAnalytics = async (userId, query) => {
 
     const { start, end } = getDateRange(query);
@@ -481,13 +387,6 @@ export const getIncomeAnalytics = async (userId, query) => {
     return incomeAnalytics;
 
 };
-
-/*
-==========================================
-Cash Flow Analytics
-GET /api/analytics/cash-flow
-==========================================
-*/
 
 export const getCashFlowAnalytics = async (userId, query) => {
 
@@ -644,7 +543,9 @@ export const getCashFlowAnalytics = async (userId, query) => {
         {
             $sort: {
 
-                month: 1,
+                "_id.year": 1,
+
+                "_id.month": 1,
 
             },
 
@@ -655,13 +556,6 @@ export const getCashFlowAnalytics = async (userId, query) => {
     return cashFlow;
 
 };
-
-/*
-==========================================
-Net Worth Analytics
-GET /api/analytics/net-worth
-==========================================
-*/
 
 export const getNetWorthAnalytics = async (userId) => {
 
@@ -678,84 +572,35 @@ export const getNetWorthAnalytics = async (userId) => {
         type: "saving",
     });
 
-    /*
-    ==========================================
-    Assets
-    ==========================================
-    */
-
     const savings = savingsTransactions.reduce(
 
-        (total, transaction) =>
+        (sum, transaction) =>
 
-            total + transaction.amount,
-
-        0
-
-    );
-
-    const investmentsValue = investments.reduce(
-
-        (total, investment) =>
-
-            total + investment.currentValue,
+            sum + transaction.amount,
 
         0
 
     );
 
-    const totalAssets =
+    const investmentSummary =
+        getInvestmentSummary(investments);
 
-        savings +
+    const loanSummary =
+        getLoanSummary(loans);
 
-        investmentsValue;
+    return getNetWorthSummary({
 
-    /*
-    ==========================================
-    Liabilities
-    ==========================================
-    */
+        savings,
 
-    const liabilities = loans.reduce(
+        investmentValue:
+            investmentSummary.currentValue,
 
-        (total, loan) =>
+        liabilities:
+            loanSummary.outstanding,
 
-            total + loan.outstandingAmount,
-
-        0
-
-    );
-
-    /*
-    ==========================================
-    Net Worth
-    ==========================================
-    */
-
-    const netWorth =
-
-        totalAssets -
-
-        liabilities;
-
-    return {
-
-        assets: roundAmount(totalAssets),
-
-        liabilities: roundAmount(liabilities),
-
-        netWorth: roundAmount(netWorth),
-
-    };
+    });
 
 };
-
-/*
-==========================================
-Net Worth Timeline
-GET /api/analytics/net-worth/timeline
-==========================================
-*/
 
 export const getNetWorthTimeline = async (userId) => {
 
@@ -814,25 +659,11 @@ export const getNetWorthTimeline = async (userId) => {
 
     ]);
 
-    const investmentValue = investments.reduce(
+    const investmentSummary =
+        getInvestmentSummary(investments);
 
-        (total, investment) =>
-
-            total + investment.currentValue,
-
-        0
-
-    );
-
-    const liabilities = loans.reduce(
-
-        (total, loan) =>
-
-            total + loan.outstandingAmount,
-
-        0
-
-    );
+    const loanSummary =
+        getLoanSummary(loans);
 
     return savings.map((item) => ({
 
@@ -872,38 +703,23 @@ export const getNetWorthTimeline = async (userId) => {
 
             item._id.year,
 
-        netWorth:
+        netWorth: roundAmount(
 
-            roundAmount(
+            item.savings +
 
-                item.savings +
+            investmentSummary.currentValue -
 
-                investmentValue -
+            loanSummary.outstanding
 
-                liabilities
-
-            ),
+        ),
 
     }));
 
 };
 
-/*
-==========================================
-Financial Health
-GET /api/analytics/financial-health
-==========================================
-*/
-
 export const getFinancialHealth = async (userId, query) => {
 
     const { start, end } = getDateRange(query);
-
-    /*
-    ==========================================
-    Fetch Data
-    ==========================================
-    */
 
     const transactions = await Transaction.find({
         user: userId,
@@ -929,134 +745,59 @@ export const getFinancialHealth = async (userId, query) => {
         user: userId,
     });
 
-    /*
-    ==========================================
-    Transaction Totals
-    ==========================================
-    */
+    const transactionSummary =
+        getTransactionSummary(transactions);
 
-    let totalIncome = 0;
-    let totalExpense = 0;
-    let totalSavings = 0;
+    const investmentSummary =
+        getInvestmentSummary(investments);
 
-    transactions.forEach((transaction) => {
+    const loanSummary =
+        getLoanSummary(loans);
 
-        switch (transaction.type) {
-
-            case "income":
-                totalIncome += transaction.amount;
-                break;
-
-            case "expense":
-                totalExpense += transaction.amount;
-                break;
-
-            case "saving":
-                totalSavings += transaction.amount;
-                break;
-
-            default:
-                break;
-
-        }
-
-    });
-
-    /*
-    ==========================================
-    Investments
-    ==========================================
-    */
-
-    const totalInvestments = investments.reduce(
-
-        (sum, investment) =>
-
-            sum + investment.currentValue,
-
-        0
-
-    );
-
-    /*
-    ==========================================
-    Goals
-    ==========================================
-    */
-
-    const completedGoals = goals.filter(
-
-        goal => goal.currentAmount >= goal.targetAmount
-
-    ).length;
-
-    /*
-    ==========================================
-    Debt Metrics
-    ==========================================
-    */
-
-    const monthlyEMI = loans.reduce(
-
-        (sum, loan) =>
-
-            sum + loan.emi,
-
-        0
-
-    );
+    const goalSummary =
+        getGoalSummary(goals);
 
     const debtToIncomeRatio =
-
-        totalIncome > 0
-
+        transactionSummary.income > 0
             ? Number(
-
-                ((monthlyEMI / totalIncome) * 100)
-
-                .toFixed(2)
-
+                (
+                    (loanSummary.monthlyEMI /
+                        transactionSummary.income) *
+                    100
+                ).toFixed(2)
             )
-
             : 0;
-
-    /*
-    ==========================================
-    FIRE Placeholder
-    ==========================================
-    */
-
-    const retirement = null;
-
-    /*
-    ==========================================
-    Financial Health Engine
-    ==========================================
-    */
 
     return calculateFinancialHealth({
 
-        totalIncome,
+        totalIncome:
+            transactionSummary.income,
 
-        totalExpense,
+        totalExpense:
+            transactionSummary.expenses,
 
-        totalSavings,
+        totalSavings:
+            transactionSummary.savings,
 
-        totalInvestments,
+        totalInvestments:
+            investmentSummary.currentValue,
 
         insurances,
 
         loans,
 
-        monthlyEMI,
+        monthlyEMI:
+            loanSummary.monthlyEMI,
 
         debtToIncomeRatio,
 
-        completedGoals,
+        completedGoals:
+            goalSummary.completed,
 
-        totalGoals: goals.length,
+        totalGoals:
+            goalSummary.total,
 
-        retirement,
+        retirement: null,
 
     });
 
@@ -1064,41 +805,40 @@ export const getFinancialHealth = async (userId, query) => {
 
 export const getFinancialInsights = async (userId, query) => {
 
-    /*
-    ==========================================
-    Existing Analytics Data
-    ==========================================
-    */
+    const overview =
+        await getOverview(userId, query);
 
-    const overview = await getOverview(userId, query);
+    const expenseAnalytics =
+        await getExpenseAnalytics(userId, query);
 
-    const expenseAnalytics = await getExpenseAnalytics(userId, query);
+    const incomeAnalytics =
+        await getIncomeAnalytics(userId, query);
 
-    const incomeAnalytics = await getIncomeAnalytics(userId,query);
+    const cashFlow =
+        await getCashFlowAnalytics(userId, query);
 
-    const cashFlow = await getCashFlowAnalytics(userId,query);
-
-    const financialHealth = await getFinancialHealth(userId,query);
-
-    /*
-    ==========================================
-    Prepare Engine Input
-    ==========================================
-    */
+    const financialHealth =
+        await getFinancialHealth(userId, query);
 
     const input = {
 
-        totalIncome: overview.totalIncome,
+        totalIncome:
+            overview.income,
 
-        totalExpense: overview.totalExpenses,
+        totalExpense:
+            overview.expenses,
 
-        totalSavings: overview.totalSavings,
+        totalSavings:
+            overview.savings,
 
-        totalInvestments: overview.totalInvestments,
+        totalInvestments:
+            overview.investments.currentValue,
 
-        netWorth: overview.netWorth,
+        netWorth:
+            overview.netWorth,
 
-        savingsRate: overview.savingsRate,
+        savingsRate:
+            overview.savingsRate,
 
         debtRatio:
             financialHealth.metrics.debtToIncomeRatio,
@@ -1107,21 +847,19 @@ export const getFinancialInsights = async (userId, query) => {
             financialHealth.breakdown.emergency.score,
 
         completedGoals:
-            overview.completedGoals || 0,
+            overview.goals.completed,
 
         fireProgress:
             financialHealth.breakdown.fire.score,
 
+        expenseAnalytics,
+
+        incomeAnalytics,
+
+        cashFlow,
+
     };
 
-    /*
-    ==========================================
-    Generate Insights
-    ==========================================
-    */
-
-    const insights = generateFinancialInsights(input);
-
-    return insights;
+    return generateFinancialInsights(input);
 
 };

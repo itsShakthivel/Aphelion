@@ -3,6 +3,7 @@ import Investment from "../models/Investment.js";
 
 import { calculateFIRE } from "../utils/fireCalculator.js";
 import { generateFIRETimeline } from "../utils/fireTimelineGenerator.js";
+import { generateFIRERecommendations } from "../utils/fireRecommendationGenerator.js";
 
 export const getFIREData = async (
     userId,
@@ -91,16 +92,10 @@ export const getFIREData = async (
     // Monthly SIP
     // ==========================
 
-    const monthlyInvestment =
-        investments.reduce(
+    const calculatedMonthlyInvestment = investments.reduce((sum, investment) => sum + (investment.monthlyContribution || 0), 0);
 
-            (sum, investment) =>
 
-                sum + (investment.monthlyContribution || 0),
-
-            0
-
-        );
+    const monthlyInvestment = Number(query.monthlyInvestment) || calculatedMonthlyInvestment;
 
     // ==========================
     // Cash Savings
@@ -170,12 +165,17 @@ export const getFIREData = async (
 
     });
 
+    const recommendations = generateFIRERecommendations(planner);
+
     return {
 
         ...planner,
 
         timeline,
 
+        recommendations,
+
     };
 
 };
+

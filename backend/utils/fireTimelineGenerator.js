@@ -54,6 +54,12 @@ export const generateFIRETimeline = ({
 
             ),
 
+            target: fireCorpus,
+
+            remaining: Math.max(fireCorpus - wealth, 0),
+
+            achieved: wealth >= fireCorpus,
+
         });
 
         age++;
@@ -72,7 +78,11 @@ export const generateFIRETimeline = ({
 
         progress: 100,
 
-        fireAchieved: true,
+        target: fireCorpus,
+
+        remaining: 0,
+
+        achieved: true,
 
     });
 

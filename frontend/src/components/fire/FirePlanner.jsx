@@ -7,6 +7,10 @@ import FireTargetCard from "./FireTargetCard";
 import FireProgressRing from "./FireProgressRing";
 import FireStatsGrid from "./FireStatsGrid";
 import FireInputPanel from "./FireInputPanel";
+import FireTimeline from "./FireTimeline";
+import FireTimelineSummary from "./FireTimelineSummary";
+import FireSimulator from "./FireSimulator";
+import FireRecommendations from "./FireRecommendations";
 
 const FIREPlanner = () => {
 
@@ -59,6 +63,22 @@ const FIREPlanner = () => {
             <FireInputPanel
                 planner={planner}
                 onApply={handleApply}
+            />
+
+            <FireTimelineSummary
+                planner={planner}
+            />
+
+            <FireTimeline
+                timeline={planner?.timeline}
+            />
+
+            <FireSimulator
+                planner={planner}
+            />
+
+            <FireRecommendations
+                recommendations={planner?.recommendations}
             />
 
         </section>
