@@ -1,8 +1,7 @@
+import createInsight from "./createInsight.js";
+
+
 export const generateFinancialInsights = ({
-
-    totalIncome,
-
-    totalExpense,
 
     totalSavings,
 
