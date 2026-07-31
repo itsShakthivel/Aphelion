@@ -15,6 +15,8 @@ import {
     calculateFIREPlan,
 } from "../fireService.js";
 
+import { getReportTemplate } from "./template.service.js";
+
 export const generateFinancialReport = async (userId, query) => {
 
     const [
@@ -37,6 +39,8 @@ export const generateFinancialReport = async (userId, query) => {
 
         fire,
 
+        insights,
+
     ] = await Promise.all([
 
         getOverview(userId, query),
@@ -57,29 +61,81 @@ export const generateFinancialReport = async (userId, query) => {
 
         calculateFIREPlan(userId),
 
+        getFinancialInsights(userId, query)
+
     ]);
+
+    const template = getReportTemplate(
+
+        query.reportType || "monthly"
+
+    );
 
     return {
 
-        generatedAt: new Date(),
+        metadata: {
 
-        overview,
+            generatedAt:
 
-        expenseAnalytics,
+                new Date(),
 
-        monthlyExpenseTrend,
+            reportType:
 
-        incomeAnalytics,
+                query.reportType ||
 
-        cashFlow,
+                "monthly",
 
-        netWorth,
+            template:
 
-        netWorthTimeline,
+                template.title,
 
-        financialHealth,
+            period: {
 
-        fire,
+                startDate:
+
+                    query.startDate ||
+
+                    null,
+
+                endDate:
+
+                    query.endDate ||
+
+                    null,
+
+            },
+
+        },
+
+        summary: {
+
+            overview,
+
+            financialHealth,
+
+            netWorth,
+
+            fire,
+
+            insights,
+
+        },
+
+        analytics: {
+
+            expenseAnalytics,
+
+            incomeAnalytics,
+
+            cashFlow,
+
+            monthlyExpenseTrend,
+
+            netWorthTimeline,
+
+        },
+
+        template,
 
     };
 

@@ -14,7 +14,7 @@ import Insurance from "./Pages/Insurance/Insurance";
 import Loans from "./Pages/Loans/Loans";
 import Goals from "./Pages/goals/Goals";
 import Analytics from "./Pages/Analytics/Analytics";
-
+import Reports from "./Pages/Reports/Reports";
 
 function App() {
 
@@ -121,6 +121,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Analytics />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <Reports />
               </ProtectedRoute>
             }
           />   

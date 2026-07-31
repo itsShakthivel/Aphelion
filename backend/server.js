@@ -16,6 +16,7 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import fireRoutes from "./routes/fireRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -41,6 +42,7 @@ app.use("/api/investments", investmentRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/fire", fireRoutes)
+app.use("/api/reports", reportRoutes);
 
 app.get("/", (req, res) => {
     res.json({

@@ -12,7 +12,8 @@ import {
   FaShieldAlt,
   FaUniversity,
   FaChartLine,
-} from "react-icons/fa";
+  FaFilePdf
+} from "react-icons/fa6";
 
 
 function Sidebar() {
@@ -64,6 +65,11 @@ function Sidebar() {
       icon: <FaChartLine />,
       path: "/analytics",
     },
+    {
+      title: "Reports",
+      path: "/reports",
+      icon: FaFilePdf,
+    }
   ];
 
   return (
