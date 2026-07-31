@@ -12,9 +12,9 @@ import {
 import { getFinancialHealth } from "../analytics/health.service.js";
 
 import {
-    calculateFIREPlan,
+    getFIREData,
 } from "../fireService.js";
-
+import { getFinancialInsights } from "../analytics/insights.service.js";
 import { getReportTemplate } from "./template.service.js";
 
 export const generateFinancialReport = async (userId, query) => {
@@ -59,7 +59,7 @@ export const generateFinancialReport = async (userId, query) => {
 
         getFinancialHealth(userId, query),
 
-        calculateFIREPlan(userId),
+        getFIREData(userId),
 
         getFinancialInsights(userId, query)
 

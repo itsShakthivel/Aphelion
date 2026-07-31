@@ -1,10 +1,10 @@
-import DashboardLayout from "../../components/layout/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout"
 
 import ReportsHeader from "../../components/reports/ReportsHeader";
 import ReportsSummaryCards from "../../components/reports/ReportsSummaryCards";
 import GenerateReportCard from "../../components/reports/GenerateReportCard";
 import ExportCSVCard from "../../components/reports/ExportCSVCard";
-import ReportsHistoryTable from "../../components/reports/ReportsHistoryTable";
+import ReportsHistoryTable from "../../components/reports/ReportHistoryTable";
 
 const Reports = () => {
 

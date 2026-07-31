@@ -36,7 +36,7 @@ export const generatePDFReport = (report) => {
 
             });
 
-            await buildReport(doc, report);
+            buildReport(doc, report);
 
             addPageNumbers(doc);
 
@@ -133,16 +133,6 @@ const buildReport = async (
     );
 
 };
-
-await buildCharts(
-
-    doc,
-
-    report.analytics,
-
-    report.summary
-
-);
 
 const buildCoverPage = (
     doc,
@@ -1032,6 +1022,16 @@ const buildFireSection = (
     doc.moveDown(2);
 
 };
+
+await buildCharts(
+
+    doc,
+
+    report.analytics,
+
+    report.summary
+
+);
 
 const buildFooter = (
     doc

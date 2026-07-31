@@ -4,7 +4,7 @@ import {
 
     FaFileCsv,
 
-    FaHistory,
+    FaClockRotateLeft,
 
 } from "react-icons/fa6";
 
@@ -16,7 +16,7 @@ const cards = [
 
         value: "--",
 
-        icon: FaFilePdf,
+        icon: <FaFilePdf />,
 
     },
 
@@ -26,7 +26,7 @@ const cards = [
 
         value: "--",
 
-        icon: FaFileCsv,
+        icon: <FaFileCsv />,
 
     },
 
@@ -36,7 +36,7 @@ const cards = [
 
         value: "--",
 
-        icon: FaHistory,
+        icon: <FaClockRotateLeft />,
 
     },
 

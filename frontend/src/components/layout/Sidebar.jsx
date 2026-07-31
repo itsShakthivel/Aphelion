@@ -3,16 +3,16 @@ import { NavLink } from "react-router-dom";
 
 import {
   FaBars,
-  FaHome,
+  FaHouse,
   FaWallet,
   FaChartPie,
   FaBullseye,
-  FaCog,
+  FaGear,
   FaFolderOpen,
-  FaShieldAlt,
-  FaUniversity,
+  FaShieldHalved,
+  FaBuildingColumns,
   FaChartLine,
-  FaFilePdf
+  FaFilePdf,
 } from "react-icons/fa6";
 
 
@@ -22,7 +22,7 @@ function Sidebar() {
   const menus = [
     {
       title: "Dashboard",
-      icon: <FaHome />,
+      icon: <FaHouse />,
       path: "/dashboard",
     },
     {
@@ -42,12 +42,12 @@ function Sidebar() {
     },
     {
       title: "Insurance",
-      icon: <FaShieldAlt />,
+      icon: <FaShieldHalved />,
       path: "/insurance",
     },
     {
       title: "Loans",
-      icon: <FaUniversity />,
+      icon: <FaBuildingColumns />,
       path: "/loans",
     },
     {
@@ -57,7 +57,7 @@ function Sidebar() {
     },
     {
       title: "Settings",
-      icon: <FaCog />,
+      icon: <FaGear />,
       path: "/settings",
     },
     {
@@ -67,8 +67,9 @@ function Sidebar() {
     },
     {
       title: "Reports",
+      icon: <FaFilePdf />,
       path: "/reports",
-      icon: FaFilePdf,
+      
     }
   ];
 
