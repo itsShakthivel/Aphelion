@@ -1,5 +1,11 @@
 export { generateFinancialReport } from "./reports/report.service.js";
 
+export {
+
+    getNetWorthTimeline,
+
+} from "./analytics/timeline.service.js";
+
 export { generatePDFReport } from "./reports/pdf.service.js";
 
 export { exportCSVReport } from "./reports/csv.service.js";

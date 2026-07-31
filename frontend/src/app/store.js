@@ -13,6 +13,7 @@ import analyticsReducer from "../features/analytics/analyticsSlice";
 import fireReducer from "../features/fire/fireSlice";
 import reportReducer from "../features/reports/reportSlice";
 
+
 export const store = configureStore({
 
     reducer: {
@@ -40,6 +41,7 @@ export const store = configureStore({
         fire: fireReducer,
 
         reports: reportReducer,
+
 
     },
 
