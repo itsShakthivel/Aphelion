@@ -4,7 +4,7 @@ import {
 
     FONT,
 
-} from "./styles.js";
+} from "../utils/styles.js";
 
 export const sectionTitle = (
 

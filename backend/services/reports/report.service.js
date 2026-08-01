@@ -17,6 +17,16 @@ import {
 import { getFinancialInsights } from "../analytics/insights.service.js";
 import { getReportTemplate } from "./template.service.js";
 
+export {
+
+    saveReport,
+
+    getReportHistory,
+
+    deleteReport,
+
+} from "./history.service.js";
+
 export const generateFinancialReport = async (userId, query) => {
 
     const [

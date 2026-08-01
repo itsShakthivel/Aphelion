@@ -4,7 +4,7 @@ import {
 
     FONT,
 
-} from "./styles.js";
+} from "../styles.js";
 
 export const drawKPI = (
 
