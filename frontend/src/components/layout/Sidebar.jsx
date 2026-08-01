@@ -14,6 +14,7 @@ import {
   FaChartLine,
   FaFilePdf,
 } from "react-icons/fa6";
+import { FaRobot } from "react-icons/fa";
 
 
 function Sidebar() {
@@ -70,6 +71,11 @@ function Sidebar() {
       icon: <FaFilePdf />,
       path: "/reports",
       
+    },
+    {
+      title: "Recommendations",
+      icon: <FaRobot />,
+      path: "/recommendations",
     }
   ];
 

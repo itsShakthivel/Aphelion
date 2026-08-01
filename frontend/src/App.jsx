@@ -15,6 +15,7 @@ import Loans from "./Pages/Loans/Loans";
 import Goals from "./Pages/goals/Goals";
 import Analytics from "./Pages/Analytics/Analytics";
 import Reports from "./Pages/Reports/Reports";
+import Recommendations from "./Pages/AI/Recommendations";
 
 function App() {
 
@@ -130,6 +131,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Reports />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/recommendations"
+            element={
+              <ProtectedRoute>
+                <Recommendations />
               </ProtectedRoute>
             }
           />   

@@ -12,6 +12,9 @@ import goalReducer from "../features/goal/goalSlice";
 import analyticsReducer from "../features/analytics/analyticsSlice";
 import fireReducer from "../features/fire/fireSlice";
 import reportReducer from "../features/reports/reportSlice";
+import aiReducer from "../features/ai/aiSlice";
+import recommendationReducer from "../features/recommendations/recommendationSlice";
+import forecastReducer from "../features/forecast/forecastService";
 
 
 export const store = configureStore({
@@ -42,6 +45,11 @@ export const store = configureStore({
 
         reports: reportReducer,
 
+        ai: aiReducer,
+
+        recommendations: recommendationReducer,
+
+        forecast: forecastReducer,
 
     },
 
