@@ -3,7 +3,7 @@ import {
     createAsyncThunk,
 } from "@reduxjs/toolkit";
 
-import * as reportAPI from "../../api/aiReportService";
+import * as reportAPI from "../../api/aiReportAPI";
 
 export const fetchAIReport =
 createAsyncThunk(

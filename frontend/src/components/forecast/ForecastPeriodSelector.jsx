@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchForecast } from "../../features/forecast/forecastSlice";
+import { fetchForecast } from "../../features/forecast/forecastService";
 
 const periods = [
 

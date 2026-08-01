@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import DashboardLayout from "../../components/layout/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
-import { fetchForecast } from "../../features/forecast/forecastSlice";
+import { fetchForecast } from "../../features/forecast/forecastService";
 
 import ForecastHeader from "../../components/forecast/ForecastHeader";
 import ForecastSummary from "../../components/forecast/ForecastSummary";

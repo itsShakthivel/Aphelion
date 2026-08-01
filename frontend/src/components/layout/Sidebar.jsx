@@ -165,37 +165,7 @@ function Sidebar() {
                 </NavLink>
             </li>
         ))}
-      </ul>
-
-      {/* Footer */}
-      <div
-        className="
-          absolute
-          bottom-5
-          left-0
-          w-full
-          px-4
-        "
-      >
-        {open && (
-          <div
-            className="
-              bg-slate-800
-              rounded-xl
-              p-4
-              text-center
-            "
-          >
-            <p className="text-xs text-slate-400">
-              Aphelion
-            </p>
-
-            <p className="text-sm font-bold text-emerald-400">
-              v1.0
-            </p>
-          </div>
-        )}
-      </div>
+      </ul>     
     </aside>
   );
 }
