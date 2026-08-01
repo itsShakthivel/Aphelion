@@ -8,6 +8,7 @@ import { analyzeSavingsPattern } from "../services/ai/savingsPattern.service.js"
 import { generateFinancialTwin } from "../services/ai/financialTwin.service.js";
 import { generateRecommendations } from "../services/ai/recommendation.service.js";
 import { generateForecast } from "../services/ai/forecast.service.js";
+import { generateAIReport } from "../services/ai/aiReport.service.js";
 
 // ===========================================
 // Financial Profile
@@ -205,6 +206,40 @@ export const getForecast = async (req, res) => {
 
             message:
                 "Failed to generate forecast",
+
+            error: error.message,
+
+        });
+
+    }
+
+};
+
+export const getAIReport = async (
+
+    req,
+
+    res
+
+) => {
+
+    try {
+
+        const report =
+            await generateAIReport(
+                req.user.id
+            );
+
+        res.json(report);
+
+    }
+
+    catch (error) {
+
+        res.status(500).json({
+
+            message:
+                "Failed to generate AI report",
 
             error: error.message,
 

@@ -16,6 +16,7 @@ import Goals from "./Pages/goals/Goals";
 import Analytics from "./Pages/Analytics/Analytics";
 import Reports from "./Pages/Reports/Reports";
 import Recommendations from "./Pages/AI/Recommendations";
+import Forecast from "./Pages/Forecast/Forecast";
 
 function App() {
 
@@ -140,6 +141,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Recommendations />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/forecast"
+            element={
+              <ProtectedRoute>
+                <Forecast />
               </ProtectedRoute>
             }
           />   

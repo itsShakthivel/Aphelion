@@ -15,6 +15,7 @@ import reportReducer from "../features/reports/reportSlice";
 import aiReducer from "../features/ai/aiSlice";
 import recommendationReducer from "../features/recommendations/recommendationSlice";
 import forecastReducer from "../features/forecast/forecastService";
+import aiReportReducer from "../features/aiReport/aiReportSlice";
 
 
 export const store = configureStore({
@@ -50,6 +51,8 @@ export const store = configureStore({
         recommendations: recommendationReducer,
 
         forecast: forecastReducer,
+
+        aiReport: aiReportReducer,
 
     },
 

@@ -11,6 +11,7 @@ import {
     getFinancialTwin,
     getRecommendations,
     getForecast,
+    getAIReport,
 } from "../controllers/aiController.js";
 
 import protect from "../middleware/authMiddleware.js";
@@ -38,5 +39,7 @@ router.get("/twin", getFinancialTwin);
 router.get("/recommendations", getRecommendations);
 
 router.get("/forecast", getForecast);
+
+router.get("/report", getAIReport);
 
 export default router;

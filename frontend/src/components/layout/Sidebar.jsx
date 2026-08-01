@@ -76,6 +76,11 @@ function Sidebar() {
       title: "Recommendations",
       icon: <FaRobot />,
       path: "/recommendations",
+    },
+    {
+      title: "Forecast",
+      icon: <FaChartLine />,
+      path: "/forecast",
     }
   ];
 
