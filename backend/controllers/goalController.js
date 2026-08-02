@@ -1,4 +1,5 @@
 import Goal from "../models/Goal.js";
+import { generateNotification } from "../services/notification/notificationGenerator.service.js";
 
 // ==========================
 // Create Goal
@@ -23,6 +24,30 @@ export const createGoal = async (req, res) => {
             targetDate: req.body.targetDate,
 
             notes: req.body.notes,
+
+        });
+
+        await generateNotification({
+
+            user: req.user.id,
+
+            title: "New Goal Created",
+
+            message: `Goal "${goal.title}" has been created successfully.`,
+
+            type: "Goal",
+
+            priority: "Info",
+
+            action: "View Goal",
+
+            link: "/goals",
+
+            payload: {
+
+                goalId: goal._id,
+
+            },
 
         });
 
@@ -120,27 +145,13 @@ export const updateGoal = async (req, res) => {
 
     try {
 
-        const goal = await Goal.findOneAndUpdate(
+        const goal = await Goal.findOne({
 
-            {
+            _id: req.params.id,
 
-                _id: req.params.id,
+            user: req.user.id,
 
-                user: req.user.id,
-
-            },
-
-            req.body,
-
-            {
-
-                new: true,
-
-                runValidators: true,
-
-            }
-
-        );
+        });
 
         if (!goal) {
 
@@ -152,9 +163,72 @@ export const updateGoal = async (req, res) => {
 
         }
 
+        // ----------------------------
+        // Store previous progress
+        // ----------------------------
+
+        const previousAmount =
+            goal.currentAmount;
+
+        // ----------------------------
+        // Update Goal
+        // ----------------------------
+
+        Object.assign(goal, req.body);
+
+        await goal.save();
+
+        // ----------------------------
+        // Goal Achieved Notification
+        // ----------------------------
+
+        const previousPercentage =
+
+            (previousAmount / goal.targetAmount) * 100;
+
+        const currentPercentage =
+
+            (goal.currentAmount / goal.targetAmount) * 100;
+
+        if (
+
+            previousPercentage < 100 &&
+
+            currentPercentage >= 100
+
+        ) {
+
+            await generateNotification({
+
+                user: req.user.id,
+
+                title: "Goal Achieved 🎉",
+
+                message: `Congratulations! "${goal.title}" has been completed.`,
+
+                type: "Goal",
+
+                priority: "High",
+
+                action: "View Goal",
+
+                link: "/goals",
+
+                payload: {
+
+                    goalId: goal._id,
+
+                },
+
+            });
+
+        }
+
         res.json(goal);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
 

@@ -16,6 +16,9 @@ import aiReducer from "../features/ai/aiSlice";
 import recommendationReducer from "../features/recommendations/recommendationSlice";
 import forecastReducer from "../features/forecast/forecastService";
 import aiReportReducer from "../features/aiReport/aiReportSlice";
+import notificationReducer from "../features/notifications/notificationSlice";
+import themeReducer from "../features/theme/themeSlice";
+import familyReducer from "../features/family/familySlice";
 
 
 export const store = configureStore({
@@ -53,6 +56,12 @@ export const store = configureStore({
         forecast: forecastReducer,
 
         aiReport: aiReportReducer,
+
+        notifications: notificationReducer,
+
+        theme: themeReducer,
+
+        family: familyReducer,
 
     },
 

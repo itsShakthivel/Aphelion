@@ -1,146 +1,202 @@
 import {
-  FaBell,
-  FaSearch,
-  FaChevronDown
+    FaSearch,
+    FaChevronDown,
 } from "react-icons/fa";
 
-function Navbar() {
+import NotificationBell from "../notifications/NotificationBell";
 
-  return (
-    <header
-      className="
-        h-16
-        bg-slate-900
-        border-b
-        border-slate-800
-        flex
-        items-center
-        justify-between
-        px-8
-      "
-    >
+const Navbar = () => {
 
-      {/* Left */}
+    return (
 
-      <div>
+        <header
 
-        <h2
-          className="
-            text-white
-            font-semibold
-            text-lg
-          "
-        >
-          Good Evening, Shakthivel 👋
-        </h2>
-
-        <p className="text-slate-400 text-sm">
-          Welcome back to Aphelion
-        </p>
-
-      </div>
-
-      {/* Right */}
-
-      <div
-        className="
-          flex
-          items-center
-          gap-6
-        "
-      >
-
-        {/* Search */}
-
-        <div
-          className="
-            bg-slate-800
-            px-4
-            py-2
-            rounded-xl
-            flex
-            items-center
-            gap-2
-          "
-        >
-
-          <FaSearch
-            className="text-slate-400"
-          />
-
-          <input
-            placeholder="Search"
             className="
-              bg-transparent
-              outline-none
-              text-white
+                h-16
+                flex
+                items-center
+                justify-between
+                px-8
+                border-b
+                backdrop-blur-xl
             "
-          />
 
-        </div>
+            style={{
 
-        {/* Notification */}
+                background: "var(--surface)",
 
-        <button
-          className="
-            relative
-            text-white
-            text-xl
-          "
+                borderColor: "var(--glass-border)",
+
+            }}
+
         >
 
-          <FaBell />
+            {/* Left */}
 
-          <span
-            className="
-              absolute
-              -top-1
-              -right-1
-              h-2
-              w-2
-              rounded-full
-              bg-red-500
-            "
-          />
+            <div>
 
-        </button>
+                <h2
 
-        {/* Profile */}
+                    className="text-lg font-semibold"
 
-        <div
-          className="
-            flex
-            items-center
-            gap-3
-            cursor-pointer
-          "
-        >
+                    style={{
 
-          <div
-            className="
-              h-10
-              w-10
-              rounded-full
-              bg-emerald-500
-              flex
-              items-center
-              justify-center
-              font-bold
-            "
-          >
-            S
-          </div>
+                        color: "var(--text-primary)",
 
-          <FaChevronDown
-            className="text-white"
-          />
+                    }}
 
-        </div>
+                >
 
-      </div>
+                    Good Evening, Shakthivel 👋
 
-    </header>
-  );
-}
+                </h2>
+
+                <p
+
+                    className="text-sm"
+
+                    style={{
+
+                        color: "var(--text-secondary)",
+
+                    }}
+
+                >
+
+                    Welcome back to Aphelion
+
+                </p>
+
+            </div>
+
+            {/* Right */}
+
+            <div
+
+                className="
+                    flex
+                    items-center
+                    gap-6
+                "
+
+            >
+
+                {/* Search */}
+
+                <div
+
+                    className="
+                        flex
+                        items-center
+                        gap-3
+                        px-4
+                        py-2
+                        rounded-xl
+                    "
+
+                    style={{
+
+                        background: "var(--surface-hover)",
+
+                        border: "1px solid var(--glass-border)",
+
+                    }}
+
+                >
+
+                    <FaSearch
+
+                        style={{
+
+                            color: "var(--text-muted)",
+
+                        }}
+
+                    />
+
+                    <input
+
+                        type="text"
+
+                        placeholder="Search..."
+
+                        className="
+                            bg-transparent
+                            outline-none
+                            w-48
+                        "
+
+                        style={{
+
+                            color: "var(--text-primary)",
+
+                        }}
+
+                    />
+
+                </div>
+
+                {/* Notifications */}
+
+                <NotificationBell />
+
+                {/* Profile */}
+
+                <div
+
+                    className="
+                        flex
+                        items-center
+                        gap-3
+                        cursor-pointer
+                    "
+
+                >
+
+                    <div
+
+                        className="
+                            h-10
+                            w-10
+                            rounded-full
+                            flex
+                            items-center
+                            justify-center
+                            font-bold
+                        "
+
+                        style={{
+
+                            background: "var(--primary)",
+
+                            color: "#ffffff",
+
+                        }}
+
+                    >
+
+                        S
+
+                    </div>
+
+                    <FaChevronDown
+
+                        style={{
+
+                            color: "var(--text-primary)",
+
+                        }}
+
+                    />
+
+                </div>
+
+            </div>
+
+        </header>
+
+    );
+
+};
 
 export default Navbar;

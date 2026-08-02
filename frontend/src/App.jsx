@@ -17,6 +17,8 @@ import Analytics from "./Pages/Analytics/Analytics";
 import Reports from "./Pages/Reports/Reports";
 import Recommendations from "./Pages/AI/Recommendations";
 import Forecast from "./Pages/Forecast/Forecast";
+import Notifications from "./Pages/Notifications/Notifications";
+import ThemeSettings from "./Pages/Settings/ThemeSettings";
 
 function App() {
 
@@ -152,6 +154,20 @@ function App() {
                 <Forecast />
               </ProtectedRoute>
             }
+          />
+
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <Notifications />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/settings/theme"
+            element={<ThemeSettings />}
           />   
 
 

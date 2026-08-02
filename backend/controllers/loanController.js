@@ -1,5 +1,7 @@
 import Loan from "../models/Loan.js";
 
+import { generateNotification } from "../services/notification/notificationGenerator.service.js";
+
 // ==========================
 // Create Loan
 // ==========================
@@ -34,9 +36,35 @@ export const createLoan = async (req, res) => {
 
         });
 
+        await generateNotification({
+
+            user: req.user.id,
+
+            title: "Loan Added",
+
+            message: `${loan.loanName} has been added successfully.`,
+
+            type: "Loan",
+
+            priority: "Info",
+
+            action: "View Loan",
+
+            link: "/loans",
+
+            payload: {
+
+                loanId: loan._id,
+
+            },
+
+        });
+
         res.status(201).json(loan);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
 
@@ -128,27 +156,13 @@ export const updateLoan = async (req, res) => {
 
     try {
 
-        const loan = await Loan.findOneAndUpdate(
+        const loan = await Loan.findOne({
 
-            {
+            _id: req.params.id,
 
-                _id: req.params.id,
+            user: req.user.id,
 
-                user: req.user.id,
-
-            },
-
-            req.body,
-
-            {
-
-                new: true,
-
-                runValidators: true,
-
-            }
-
-        );
+        });
 
         if (!loan) {
 
@@ -160,9 +174,64 @@ export const updateLoan = async (req, res) => {
 
         }
 
+        // ------------------------------------
+        // Store previous outstanding amount
+        // ------------------------------------
+
+        const previousOutstanding =
+            loan.outstandingAmount;
+
+        // ------------------------------------
+        // Update loan
+        // ------------------------------------
+
+        Object.assign(loan, req.body);
+
+        await loan.save();
+
+        // ------------------------------------
+        // Loan Paid Notification
+        // ------------------------------------
+
+        if (
+
+            previousOutstanding > 0 &&
+
+            loan.outstandingAmount <= 0
+
+        ) {
+
+            await generateNotification({
+
+                user: req.user.id,
+
+                title: "Loan Paid Off 🎉",
+
+                message: `${loan.loanName} has been fully paid.`,
+
+                type: "Loan",
+
+                priority: "High",
+
+                action: "View Loan",
+
+                link: "/loans",
+
+                payload: {
+
+                    loanId: loan._id,
+
+                },
+
+            });
+
+        }
+
         res.json(loan);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
 

@@ -1,4 +1,5 @@
 import Insurance from "../models/Insurance.js";
+import { generateNotification } from "../services/notification/notificationGenerator.service.js";
 
 // ==========================
 // Create Insurance
@@ -30,9 +31,35 @@ export const createInsurance = async (req, res) => {
 
         });
 
+        await generateNotification({
+
+            user: req.user.id,
+
+            title: "Insurance Policy Added",
+
+            message: `${insurance.policyName} has been added successfully.`,
+
+            type: "Insurance",
+
+            priority: "Info",
+
+            action: "View Insurance",
+
+            link: "/insurance",
+
+            payload: {
+
+                insuranceId: insurance._id,
+
+            },
+
+        });
+
         res.status(201).json(insurance);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
 

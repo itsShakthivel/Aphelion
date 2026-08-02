@@ -3,13 +3,12 @@ import ReactDOM from "react-dom/client";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import store from "./app/store";
 
 import App from "./App";
 
 import "./index.css";
 import "./styles/theme.css";
-
-import { store } from "./app/store";
 
 ReactDOM.createRoot(
     document.getElementById("root")

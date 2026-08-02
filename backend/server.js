@@ -18,6 +18,8 @@ import analyticsRoutes from "./routes/analyticsRoutes.js";
 import fireRoutes from "./routes/fireRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
+import familyRoutes from "./routes/familyRoutes.js";
 
 
 dotenv.config();
@@ -45,7 +47,9 @@ app.use("/api/goals", goalRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/fire", fireRoutes)
 app.use("/api/reports", reportRoutes);
-app.use("/api/ai", aiRoutes)
+app.use("/api/ai", aiRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/family", familyRoutes);
 
 
 app.get("/", (req, res) => {

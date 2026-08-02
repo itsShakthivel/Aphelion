@@ -1,4 +1,9 @@
 import Report from "../../models/Report.js";
+import { generateNotification } from "../notification/notificationGenerator.service.js";
+
+// ============================================
+// Save Report
+// ============================================
 
 export const saveReport = async (
 
@@ -10,7 +15,7 @@ export const saveReport = async (
 
 ) => {
 
-    return await Report.create({
+    const report = await Report.create({
 
         user: userId,
 
@@ -20,7 +25,41 @@ export const saveReport = async (
 
     });
 
+    await generateNotification({
+
+        user: userId,
+
+        title: "Financial Report Saved",
+
+        message: `Your ${reportType} report has been generated and saved successfully.`,
+
+        type: "Report",
+
+        priority: "Info",
+
+        action: "View Reports",
+
+        link: "/reports",
+
+        payload: {
+
+            reportId: report._id,
+
+            reportType,
+
+            format,
+
+        },
+
+    });
+
+    return report;
+
 };
+
+// ============================================
+// Get Report History
+// ============================================
 
 export const getReportHistory = async (
 
@@ -41,6 +80,10 @@ export const getReportHistory = async (
         });
 
 };
+
+// ============================================
+// Delete Report
+// ============================================
 
 export const deleteReport = async (
 
