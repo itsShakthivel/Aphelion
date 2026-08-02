@@ -1,5 +1,4 @@
 import crypto from "crypto";
-
 import Family from "../../models/Family.js";
 
 // ============================================
@@ -7,28 +6,50 @@ import Family from "../../models/Family.js";
 // ============================================
 
 const generateInviteCode = () => {
-
     return crypto
-
         .randomBytes(4)
-
         .toString("hex")
-
         .toUpperCase();
-
 };
 
 // ============================================
-// Create Family
+// Populate Helper
+// ============================================
+
+const populateFamily = async (family) => {
+    return await family.populate([
+        {
+            path: "owner",
+            select: "name email avatar",
+        },
+        {
+            path: "members.user",
+            select: "name email avatar",
+        },
+    ]);
+};
+
+// ============================================
+// Create Household
 // ============================================
 
 export const createFamilyService = async (
-
     userId,
-
     data
-
 ) => {
+
+    // User should not own another active household
+    const existingFamily = await Family.findOne({
+        owner: userId,
+        isActive: true,
+        isArchived: false,
+    });
+
+    if (existingFamily) {
+        throw new Error(
+            "You already own a household."
+        );
+    }
 
     const inviteCode = generateInviteCode();
 
@@ -36,122 +57,157 @@ export const createFamilyService = async (
 
         name: data.name,
 
-        description: data.description,
+        description: data.description || "",
+
+        avatar: data.avatar || "",
 
         owner: userId,
 
         inviteCode,
 
         members: [
-
             {
-
                 user: userId,
-
                 role: "Owner",
-
+                status: "Active",
             },
-
         ],
+
+        configuration: {
+            currency: "INR",
+            timezone: "Asia/Kolkata",
+            locale: "en-IN",
+        },
+
+        features: {
+            treasuryEnabled: true,
+            managedMembersEnabled: true,
+            invitationsEnabled: true,
+        },
+
+        statistics: {
+            memberCount: 1,
+            registeredMemberCount: 1,
+            managedMemberCount: 0,
+        },
 
     });
 
-    return family.populate(
-
-        "owner",
-
-        "name email"
-
-    );
+    return await populateFamily(family);
 
 };
 
 // ============================================
-// Get Family
+// Get Household
 // ============================================
 
 export const getFamilyService = async (
-
     userId
-
 ) => {
 
-    return await Family.findOne({
+    const family = await Family.findOne({
 
         "members.user": userId,
 
         isActive: true,
 
-    })
+        isArchived: false,
 
-        .populate(
+    });
 
-            "owner",
+    if (!family) return null;
 
-            "name email"
-
-        )
-
-        .populate(
-
-            "members.user",
-
-            "name email avatar"
-
-        );
+    return await populateFamily(family);
 
 };
 
 // ============================================
-// Update Family
+// Update Household
 // ============================================
 
 export const updateFamilyService = async (
-
     familyId,
-
     data
-
 ) => {
 
-    return await Family.findByIdAndUpdate(
-
-        familyId,
-
-        {
-
-            name: data.name,
-
-            description: data.description,
-
-        },
-
-        {
-
-            new: true,
-
-            runValidators: true,
-
-        }
-
+    const family = await Family.findById(
+        familyId
     );
+
+    if (!family) {
+        throw new Error(
+            "Household not found."
+        );
+    }
+
+    if (data.name !== undefined)
+        family.name = data.name;
+
+    if (data.description !== undefined)
+        family.description = data.description;
+
+    if (data.avatar !== undefined)
+        family.avatar = data.avatar;
+
+    if (data.configuration) {
+
+        family.configuration = {
+
+            ...family.configuration.toObject(),
+
+            ...data.configuration,
+
+        };
+
+    }
+
+    await family.save();
+
+    return await populateFamily(family);
 
 };
 
 // ============================================
-// Delete Family
+// Archive Household
 // ============================================
 
 export const deleteFamilyService = async (
-
     familyId
-
 ) => {
 
-    return await Family.findByIdAndDelete(
-
+    const family = await Family.findById(
         familyId
-
     );
+
+    if (!family) {
+        throw new Error(
+            "Household not found."
+        );
+    }
+
+    family.isActive = false;
+    family.isArchived = true;
+
+    await family.save();
+
+    return family;
+
+};
+
+// ============================================
+// Get Household By ID
+// ============================================
+
+export const getFamilyByIdService = async (
+    familyId
+) => {
+
+    const family = await Family.findById(
+        familyId
+    );
+
+    if (!family) return null;
+
+    return await populateFamily(family);
 
 };

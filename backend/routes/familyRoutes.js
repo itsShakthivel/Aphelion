@@ -3,73 +3,55 @@ import express from "express";
 import protect from "../middleware/authMiddleware.js";
 
 import {
+    requireOwner,
+    requireAdmin,
+} from "../middleware/familyPermissionMiddleware.js";
 
+import {
     createFamily,
-
     getFamily,
-
     updateFamily,
-
     deleteFamily,
-
     sendInvitation,
-
     getPendingInvitations,
-
     acceptInvitation,
-
     rejectInvitation,
-
     removeMember,
-
     updateMemberRole,
-
 } from "../controllers/familyController.js";
 
 const router = express.Router();
+
+// ============================================
+// Authentication Middleware
+// ============================================
+
+router.use(protect);
 
 // ============================================
 // Family
 // ============================================
 
 router.post(
-
     "/",
-
-    protect,
-
     createFamily
-
 );
 
 router.get(
-
     "/",
-
-    protect,
-
     getFamily
-
 );
 
 router.put(
-
     "/:id",
-
-    protect,
-
+    requireOwner,
     updateFamily
-
 );
 
 router.delete(
-
     "/:id",
-
-    protect,
-
+    requireOwner,
     deleteFamily
-
 );
 
 // ============================================
@@ -77,67 +59,40 @@ router.delete(
 // ============================================
 
 router.post(
-
     "/invite",
-
-    protect,
-
+    requireAdmin,
     sendInvitation
-
 );
 
 router.get(
-
     "/invitations",
-
-    protect,
-
     getPendingInvitations
-
 );
 
 router.put(
-
     "/invite/:id/accept",
-
-    protect,
-
     acceptInvitation
-
 );
 
 router.put(
-
     "/invite/:id/reject",
-
-    protect,
-
     rejectInvitation
-
 );
 
 // ============================================
-// Members
+// Registered Members
 // ============================================
 
 router.delete(
-
     "/:familyId/member/:memberId",
-
-    protect,
-
+    requireAdmin,
     removeMember
-
 );
 
 router.put(
-
     "/:familyId/member/:memberId",
-
-    protect,
-
+    requireOwner,
     updateMemberRole
-
 );
 
 export default router;

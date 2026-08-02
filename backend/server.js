@@ -20,6 +20,9 @@ import reportRoutes from "./routes/reportRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import familyRoutes from "./routes/familyRoutes.js";
+import memberRoutes from "./routes/member.routes.js";
+import treasuryRoutes from "./routes/treasury.routes.js";
+import contributionRoutes from "./routes/contribution.routes.js";
 
 
 dotenv.config();
@@ -50,6 +53,9 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/family", familyRoutes);
+app.use("/api/member", memberRoutes);
+app.use("/api/treasury", treasuryRoutes);
+app.use("/api/contributions", contributionRoutes);
 
 
 app.get("/", (req, res) => {

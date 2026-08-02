@@ -1,6 +1,3 @@
-import Family from "../models/Family.js";
-import Invitation from "../models/Invitation.js";
-
 import {
     createFamilyService,
     getFamilyService,
@@ -11,8 +8,14 @@ import {
 import {
     createInvitationService,
     getPendingInvitationsService,
-    updateInvitationStatusService,
+    acceptInvitationService,
+    rejectInvitationService,
 } from "../services/family/invitation.service.js";
+
+import {
+    removeMemberService,
+    updateMemberRoleService,
+} from "../services/family/member.service.js";
 
 import {
     getMemberRole,
@@ -21,47 +24,31 @@ import {
 } from "../services/family/permission.service.js";
 
 // ============================================
-// Create Family
+// Create Household
 // ============================================
 
 export const createFamily = async (req, res) => {
 
     try {
 
-        const existingFamily = await getFamilyService(
-
-            req.user.id
-
-        );
-
-        if (existingFamily) {
-
-            return res.status(400).json({
-
-                message: "User already belongs to a family.",
-
-            });
-
-        }
-
         const family = await createFamilyService(
-
             req.user.id,
-
             req.body
-
         );
 
-        res.status(201).json(family);
+        return res.status(201).json({
+            success: true,
+            message: "Household created successfully.",
+            data: family,
+        });
 
     }
 
     catch (error) {
 
-        res.status(500).json({
-
+        return res.status(400).json({
+            success: false,
             message: error.message,
-
         });
 
     }
@@ -69,7 +56,7 @@ export const createFamily = async (req, res) => {
 };
 
 // ============================================
-// Get Family
+// Get Household
 // ============================================
 
 export const getFamily = async (req, res) => {
@@ -77,28 +64,36 @@ export const getFamily = async (req, res) => {
     try {
 
         const family = await getFamilyService(
-
             req.user.id
-
         );
 
         if (!family) {
 
             return res.status(404).json({
 
-                message: "Family not found.",
+                success: false,
+
+                message: "Household not found.",
 
             });
 
         }
 
-        res.json(family);
+        return res.json({
+
+            success: true,
+
+            data: family,
+
+        });
 
     }
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(500).json({
+
+            success: false,
 
             message: error.message,
 
@@ -109,7 +104,7 @@ export const getFamily = async (req, res) => {
 };
 
 // ============================================
-// Update Family
+// Update Household
 // ============================================
 
 export const updateFamily = async (req, res) => {
@@ -117,38 +112,44 @@ export const updateFamily = async (req, res) => {
     try {
 
         const role = await getMemberRole(
-
             req.params.id,
-
             req.user.id
-
         );
 
         if (!isOwner(role)) {
 
             return res.status(403).json({
 
-                message: "Only the owner can update the family.",
+                success: false,
+
+                message: "Only the owner can update the household.",
 
             });
 
         }
 
         const family = await updateFamilyService(
-
             req.params.id,
-
             req.body
-
         );
 
-        res.json(family);
+        return res.json({
+
+            success: true,
+
+            message: "Household updated successfully.",
+
+            data: family,
+
+        });
 
     }
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(400).json({
+
+            success: false,
 
             message: error.message,
 
@@ -159,7 +160,7 @@ export const updateFamily = async (req, res) => {
 };
 
 // ============================================
-// Delete Family
+// Archive Household
 // ============================================
 
 export const deleteFamily = async (req, res) => {
@@ -167,32 +168,31 @@ export const deleteFamily = async (req, res) => {
     try {
 
         const role = await getMemberRole(
-
             req.params.id,
-
             req.user.id
-
         );
 
         if (!isOwner(role)) {
 
             return res.status(403).json({
 
-                message: "Only the owner can delete the family.",
+                success: false,
+
+                message: "Only the owner can archive the household.",
 
             });
 
         }
 
         await deleteFamilyService(
-
             req.params.id
-
         );
 
-        res.json({
+        return res.json({
 
-            message: "Family deleted successfully.",
+            success: true,
+
+            message: "Household archived successfully.",
 
         });
 
@@ -200,7 +200,9 @@ export const deleteFamily = async (req, res) => {
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(400).json({
+
+            success: false,
 
             message: error.message,
 
@@ -219,16 +221,15 @@ export const sendInvitation = async (req, res) => {
     try {
 
         const role = await getMemberRole(
-
             req.body.family,
-
             req.user.id
-
         );
 
         if (!isAdmin(role)) {
 
             return res.status(403).json({
+
+                success: false,
 
                 message: "Permission denied.",
 
@@ -248,13 +249,23 @@ export const sendInvitation = async (req, res) => {
 
         });
 
-        res.status(201).json(invitation);
+        return res.status(201).json({
+
+            success: true,
+
+            message: "Invitation sent successfully.",
+
+            data: invitation,
+
+        });
 
     }
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(400).json({
+
+            success: false,
 
             message: error.message,
 
@@ -273,20 +284,25 @@ export const getPendingInvitations = async (req, res) => {
     try {
 
         const invitations =
-
             await getPendingInvitationsService(
-
                 req.user.email
-
             );
 
-        res.json(invitations);
+        return res.json({
+
+            success: true,
+
+            data: invitations,
+
+        });
 
     }
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(500).json({
+
+            success: false,
 
             message: error.message,
 
@@ -304,65 +320,19 @@ export const acceptInvitation = async (req, res) => {
 
     try {
 
-        const invitation = await Invitation.findById(
+        const result = await acceptInvitationService(
 
-            req.params.id
+            req.params.id,
 
-        );
-
-        if (!invitation) {
-
-            return res.status(404).json({
-
-                message: "Invitation not found.",
-
-            });
-
-        }
-
-        if (invitation.status !== "Pending") {
-
-            return res.status(400).json({
-
-                message: "Invitation already processed.",
-
-            });
-
-        }
-
-        await Family.findByIdAndUpdate(
-
-            invitation.family,
-
-            {
-
-                $push: {
-
-                    members: {
-
-                        user: req.user.id,
-
-                        role: invitation.role,
-
-                    },
-
-                },
-
-            }
+            req.user.id
 
         );
 
-        await updateInvitationStatusService(
+        return res.json({
 
-            invitation._id,
+            success: true,
 
-            "Accepted"
-
-        );
-
-        res.json({
-
-            message: "Invitation accepted.",
+            message: result.message,
 
         });
 
@@ -370,7 +340,9 @@ export const acceptInvitation = async (req, res) => {
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(400).json({
+
+            success: false,
 
             message: error.message,
 
@@ -388,17 +360,17 @@ export const rejectInvitation = async (req, res) => {
 
     try {
 
-        await updateInvitationStatusService(
+        const result = await rejectInvitationService(
 
-            req.params.id,
-
-            "Rejected"
+            req.params.id
 
         );
 
-        res.json({
+        return res.json({
 
-            message: "Invitation rejected.",
+            success: true,
+
+            message: result.message,
 
         });
 
@@ -406,7 +378,9 @@ export const rejectInvitation = async (req, res) => {
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(400).json({
+
+            success: false,
 
             message: error.message,
 
@@ -436,35 +410,27 @@ export const removeMember = async (req, res) => {
 
             return res.status(403).json({
 
+                success: false,
+
                 message: "Permission denied.",
 
             });
 
         }
 
-        await Family.findByIdAndUpdate(
+        const result = await removeMemberService(
 
             req.params.familyId,
 
-            {
-
-                $pull: {
-
-                    members: {
-
-                        user: req.params.memberId,
-
-                    },
-
-                },
-
-            }
+            req.params.memberId
 
         );
 
-        res.json({
+        return res.json({
 
-            message: "Member removed successfully.",
+            success: true,
+
+            message: result.message,
 
         });
 
@@ -472,7 +438,9 @@ export const removeMember = async (req, res) => {
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(400).json({
+
+            success: false,
 
             message: error.message,
 
@@ -483,7 +451,7 @@ export const removeMember = async (req, res) => {
 };
 
 // ============================================
-// Change Member Role
+// Update Member Role
 // ============================================
 
 export const updateMemberRole = async (req, res) => {
@@ -502,47 +470,31 @@ export const updateMemberRole = async (req, res) => {
 
             return res.status(403).json({
 
-                message: "Only the owner can change member roles.",
+                success: false,
+
+                message: "Only owner can change roles.",
 
             });
 
         }
 
-        const family = await Family.findById(
+        const family = await updateMemberRoleService(
 
-            req.params.familyId
+            req.params.familyId,
 
-        );
+            req.params.memberId,
 
-        const member = family.members.find(
-
-            member =>
-
-                member.user.toString() ===
-
-                req.params.memberId
+            req.body.role
 
         );
 
-        if (!member) {
+        return res.json({
 
-            return res.status(404).json({
-
-                message: "Member not found.",
-
-            });
-
-        }
-
-        member.role = req.body.role;
-
-        await family.save();
-
-        res.json({
+            success: true,
 
             message: "Member role updated successfully.",
 
-            family,
+            data: family,
 
         });
 
@@ -550,7 +502,9 @@ export const updateMemberRole = async (req, res) => {
 
     catch (error) {
 
-        res.status(500).json({
+        return res.status(400).json({
+
+            success: false,
 
             message: error.message,
 
