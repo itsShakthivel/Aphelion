@@ -23,6 +23,7 @@ import familyRoutes from "./routes/familyRoutes.js";
 import memberRoutes from "./routes/member.routes.js";
 import treasuryRoutes from "./routes/treasury.routes.js";
 import contributionRoutes from "./routes/contribution.routes.js";
+import familyTransactioRoutes from "./routes/familyTransaction.routes.js";
 
 
 dotenv.config();
@@ -56,7 +57,7 @@ app.use("/api/family", familyRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/treasury", treasuryRoutes);
 app.use("/api/contributions", contributionRoutes);
-
+app.use("/api/familyTransactions", familyTransactioRoutes)
 
 app.get("/", (req, res) => {
     res.json({
