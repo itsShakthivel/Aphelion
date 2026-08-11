@@ -19,6 +19,7 @@ import aiReportReducer from "../features/aiReport/aiReportSlice";
 import notificationReducer from "../features/notifications/notificationSlice";
 import themeReducer from "../features/theme/themeSlice";
 import familyReducer from "../features/family/familySlice";
+import treasuryRequestReducer from "../features/treasuryRequest/treasuryRequestSlice";
 
 
 export const store = configureStore({
@@ -62,6 +63,8 @@ export const store = configureStore({
         theme: themeReducer,
 
         family: familyReducer,
+
+        treasuryRequest: treasuryRequestReducer,
 
     },
 

@@ -19,6 +19,7 @@ import Recommendations from "./Pages/AI/Recommendations";
 import Forecast from "./Pages/Forecast/Forecast";
 import Notifications from "./Pages/Notifications/Notifications";
 import ThemeSettings from "./Pages/Settings/ThemeSettings";
+import TreasuryRequests from "./Pages/TreasuryRequest/TreasuryRequest";
 
 function App() {
 
@@ -170,7 +171,11 @@ function App() {
             element={<ThemeSettings />}
           />   
 
-
+          <Route
+            path="/family/treasury-request"
+            element={<TreasuryRequests />}
+          />
+          
       </Routes>
   );
 }
