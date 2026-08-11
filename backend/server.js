@@ -27,6 +27,7 @@ import familyTransactioRoutes from "./routes/familyTransaction.routes.js";
 import familyInvestmentRoutes from "./routes/familyInvestment.routes.js";
 import familyLoanRoutes from "./routes/familyLoan.routes.js";
 import familyInsuranceRoutes from "./routes/familyInsurance.routes.js";
+import familyGoalRoutes from "./routes/familyGoal.routes.js";
 
 dotenv.config();
 connectDB();
@@ -63,6 +64,7 @@ app.use("/api/familyTransactions", familyTransactioRoutes)
 app.use("/api/family-investments", familyInvestmentRoutes);
 app.use("/api/family-loans", familyLoanRoutes);
 app.use("/api/family-insurance", familyInsuranceRoutes);
+app.use("/api/family-goals", familyGoalRoutes);
 
 app.get("/", (req, res) => {
     res.json({
