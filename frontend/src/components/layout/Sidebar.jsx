@@ -103,6 +103,12 @@ const Sidebar = () => {
             path: "/settings/theme",
         },
 
+        {
+            title: "Reports",
+
+            path: "/family/reports",
+        },
+
     ];
 
     return (

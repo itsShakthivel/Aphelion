@@ -37,7 +37,7 @@ import {
 
     fetchFamilyDebtAnalysis,
 
-} from "../features/familyAnalytics/familyAnalyticsSlice";
+} from "../../features/familyAnalytics/familyAnalyticsSlice";
 
 const FamilyAnalytics = () => {
 
