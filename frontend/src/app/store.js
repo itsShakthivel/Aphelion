@@ -21,6 +21,7 @@ import themeReducer from "../features/theme/themeSlice";
 import familyReducer from "../features/family/familySlice";
 import treasuryRequestReducer from "../features/treasuryRequest/treasuryRequestSlice";
 import treasuryBucketReducer from "../features/treasuryBucket/treasuryBucketSlice";
+import familyAnalyticsReducer from "../features/familyAnalytics/familyAnalyticsSlice";
 
 
 export const store = configureStore({
@@ -68,6 +69,8 @@ export const store = configureStore({
         treasuryRequest: treasuryRequestReducer,
 
         treasuryBucket: treasuryBucketReducer,
+
+        familyAnalytics: familyAnalyticsReducer,
 
     },
 

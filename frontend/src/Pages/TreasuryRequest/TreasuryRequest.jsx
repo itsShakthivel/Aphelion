@@ -8,21 +8,21 @@ import {
     useSelector,
 } from "react-redux";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
 import TreasuryRequestTable
-    from "../components/treasuryRequests/TreasuryRequestTable";
+    from "../../components/treasuryRequests/TreasuryRequestTable";
 
 import TreasuryRequestFormModal
-    from "../components/treasuryRequests/TreasuryRequestFormModal";
+    from "../../components/treasuryRequests/TreasuryRequestFormModal";
 
 import {
     fetchTreasury,
-} from "../features/treasury/treasurySlice";
+} from "../../features/treasury/treasurySlice";
 
 import {
     fetchTreasuryRequests,
-} from "../features/treasuryRequest/treasuryRequestSlice";
+} from "../../features/treasuryRequest/treasuryRequestSlice";
 
 const TreasuryRequests = () => {
 

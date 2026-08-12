@@ -21,6 +21,7 @@ import Notifications from "./Pages/Notifications/Notifications";
 import ThemeSettings from "./Pages/Settings/ThemeSettings";
 import TreasuryRequests from "./Pages/TreasuryRequest/TreasuryRequest";
 import TreasuryBucket from "../../backend/models/TreasuryBucket";
+import FamilyAnalytics from "./Pages/FamilyAnalytics/FamilyAnalytics";
 
 function App() {
 
@@ -186,6 +187,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <TreasuryBuckets />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/family/analytics"
+            element={
+              <ProtectedRoute>
+                <FamilyAnalytics />
               </ProtectedRoute>
             }
           />
