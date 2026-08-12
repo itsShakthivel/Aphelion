@@ -20,6 +20,7 @@ import Forecast from "./Pages/Forecast/Forecast";
 import Notifications from "./Pages/Notifications/Notifications";
 import ThemeSettings from "./Pages/Settings/ThemeSettings";
 import TreasuryRequests from "./Pages/TreasuryRequest/TreasuryRequest";
+import TreasuryBucket from "../../backend/models/TreasuryBucket";
 
 function App() {
 
@@ -173,7 +174,20 @@ function App() {
 
           <Route
             path="/family/treasury-request"
-            element={<TreasuryRequests />}
+            element={
+              <ProtectedRoute>
+                <TreasuryRequests />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/family/treasury-buckets"
+            element={
+              <ProtectedRoute>
+                <TreasuryBuckets />
+              </ProtectedRoute>
+            }
           />
           
       </Routes>

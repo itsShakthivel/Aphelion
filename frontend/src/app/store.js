@@ -20,6 +20,7 @@ import notificationReducer from "../features/notifications/notificationSlice";
 import themeReducer from "../features/theme/themeSlice";
 import familyReducer from "../features/family/familySlice";
 import treasuryRequestReducer from "../features/treasuryRequest/treasuryRequestSlice";
+import treasuryBucketReducer from "../features/treasuryBucket/treasuryBucketSlice";
 
 
 export const store = configureStore({
@@ -65,6 +66,8 @@ export const store = configureStore({
         family: familyReducer,
 
         treasuryRequest: treasuryRequestReducer,
+
+        treasuryBucket: treasuryBucketReducer,
 
     },
 
