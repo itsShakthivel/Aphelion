@@ -6,6 +6,10 @@ import {
     deleteContributionService,
 } from "../services/family/contribution.service.js";
 
+import {
+    notifyFamilyContribution,
+} from "../services/notification/familyNotification.service.js";
+
 // ============================================
 // Create Contribution
 // ============================================
@@ -22,13 +26,57 @@ export const createContribution = async (
 
                 ...req.body,
 
-                family: req.params.familyId,
+                family:
+                    req.params.familyId,
 
-                treasury: req.params.treasuryId,
+                treasury:
+                    req.params.treasuryId,
 
-                createdBy: req.user.id,
+                createdBy:
+                    req.user.id,
 
             });
+
+        // ========================================
+        // Household Notification
+        // ========================================
+
+        let contributorName =
+            req.user.name ||
+            "A family member";
+
+        let contributorId =
+            req.user.id;
+
+        if (
+            contribution.contributor
+        ) {
+
+            contributorName =
+                contribution
+                    .contributor
+                    .name ||
+                contributorName;
+
+            contributorId =
+                contribution
+                    .contributor
+                    ._id ||
+                contributorId;
+
+        }
+
+        await notifyFamilyContribution(
+
+            req.params.familyId,
+
+            contributorName,
+
+            contribution.amount,
+
+            contributorId
+
+        );
 
         return res.status(201).json({
 
@@ -37,7 +85,8 @@ export const createContribution = async (
             message:
                 "Contribution added successfully.",
 
-            data: contribution,
+            data:
+                contribution,
 
         });
 
@@ -49,7 +98,8 @@ export const createContribution = async (
 
             success: false,
 
-            message: error.message,
+            message:
+                error.message,
 
         });
 
@@ -79,7 +129,8 @@ export const getContributions = async (
 
             success: true,
 
-            data: contributions,
+            data:
+                contributions,
 
         });
 
@@ -91,7 +142,8 @@ export const getContributions = async (
 
             success: false,
 
-            message: error.message,
+            message:
+                error.message,
 
         });
 
@@ -121,7 +173,8 @@ export const getContribution = async (
 
             success: true,
 
-            data: contribution,
+            data:
+                contribution,
 
         });
 
@@ -133,7 +186,8 @@ export const getContribution = async (
 
             success: false,
 
-            message: error.message,
+            message:
+                error.message,
 
         });
 
@@ -168,7 +222,8 @@ export const updateContribution = async (
             message:
                 "Contribution updated successfully.",
 
-            data: contribution,
+            data:
+                contribution,
 
         });
 
@@ -180,7 +235,8 @@ export const updateContribution = async (
 
             success: false,
 
-            message: error.message,
+            message:
+                error.message,
 
         });
 
@@ -216,7 +272,8 @@ export const deleteContribution = async (
 
             success: false,
 
-            message: error.message,
+            message:
+                error.message,
 
         });
 

@@ -1,4 +1,6 @@
-import { createNotification } from "./notification.service.js";
+import {
+    createNotification,
+} from "./notification.service.js";
 
 // ============================================
 // Generate Notification
@@ -22,6 +24,10 @@ export const generateNotification = async ({
 
     payload = {},
 
+    scope = "Personal",
+
+    family = null,
+
 }) => {
 
     return await createNotification({
@@ -41,6 +47,10 @@ export const generateNotification = async ({
         link,
 
         payload,
+
+        scope,
+
+        family,
 
     });
 

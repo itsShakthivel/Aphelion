@@ -2,6 +2,10 @@ import {
     generateFamilyPDFReport,
 } from "../services/reports/familyPDF.service.js";
 
+import {
+    notifyFamilyReport,
+} from "../services/notification/familyNotification.service.js";
+
 // ============================================
 // Generate Household PDF
 // ============================================
@@ -62,6 +66,22 @@ export const generateFamilyPDF = async (
 
         );
 
+        // ========================================
+        // Household Report Notification
+        // ========================================
+
+        await notifyFamilyReport(
+
+            familyId,
+
+            `${report.family.name} Household Report`
+
+        );
+
+        // ========================================
+        // PDF Response
+        // ========================================
+
         res.setHeader(
 
             "Content-Type",
@@ -81,7 +101,7 @@ export const generateFamilyPDF = async (
 
         );
 
-        res.send(buffer);
+        return res.send(buffer);
 
     }
 

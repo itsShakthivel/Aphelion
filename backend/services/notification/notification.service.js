@@ -18,50 +18,78 @@ export const createNotification = async (
 // Get User Notifications
 // ============================================
 
-export const getNotifications = async (userId) => {
+export const getNotifications = async (
 
-    const notifications = await Notification.find({
+    userId
 
-        user: userId,
+) => {
 
-    }).sort({
+    const notifications =
+        await Notification.find({
 
-        createdAt: -1,
+            user: userId,
 
-    });
+        })
+
+            .populate(
+
+                "family",
+
+                "name"
+
+            )
+
+            .sort({
+
+                createdAt: -1,
+
+            });
 
     const summary = {
 
-        total: notifications.length,
+        total:
+            notifications.length,
 
-        unread: notifications.filter(
-            notification => !notification.read
-        ).length,
+        unread:
+            notifications.filter(
+                notification =>
+                    !notification.read
+            ).length,
 
-        critical: notifications.filter(
-            notification =>
-                notification.priority === "Critical"
-        ).length,
+        critical:
+            notifications.filter(
+                notification =>
+                    notification.priority ===
+                    "Critical"
+            ).length,
 
-        high: notifications.filter(
-            notification =>
-                notification.priority === "High"
-        ).length,
+        high:
+            notifications.filter(
+                notification =>
+                    notification.priority ===
+                    "High"
+            ).length,
 
-        medium: notifications.filter(
-            notification =>
-                notification.priority === "Medium"
-        ).length,
+        medium:
+            notifications.filter(
+                notification =>
+                    notification.priority ===
+                    "Medium"
+            ).length,
 
-        low: notifications.filter(
-            notification =>
-                notification.priority === "Low"
-        ).length,
+        low:
+            notifications.filter(
+                notification =>
+                    notification.priority ===
+                    "Low"
+            ).length,
 
-        info: notifications.filter(
-            notification =>
-                notification.priority === "Info"
-        ).length,
+        info:
+            notifications.filter(
+                notification =>
+                    notification.priority ===
+                    "Info"
+            ).length,
 
     };
 
@@ -72,6 +100,44 @@ export const getNotifications = async (userId) => {
         notifications,
 
     };
+
+};
+
+// ============================================
+// Get Family Notifications
+// ============================================
+
+export const getFamilyNotifications = async (
+
+    userId,
+
+    familyId
+
+) => {
+
+    return await Notification.find({
+
+        user: userId,
+
+        scope: "Family",
+
+        family: familyId,
+
+    })
+
+        .populate(
+
+            "family",
+
+            "name"
+
+        )
+
+        .sort({
+
+            createdAt: -1,
+
+        });
 
 };
 

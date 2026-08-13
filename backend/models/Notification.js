@@ -14,6 +14,40 @@ const notificationSchema = new mongoose.Schema(
 
         },
 
+        // ========================================
+        // Notification Scope
+        // ========================================
+
+        scope: {
+
+            type: String,
+
+            enum: [
+
+                "Personal",
+
+                "Family",
+
+            ],
+
+            default: "Personal",
+
+        },
+
+        // ========================================
+        // Family Reference
+        // ========================================
+
+        family: {
+
+            type: mongoose.Schema.Types.ObjectId,
+
+            ref: "Family",
+
+            default: null,
+
+        },
+
         title: {
 
             type: String,
@@ -51,6 +85,12 @@ const notificationSchema = new mongoose.Schema(
                 "Report",
 
                 "FIRE",
+
+                "Family",
+
+                "Treasury",
+
+                "Contribution",
 
                 "System",
 
@@ -125,6 +165,9 @@ const notificationSchema = new mongoose.Schema(
 );
 
 export default mongoose.model(
+
     "Notification",
+
     notificationSchema
+
 );
