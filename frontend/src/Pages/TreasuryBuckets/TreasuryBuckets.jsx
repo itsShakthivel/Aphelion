@@ -9,21 +9,21 @@ import {
 } from "react-redux";
 
 import DashboardLayout
-    from "../layouts/DashboardLayout";
+    from "../../layouts/DashboardLayout";
 
 import TreasuryBucketTable
-    from "../components/treasuryBuckets/TreasuryBucketTable";
+    from "../../components/treasuryBuckets/TreasuryBucketTable";
 
 import TreasuryBucketFormModal
-    from "../components/treasuryBuckets/TreasuryBucketFormModal";
+    from "../../components/treasuryBuckets/TreasuryBucketFormModal";
 
 import {
     fetchTreasury,
-} from "../features/treasury/treasurySlice";
+} from "../../features/treasury/treasurySlice";
 
 import {
     fetchTreasuryBuckets,
-} from "../features/treasuryBucket/treasuryBucketSlice";
+} from "../../features/treasuryBucket/treasuryBucketSlice";
 
 const TreasuryBuckets = () => {
 

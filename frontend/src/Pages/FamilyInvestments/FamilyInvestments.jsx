@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
-import FamilyInvestmentTable from "../components/familyInvestments/FamilyInvestmentTable";
-import FamilyInvestmentFormModal from "../components/familyInvestments/FamilyInvestmentFormModal";
+import FamilyInvestmentTable from "../../components/familyInvestments/FamilyInvestmentTable";
+import FamilyInvestmentFormModal from "../../components/familyInvestments/FamilyInvestmentFormModal";
 
-import { fetchTreasury } from "../features/treasury/treasurySlice";
-import { fetchFamilyInvestments } from "../features/familyInvestment/familyInvestmentSlice";
+import { fetchTreasury } from "../../features/treasury/treasurySlice";
+import { fetchFamilyInvestments } from "../../features/familyInvestment/familyInvestmentSlice";
 
 const FamilyInvestments = () => {
 

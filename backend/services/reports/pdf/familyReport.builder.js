@@ -1,7 +1,8 @@
 import {
-    sectionTitle,
     buildTable,
 } from "./components/table.js";
+
+import { sectionTitle, } from "./components/section.js"
 
 // ============================================
 // Currency

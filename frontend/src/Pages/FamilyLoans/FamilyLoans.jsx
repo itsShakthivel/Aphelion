@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
-import FamilyLoanTable from "../components/familyLoans/FamilyLoanTable";
-import FamilyLoanFormModal from "../components/familyLoans/FamilyLoanFormModal";
+import FamilyLoanTable from "../../components/familyLoans/FamilyLoanTable";
+import FamilyLoanFormModal from "../../components/familyLoans/FamilyLoanFormModal";
 
 import {
     fetchTreasury,
-} from "../features/treasury/treasurySlice";
+} from "../../features/treasury/treasurySlice";
 
 import {
     fetchFamilyLoans,
-} from "../features/familyLoan/familyLoanSlice";
+} from "../../features/familyLoan/familyLoanSlice";
 
 const FamilyLoans = () => {
 

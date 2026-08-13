@@ -104,9 +104,9 @@ const Sidebar = () => {
         },
 
         {
-            title: "Reports",
+            title: "FamilyReports",
 
-            path: "/family/reports",
+            path: "/family/familyreports",
         },
 
     ];

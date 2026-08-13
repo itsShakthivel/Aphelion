@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
-import FamilyInsuranceTable from "../components/familyInsurance/FamilyInsuranceTable";
-import FamilyInsuranceFormModal from "../components/familyInsurance/FamilyInsuranceFormModal";
+import FamilyInsuranceTable from "../../components/familyInsurance/FamilyInsuranceTable";
+import FamilyInsuranceFormModal from "../../components/familyInsurance/FamilyInsuranceFormModal";
 
 import {
     fetchTreasury,
-} from "../features/treasury/treasurySlice";
+} from "../../features/treasury/treasurySlice";
 
 import {
     fetchFamilyInsurancePolicies,

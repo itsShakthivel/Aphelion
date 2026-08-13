@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
-import FamilyTransactionTable from "../components/familyTransactions/FamilyTransactionTable";
-import FamilyTransactionFormModal from "../components/familyTransactions/FamilyTransactionFormModal";
+import FamilyTransactionTable from "../../components/familyTransactions/FamilyTransactionTable";
+import FamilyTransactionFormModal from "../../components/familyTransactions/FamilyTransactionFormModal";
 
 import {
     fetchTreasury,
-} from "../features/treasury/treasurySlice";
+} from "../../features/treasury/treasurySlice";
 
 import {
     fetchFamilyTransactions,
-} from "../features/familyTransaction/familyTransactionSlice";
+} from "../../features/familyTransaction/familyTransactionSlice";
 
 const FamilyTransactions = () => {
 

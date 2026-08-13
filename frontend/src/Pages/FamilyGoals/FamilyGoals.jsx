@@ -8,21 +8,21 @@ import {
     useSelector,
 } from "react-redux";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
 import FamilyGoalTable
-    from "../components/familyGoals/FamilyGoalTable";
+    from "../../components/familyGoals/FamilyGoalTable";
 
 import FamilyGoalFormModal
-    from "../components/familyGoals/FamilyGoalFormModal";
+    from "../../components/familyGoals/FamilyGoalFormModal";
 
 import {
     fetchTreasury,
-} from "../features/treasury/treasurySlice";
+} from "../../features/treasury/treasurySlice";
 
 import {
     fetchFamilyGoals,
-} from "../features/familyGoal/familyGoalSlice";
+} from "../../features/familyGoal/familyGoalSlice";
 
 const FamilyGoals = () => {
 

@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
-import TreasurySummaryCards from "../components/treasury/TreasurySummaryCards";
-import BucketList from "../components/treasury/BucketList";
-import ContributionTable from "../components/treasury/ContributionTable";
+import TreasurySummaryCards from "../../components/treasury/TreasurySummaryCards";
+import BucketList from "../../components/treasury/BucketList";
+import ContributionTable from "../../components/treasury/ContributionTable";
 
 import {
     fetchTreasury,
     fetchBuckets,
-} from "../features/treasury/treasurySlice";
+} from "../../features/treasury/treasurySlice";
 
 import {
     fetchContributions,
-} from "../features/treasury/contributionSlice";
+} from "../../features/treasury/contributionSlice";
 
 const Treasury = () => {
 
