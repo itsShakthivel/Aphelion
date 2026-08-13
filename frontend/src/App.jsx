@@ -18,7 +18,7 @@ import Reports from "./Pages/Reports/Reports";
 import Recommendations from "./Pages/AI/Recommendations";
 import Forecast from "./Pages/Forecast/Forecast";
 import Notifications from "./Pages/Notifications/Notifications";
-import ThemeSettings from "./Pages/Settings/ThemeSettings";
+import Settings from "./Pages/Settings/Settings";
 import TreasuryRequests from "./Pages/TreasuryRequest/TreasuryRequest";
 import TreasuryBuckets from "./Pages/TreasuryBuckets/TreasuryBuckets";
 import FamilyAnalytics from "./Pages/FamilyAnalytics/FamilyAnalytics";
@@ -170,8 +170,8 @@ function App() {
           />
 
           <Route
-            path="/settings/theme"
-            element={<ThemeSettings />}
+            path="/settings"
+            element={<Settings />}
           />   
 
           <Route

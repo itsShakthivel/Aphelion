@@ -98,14 +98,14 @@ const Sidebar = () => {
         },
 
         {
-            title: "Theme",
-            icon: <FaPalette />,
-            path: "/settings/theme",
+            title: "Settings",
+            icon: <FaGear />,
+            path: "/settings",
         },
 
         {
             title: "FamilyReports",
-
+            icon: <FaFilePdf />,
             path: "/family/familyreports",
         },
 
