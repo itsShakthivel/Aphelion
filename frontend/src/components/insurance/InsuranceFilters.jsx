@@ -1,71 +1,112 @@
-import { useDispatch } from "react-redux";
-import { removeInsurance } from "../../features/insurance/insuranceSlice";
-
-const DeleteInsuranceModal = ({
-    open,
-    onClose,
-    insurance,
+const InsuranceFilters = ({
+    search,
+    setSearch,
+    type,
+    setType,
+    status,
+    setStatus,
+    onAdd,
 }) => {
-
-    const dispatch = useDispatch();
-
-    if (!open || !insurance) return null;
-
-    const handleDelete = async () => {
-
-        await dispatch(
-            removeInsurance(insurance._id)
-        );
-
-        onClose();
-
-    };
 
     return (
 
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+        <div className="finance-filter">
 
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                <h2 className="text-2xl font-bold mb-4">
+                {/* Search */}
 
-                    Delete Insurance
+                <input
+                    type="text"
+                    placeholder="Search insurance..."
+                    value={search}
+                    onChange={(e) =>
+                        setSearch(e.target.value)
+                    }
+                    className="w-full rounded-lg px-4 py-2 border"
+                />
 
-                </h2>
 
-                <p className="text-gray-600">
+                {/* Type */}
 
-                    Delete
+                <select
+                    value={type}
+                    onChange={(e) =>
+                        setType(e.target.value)
+                    }
+                    className="rounded-lg px-4 py-2 border"
+                >
 
-                    <span className="font-semibold">
+                    <option value="">
+                        All Types
+                    </option>
 
-                        {" "}
+                    <option value="health">
+                        Health
+                    </option>
 
-                        {insurance.policyName}
+                    <option value="term">
+                        Term
+                    </option>
 
-                    </span>
+                    <option value="vehicle">
+                        Vehicle
+                    </option>
 
-                    ?
+                    <option value="home">
+                        Home
+                    </option>
 
-                </p>
+                    <option value="other">
+                        Other
+                    </option>
 
-                <div className="flex justify-end gap-3 mt-8">
+                </select>
 
-                    <button
-                        onClick={onClose}
-                        className="border px-5 py-2 rounded-lg"
-                    >
-                        Cancel
-                    </button>
 
-                    <button
-                        onClick={handleDelete}
-                        className="bg-red-600 text-white px-5 py-2 rounded-lg"
-                    >
-                        Delete
-                    </button>
+                {/* Status */}
 
-                </div>
+                <select
+                    value={status}
+                    onChange={(e) =>
+                        setStatus(e.target.value)
+                    }
+                    className="rounded-lg px-4 py-2 border"
+                >
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="active">
+                        Active
+                    </option>
+
+                    <option value="expiring">
+                        Expiring Soon
+                    </option>
+
+                    <option value="expired">
+                        Expired
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            {/* Add Button */}
+
+            <div className="mt-4">
+
+                <button
+                    onClick={onAdd}
+                    className="finance-add-button"
+                >
+
+                    + Add Insurance
+
+                </button>
 
             </div>
 
@@ -75,4 +116,4 @@ const DeleteInsuranceModal = ({
 
 };
 
-export default DeleteInsuranceModal;
+export default InsuranceFilters;
