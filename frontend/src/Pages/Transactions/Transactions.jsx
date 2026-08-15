@@ -1,7 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { exportCSV, exportExcel, } from "../../utils/exportTransactions";
-import { fetchTransactions } from "../../features/transaction/transactionSlice";
+
+import {
+    exportCSV,
+    exportExcel,
+} from "../../utils/exportTransactions";
+
+import {
+    fetchTransactions,
+} from "../../features/transaction/transactionSlice";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 
@@ -13,47 +20,77 @@ import DeleteTransactionModal from "../../components/transactions/DeleteTransact
 import TransactionPagination from "../../components/transactions/TransactionPagination";
 import TransactionDetailsModal from "../../components/transactions/TransactionDetailsModal";
 
+
 const Transactions = () => {
+
     const dispatch = useDispatch();
+
 
     const {
         transactions,
         loading,
         error,
-    } = useSelector((state) => state.transaction);
+    } = useSelector(
+        (state) => state.transaction
+    );
+
 
     // ==========================
     // Filter States
     // ==========================
 
     const [search, setSearch] = useState("");
+
     const [type, setType] = useState("");
+
     const [category, setCategory] = useState("");
+
     const [startDate, setStartDate] = useState("");
+
     const [endDate, setEndDate] = useState("");
+
     const [sortBy, setSortBy] = useState("latest");
+
     const [currentPage, setCurrentPage] = useState(1);
+
     const [pageSize, setPageSize] = useState(10);
+
 
     // ==========================
     // Modal States
     // ==========================
 
     const [openModal, setOpenModal] = useState(false);
-    const [selectedTransaction, setSelectedTransaction] = useState(null);
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [detailsOpen, setDetailsOpen] = useState(false);
+
+    const [selectedTransaction, setSelectedTransaction] =
+        useState(null);
+
+    const [deleteModalOpen, setDeleteModalOpen] =
+        useState(false);
+
+    const [detailsOpen, setDetailsOpen] =
+        useState(false);
+
 
     // ==========================
     // Fetch Transactions
     // ==========================
 
     useEffect(() => {
+
         dispatch(fetchTransactions());
+
     }, [dispatch]);
 
+
+    // ==========================
+    // Reset Pagination
+    // ==========================
+
     useEffect(() => {
+
         setCurrentPage(1);
+
     }, [
         search,
         type,
@@ -63,44 +100,73 @@ const Transactions = () => {
         sortBy,
     ]);
 
+
     // ==========================
     // Handlers
     // ==========================
 
     const handleAdd = () => {
+
         setSelectedTransaction(null);
+
         setOpenModal(true);
+
     };
+
 
     const handleEdit = (transaction) => {
+
         setSelectedTransaction(transaction);
+
         setOpenModal(true);
+
     };
+
 
     const handleView = (transaction) => {
+
         setSelectedTransaction(transaction);
+
         setDetailsOpen(true);
+
     };
+
 
     const handleDelete = (transaction) => {
+
         setSelectedTransaction(transaction);
+
         setDeleteModalOpen(true);
+
     };
+
 
     const handleCloseModal = () => {
+
         setOpenModal(false);
+
         setSelectedTransaction(null);
+
     };
+
 
     const handleCloseDeleteModal = () => {
+
         setDeleteModalOpen(false);
+
         setSelectedTransaction(null);
+
     };
 
+
     const handleCloseDetails = () => {
+
         setDetailsOpen(false);
+
         setSelectedTransaction(null);
+
     };
+
 
     // ==========================
     // Active Filters
@@ -114,93 +180,150 @@ const Transactions = () => {
         endDate
     );
 
+
     // ==========================
     // Filter + Sort
     // ==========================
 
     const filteredTransactions = useMemo(() => {
 
-        const searchTerm = search.trim().toLowerCase();
+        const searchTerm =
+            search
+                .trim()
+                .toLowerCase();
 
-        const filtered = transactions.filter((transaction) => {
 
-            const matchesSearch =
-                transaction.description
-                    ?.toLowerCase()
-                    .includes(searchTerm) ||
+        const filtered =
+            transactions.filter(
+                (transaction) => {
 
-                transaction.category?.name
-                    ?.toLowerCase()
-                    .includes(searchTerm);
+                    const matchesSearch =
 
-            const matchesType =
-                type === "" ||
-                transaction.type === type;
+                        transaction.description
+                            ?.toLowerCase()
+                            .includes(searchTerm)
 
-            const matchesCategory =
-                category === "" ||
-                transaction.category?._id === category;
+                        ||
 
-            const transactionDate = new Date(transaction.date);
+                        transaction.category?.name
+                            ?.toLowerCase()
+                            .includes(searchTerm);
 
-            const matchesStartDate =
-                !startDate ||
-                transactionDate >= new Date(startDate);
 
-            let matchesEndDate = true;
+                    const matchesType =
+                        type === "" ||
+                        transaction.type === type;
 
-            if (endDate) {
-                const end = new Date(endDate);
-                end.setHours(23, 59, 59, 999);
 
-                matchesEndDate =
-                    transactionDate <= end;
-            }
+                    const matchesCategory =
+                        category === "" ||
+                        transaction.category?._id === category;
 
-            return (
-                matchesSearch &&
-                matchesType &&
-                matchesCategory &&
-                matchesStartDate &&
-                matchesEndDate
+
+                    const transactionDate =
+                        new Date(
+                            transaction.date
+                        );
+
+
+                    const matchesStartDate =
+                        !startDate ||
+                        transactionDate >=
+                        new Date(startDate);
+
+
+                    let matchesEndDate = true;
+
+
+                    if (endDate) {
+
+                        const end =
+                            new Date(endDate);
+
+                        end.setHours(
+                            23,
+                            59,
+                            59,
+                            999
+                        );
+
+
+                        matchesEndDate =
+                            transactionDate <= end;
+
+                    }
+
+
+                    return (
+
+                        matchesSearch &&
+
+                        matchesType &&
+
+                        matchesCategory &&
+
+                        matchesStartDate &&
+
+                        matchesEndDate
+
+                    );
+
+                }
             );
 
-        });
 
         switch (sortBy) {
 
             case "latest":
+
                 filtered.sort(
                     (a, b) =>
-                        new Date(b.date) - new Date(a.date)
+                        new Date(b.date) -
+                        new Date(a.date)
                 );
+
                 break;
+
 
             case "oldest":
+
                 filtered.sort(
                     (a, b) =>
-                        new Date(a.date) - new Date(b.date)
+                        new Date(a.date) -
+                        new Date(b.date)
                 );
+
                 break;
+
 
             case "highest":
+
                 filtered.sort(
                     (a, b) =>
-                        b.amount - a.amount
+                        b.amount -
+                        a.amount
                 );
+
                 break;
+
 
             case "lowest":
+
                 filtered.sort(
                     (a, b) =>
-                        a.amount - b.amount
+                        a.amount -
+                        b.amount
                 );
+
                 break;
 
+
             default:
+
                 break;
 
         }
+
 
         return filtered;
 
@@ -214,87 +337,158 @@ const Transactions = () => {
         sortBy,
     ]);
 
-    // Pagination Logic
+
+    // ==========================
+    // Pagination
+    // ==========================
 
     const totalPages = Math.ceil(
-        filteredTransactions.length / pageSize
+        filteredTransactions.length /
+        pageSize
     );
 
-    const startIndex = (currentPage - 1) * pageSize;
 
-    const endIndex = startIndex + pageSize;
+    const startIndex =
+        (currentPage - 1) *
+        pageSize;
 
-    const paginatedTransactions = filteredTransactions.slice(
-        startIndex,
-        endIndex
-    );
+
+    const endIndex =
+        startIndex +
+        pageSize;
+
+
+    const paginatedTransactions =
+        filteredTransactions.slice(
+            startIndex,
+            endIndex
+        );
+
 
     const handlePreviousPage = () => {
-        if(currentPage > 1) {
-            setCurrentPage((prev) => prev - 1);
+
+        if (currentPage > 1) {
+
+            setCurrentPage(
+                (prev) => prev - 1
+            );
+
         }
+
     };
+
 
     const handleNextPage = () => {
-        if(currentPage < totalPages){
-            setCurrentPage((prev) => prev + 1);
+
+        if (currentPage < totalPages) {
+
+            setCurrentPage(
+                (prev) => prev + 1
+            );
+
         }
+
     };
+
+
+    // ==========================
+    // Export
+    // ==========================
 
     const handleExportCSV = () => {
-        exportCSV(filteredTransactions);
+
+        exportCSV(
+            filteredTransactions
+        );
+
     };
 
+
     const handleExportExcel = () => {
-        exportExcel(filteredTransactions);
-    }
+
+        exportExcel(
+            filteredTransactions
+        );
+
+    };
+
+
+    // ==========================
+    // UI
+    // ==========================
 
     return (
+
         <DashboardLayout>
 
-            <div className="space-y-8">
+            <div className="finance-page space-y-8">
 
-                {/* Header */}
 
-                <div className="flex justify-between items-center">
+                {/* ==========================
+                    Header
+                ========================== */}
+
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
 
                     <div>
+
                         <h1 className="text-3xl font-bold">
+
                             Transactions
+
                         </h1>
 
+
                         <p className="text-gray-500 mt-1">
+
                             Manage all your financial transactions.
+
                         </p>
+
                     </div>
 
+
                     <div className="flex gap-3">
+
                         <button
                             onClick={handleExportCSV}
-                            className="bg-green-600 text-white px-4 py-2 rounded-lg"
+                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
                         >
+
                             Export CSV
+
                         </button>
+
 
                         <button
                             onClick={handleExportExcel}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
                         >
+
                             Export Excel
+
                         </button>
+
                     </div>
 
                 </div>
 
-                {/* Summary Cards */}
+
+                {/* ==========================
+                    Summary Cards
+                ========================== */}
 
                 <TransactionSummaryCards
                     transactions={transactions}
                 />
 
-                {/* Filters */}
+
+                {/* ==========================
+                    Filters
+                ========================== */}
 
                 <TransactionFilters
+
                     search={search}
                     setSearch={setSearch}
 
@@ -316,16 +510,22 @@ const Transactions = () => {
                     categories={[]}
 
                     onAdd={handleAdd}
+
                 />
 
-                {/* Table */}
+
+                {/* ==========================
+                    Table
+                ========================== */}
 
                 {loading ? (
 
                     <div className="bg-white rounded-xl shadow-md p-8 text-center">
 
                         <p className="text-gray-500">
+
                             Loading transactions...
+
                         </p>
 
                     </div>
@@ -335,7 +535,9 @@ const Transactions = () => {
                     <div className="bg-red-50 border border-red-200 rounded-xl p-6">
 
                         <p className="text-red-600">
+
                             {error}
+
                         </p>
 
                     </div>
@@ -343,54 +545,129 @@ const Transactions = () => {
                 ) : (
 
                     <TransactionTable
-                        transactions={paginatedTransactions}
+
+                        transactions={
+                            paginatedTransactions
+                        }
+
                         hasFilters={hasFilters}
+
                         onView={handleView}
+
                         onEdit={handleEdit}
+
                         onDelete={handleDelete}
+
                     />
 
                 )}
 
+
+                {/* ==========================
+                    Pagination
+                ========================== */}
+
                 <TransactionPagination
+
                     currentPage={currentPage}
+
                     totalPages={totalPages}
+
                     pageSize={pageSize}
+
                     setPageSize={setPageSize}
-                    totalItems={filteredTransactions.length}
+
+                    totalItems={
+                        filteredTransactions.length
+                    }
+
                     startIndex={startIndex}
-                    endIndex={Math.min(endIndex, filteredTransactions.length)}
-                    onPrevious={handlePreviousPage}
-                    onNext={handleNextPage}
+
+                    endIndex={
+                        Math.min(
+                            endIndex,
+                            filteredTransactions.length
+                        )
+                    }
+
+                    onPrevious={
+                        handlePreviousPage
+                    }
+
+                    onNext={
+                        handleNextPage
+                    }
+
                 />
 
-                {/* Add / Edit */}
+
+                {/* ==========================
+                    Add / Edit
+                ========================== */}
 
                 <TransactionFormModal
+
                     open={openModal}
+
                     onClose={handleCloseModal}
-                    mode={selectedTransaction ? "edit" : "add"}
-                    transaction={selectedTransaction}
+
+                    mode={
+                        selectedTransaction
+                            ? "edit"
+                            : "add"
+                    }
+
+                    transaction={
+                        selectedTransaction
+                    }
+
                 />
 
-                {/* Delete */}
+
+                {/* ==========================
+                    Delete
+                ========================== */}
 
                 <DeleteTransactionModal
+
                     open={deleteModalOpen}
-                    onClose={handleCloseDeleteModal}
-                    transaction={selectedTransaction}
+
+                    onClose={
+                        handleCloseDeleteModal
+                    }
+
+                    transaction={
+                        selectedTransaction
+                    }
+
                 />
 
+
+                {/* ==========================
+                    Details
+                ========================== */}
+
                 <TransactionDetailsModal
+
                     open={detailsOpen}
-                    onClose={handleCloseDetails}
-                    transaction={selectedTransaction}
+
+                    onClose={
+                        handleCloseDetails
+                    }
+
+                    transaction={
+                        selectedTransaction
+                    }
+
                 />
 
             </div>
 
         </DashboardLayout>
+
     );
+
 };
+
 
 export default Transactions;

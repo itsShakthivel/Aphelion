@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
+import {
+    useDispatch,
+    useSelector,
+} from "react-redux";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 
@@ -15,25 +19,54 @@ import {
     fetchInsights,
 } from "../../features/analytics/analyticsSlice";
 
-import AnalyticsHeader from "../../components/Analytics/Header/AnalyticsHeader";
-import AnalyticsDateFilter from "../../components/Analytics/Filters/AnalyticsDateFilter";
-import AnalyticsSummaryCards from "../../components/Analytics/SummaryCards/AnalyticsSummaryCards";
+import AnalyticsHeader
+    from "../../components/Analytics/Header/AnalyticsHeader";
 
-import ExpensePieChart from "../../components/Analytics/Charts/ExpensePieChart";
-import ExpenseBreakdown from "../../components/Analytics/Charts/ExpenseBreakdown";
-import MonthlyExpenseTrend from "../../components/Analytics/Charts/MonthlyExpenseTrend";
-import IncomeBarChart from "../../components/Analytics/Charts/IncomeBarCharts";
-import CashFlowChart from "../../components/Analytics/Charts/CashFlowChart";
+import AnalyticsDateFilter
+    from "../../components/Analytics/Filters/AnalyticsDateFilter";
 
-import NetWorthCard from "../../components/Analytics/NetWorth/NetWorthCard";
-import NetWorthTimeline from "../../components/Analytics/NetWorth/NetWorthTimeline";
+import AnalyticsSummaryCards
+    from "../../components/Analytics/SummaryCards/AnalyticsSummaryCards";
 
-import FinancialHealthCard from "../../components/Analytics/FinancialHealth/FinancialHealthCard";
-import InsightsSection from "../../components/Analytics/InsightCard/InsightsSection";
+import ExpensePieChart
+    from "../../components/Analytics/Charts/ExpensePieChart";
+
+import ExpenseBreakdown
+    from "../../components/Analytics/Charts/ExpenseBreakdown";
+
+import MonthlyExpenseTrend
+    from "../../components/Analytics/Charts/MonthlyExpenseTrend";
+
+import IncomeBarChart
+    from "../../components/Analytics/Charts/IncomeBarCharts";
+
+import CashFlowChart
+    from "../../components/Analytics/Charts/CashFlowChart";
+
+import NetWorthCard
+    from "../../components/Analytics/NetWorth/NetWorthCard";
+
+import NetWorthTimeline
+    from "../../components/Analytics/NetWorth/NetWorthTimeline";
+
+import FinancialHealthCard
+    from "../../components/Analytics/FinancialHealth/FinancialHealthCard";
+
+import InsightsSection
+    from "../../components/Analytics/InsightCard/InsightsSection";
+
+import FIREPlanner
+    from "../../components/fire/FirePlanner";
+
 
 const Analytics = () => {
 
     const dispatch = useDispatch();
+
+
+    // ==========================================
+    // Redux
+    // ==========================================
 
     const {
 
@@ -45,21 +78,41 @@ const Analytics = () => {
 
         insights,
 
-    } = useSelector((state) => state.analytics);
+    } = useSelector(
+        (state) => state.analytics
+    );
+
+
+    // ==========================================
+    // Fetch Analytics
+    // ==========================================
 
     useEffect(() => {
 
         dispatch(fetchOverview());
+
         dispatch(fetchExpenseAnalytics());
+
         dispatch(fetchMonthlyExpenseTrend());
+
         dispatch(fetchIncomeAnalytics());
+
         dispatch(fetchCashFlowAnalytics());
+
         dispatch(fetchNetWorthAnalytics());
+
         dispatch(fetchNetWorthTimeline());
+
         dispatch(fetchFinancialHealth());
+
         dispatch(fetchInsights());
 
     }, [dispatch]);
+
+
+    // ==========================================
+    // Loading
+    // ==========================================
 
     const isLoading =
 
@@ -79,6 +132,11 @@ const Analytics = () => {
 
         loading.financialHealth;
 
+
+    // ==========================================
+    // Error
+    // ==========================================
+
     const firstError =
 
         error.overview ||
@@ -97,39 +155,57 @@ const Analytics = () => {
 
         error.financialHealth;
 
+
+    // ==========================================
+    // UI
+    // ==========================================
+
     return (
 
         <DashboardLayout>
 
-            <div className="space-y-10">
+            <div className="finance-page space-y-10">
 
-                {/* ===========================================
-                    Header
-                =========================================== */}
+
+                {/* =====================================
+                    ANALYTICS HEADER
+                ===================================== */}
 
                 <AnalyticsHeader />
 
-                {/* ===========================================
-                    Date Filter
-                =========================================== */}
+
+                {/* =====================================
+                    DATE FILTER
+                ===================================== */}
 
                 <AnalyticsDateFilter />
 
-                {/* ===========================================
-                    Summary Cards
-                =========================================== */}
+
+                {/* =====================================
+                    SUMMARY CARDS
+                ===================================== */}
 
                 <AnalyticsSummaryCards />
 
-                {/* ===========================================
-                    Loading
-                =========================================== */}
+
+                {/* =====================================
+                    LOADING
+                ===================================== */}
 
                 {isLoading && (
 
-                    <div className="bg-white rounded-xl shadow-md p-8 text-center">
+                    <div className="
+                        bg-white
+                        rounded-xl
+                        shadow-md
+                        p-8
+                        text-center
+                    ">
 
-                        <p className="text-gray-500 text-lg">
+                        <p className="
+                            text-gray-500
+                            text-lg
+                        ">
 
                             Loading analytics...
 
@@ -139,15 +215,25 @@ const Analytics = () => {
 
                 )}
 
-                {/* ===========================================
-                    Error
-                =========================================== */}
+
+                {/* =====================================
+                    ERROR
+                ===================================== */}
 
                 {!isLoading && firstError && (
 
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+                    <div className="
+                        bg-red-50
+                        border
+                        border-red-200
+                        rounded-xl
+                        p-6
+                    ">
 
-                        <p className="text-red-600 font-medium">
+                        <p className="
+                            text-red-600
+                            font-medium
+                        ">
 
                             {firstError}
 
@@ -157,27 +243,38 @@ const Analytics = () => {
 
                 )}
 
-                {/* ===========================================
-                    Analytics Content
-                =========================================== */}
+
+                {/* =====================================
+                    ANALYTICS CONTENT
+                ===================================== */}
 
                 {!isLoading && !firstError && (
 
                     <div className="space-y-12">
 
-                        {/* =======================================
-                            Net Worth
-                        ======================================= */}
+
+                        {/* =================================
+                            NET WORTH
+                        ================================= */}
 
                         <section className="space-y-6">
 
-                            <h2 className="text-2xl font-bold">
+                            <h2 className="
+                                text-2xl
+                                font-bold
+                            ">
 
                                 Net Worth
 
                             </h2>
 
-                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+                            <div className="
+                                grid
+                                grid-cols-1
+                                xl:grid-cols-2
+                                gap-6
+                            ">
 
                                 <NetWorthCard />
 
@@ -187,47 +284,79 @@ const Analytics = () => {
 
                         </section>
 
-                        {/* =======================================
-                            Financial Health
-                        ======================================= */}
+
+                        {/* =================================
+                            FINANCIAL HEALTH
+                        ================================= */}
 
                         {financialHealth && (
 
                             <section className="space-y-6">
 
-                                <h2 className="text-2xl font-bold">
+                                <h2 className="
+                                    text-2xl
+                                    font-bold
+                                ">
 
                                     Financial Health
 
                                 </h2>
 
+
                                 <FinancialHealthCard
-                                    data={financialHealth}
+
+                                    data={
+                                        financialHealth
+                                    }
+
                                 />
 
                             </section>
 
                         )}
 
-                        <InsightsSection
 
-                            insights={insights}
+                        {/* =================================
+                            SMART FINANCIAL INSIGHTS
+                        ================================= */}
 
-                        />
+                        <section className="
+                            space-y-6
+                        ">
 
-                        {/* =======================================
-                            Expense Analytics
-                        ======================================= */}
+                            <InsightsSection
+
+                                insights={
+                                    insights || []
+                                }
+
+                            />
+
+                        </section>
+
+
+                        {/* =================================
+                            EXPENSE ANALYTICS
+                        ================================= */}
 
                         <section className="space-y-6">
 
-                            <h2 className="text-2xl font-bold">
+                            <h2 className="
+                                text-2xl
+                                font-bold
+                            ">
 
                                 Expense Analytics
 
                             </h2>
 
-                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+                            <div className="
+                                grid
+                                grid-cols-1
+                                xl:grid-cols-2
+                                gap-6
+                            ">
 
                                 <ExpensePieChart />
 
@@ -235,97 +364,89 @@ const Analytics = () => {
 
                             </div>
 
+
                             <MonthlyExpenseTrend />
 
                         </section>
 
-                        {/* =======================================
-                            Income Analytics
-                        ======================================= */}
+
+                        {/* =================================
+                            INCOME ANALYTICS
+                        ================================= */}
 
                         <section className="space-y-6">
 
-                            <h2 className="text-2xl font-bold">
+                            <h2 className="
+                                text-2xl
+                                font-bold
+                            ">
 
                                 Income Analytics
 
                             </h2>
 
+
                             <IncomeBarChart />
 
                         </section>
 
-                        {/* =======================================
-                            Cash Flow Analytics
-                        ======================================= */}
+
+                        {/* =================================
+                            CASH FLOW
+                        ================================= */}
 
                         <section className="space-y-6">
 
-                            <h2 className="text-2xl font-bold">
+                            <h2 className="
+                                text-2xl
+                                font-bold
+                            ">
 
                                 Cash Flow Analytics
 
                             </h2>
 
+
                             <CashFlowChart />
 
                         </section>
 
-                        {/* =======================================
-                            Smart Insights
-                            (Phase 5.2)
-                        ======================================= */}
 
-                        <section className="space-y-6">
+                        {/* =================================
+                            FIRE PLANNER
+                        ================================= */}
 
-                            <h2 className="text-2xl font-bold">
+                        <section className="
+                            space-y-6
+                        ">
 
-                                Smart Insights
+                            <div>
 
-                            </h2>
-
-                            <div className="bg-white rounded-xl shadow-md h-72 flex items-center justify-center">
-
-                                <p className="text-gray-500 text-lg">
-
-                                    Smart Financial Insights
-
-                                    <br />
-
-                                    Coming Soon 🚀
-
-                                </p>
-
-                            </div>
-
-                        </section>
-
-                        {/* =======================================
-                            FIRE Planner
-                            (Phase 5.3)
-                        ======================================= */}
-
-                        <section className="space-y-6">
-
-                            <h2 className="text-2xl font-bold">
-
-                                FIRE Planner
-
-                            </h2>
-
-                            <div className="bg-white rounded-xl shadow-md h-72 flex items-center justify-center">
-
-                                <p className="text-gray-500 text-lg">
+                                <h2 className="
+                                    text-2xl
+                                    font-bold
+                                ">
 
                                     FIRE Planner
 
-                                    <br />
+                                </h2>
 
-                                    Coming Soon 🚀
+
+                                <p className="
+                                    mt-1
+                                    text-gray-500
+                                ">
+
+                                    Plan, simulate, and track
+                                    your path to financial
+                                    independence.
 
                                 </p>
 
                             </div>
+
+
+                            <FIREPlanner />
 
                         </section>
 
@@ -340,5 +461,6 @@ const Analytics = () => {
     );
 
 };
+
 
 export default Analytics;

@@ -10,25 +10,45 @@ import {
 
 import { useSelector } from "react-redux";
 
+
 const NetWorthTimeline = () => {
 
-    const { netWorthTimeline } = useSelector(
+    const {
+        netWorthTimeline,
+    } = useSelector(
         (state) => state.analytics
     );
+
 
     if (!netWorthTimeline.length) {
 
         return (
 
-            <div className="bg-white rounded-2xl shadow-xl p-6">
+            <div className="
+                bg-white
+                rounded-2xl
+                shadow-xl
+                p-6
+            ">
 
-                <h2 className="text-xl font-semibold mb-6">
+                <h2 className="
+                    text-xl
+                    font-semibold
+                    mb-6
+                ">
 
                     Net Worth Timeline
 
                 </h2>
 
-                <div className="h-[350px] flex items-center justify-center text-gray-500">
+
+                <div className="
+                    h-[350px]
+                    flex
+                    items-center
+                    justify-center
+                    text-gray-500
+                ">
 
                     No timeline data available.
 
@@ -40,15 +60,26 @@ const NetWorthTimeline = () => {
 
     }
 
+
     return (
 
-        <div className="bg-white rounded-2xl shadow-xl p-6">
+        <div className="
+            bg-white
+            rounded-2xl
+            shadow-xl
+            p-6
+        ">
 
-            <h2 className="text-xl font-semibold mb-6">
+            <h2 className="
+                text-xl
+                font-semibold
+                mb-6
+            ">
 
                 Net Worth Timeline
 
             </h2>
+
 
             <ResponsiveContainer
                 width="100%"
@@ -59,24 +90,61 @@ const NetWorthTimeline = () => {
                     data={netWorthTimeline}
                 >
 
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid
+                        strokeDasharray="3 3"
+                    />
 
-                    <XAxis dataKey="month" />
+
+                    <XAxis
+                        dataKey="month"
+                    />
+
 
                     <YAxis />
 
+
                     <Tooltip
+
                         formatter={(value) =>
                             `₹ ${Number(value).toLocaleString("en-IN")}`
                         }
+
                     />
 
+
                     <Line
+
                         type="monotone"
+
                         dataKey="netWorth"
+
                         stroke="#2563EB"
+
                         strokeWidth={4}
-                        dot={{ r: 5 }}
+
+                        dot={({
+                            cx,
+                            cy,
+                        }) => (
+
+                            <circle
+
+                                cx={cx}
+
+                                cy={cy}
+
+                                r={5}
+
+                                fill="#2563EB"
+
+                                stroke="#ffffff"
+
+                                strokeWidth={2}
+
+                            />
+
+                        )}
+
                     />
 
                 </LineChart>
@@ -88,5 +156,6 @@ const NetWorthTimeline = () => {
     );
 
 };
+
 
 export default NetWorthTimeline;

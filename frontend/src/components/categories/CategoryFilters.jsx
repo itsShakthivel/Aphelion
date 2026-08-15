@@ -10,11 +10,13 @@ const CategoryFilters = ({
 
     return (
 
-        <div className="bg-white rounded-xl shadow-md p-4">
+        <div className="finance-filter">
 
-            <div className="flex flex-col lg:flex-row gap-4">
+            {/* ==========================================
+                Search
+            ========================================== */}
 
-                {/* Search */}
+            <div className="w-full">
 
                 <input
 
@@ -28,9 +30,24 @@ const CategoryFilters = ({
                         setSearch(e.target.value)
                     }
 
-                    className="flex-1 border rounded-lg px-4 py-2"
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        px-4
+                        py-2.5
+                    "
 
                 />
+
+            </div>
+
+
+            {/* ==========================================
+                Type + Sort
+            ========================================== */}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
 
                 {/* Type */}
 
@@ -42,7 +59,13 @@ const CategoryFilters = ({
                         setType(e.target.value)
                     }
 
-                    className="border rounded-lg px-4 py-2"
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        px-4
+                        py-2.5
+                    "
 
                 >
 
@@ -68,11 +91,27 @@ const CategoryFilters = ({
 
                 </select>
 
+
+                {/* Sort */}
+
                 <select
+
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="border rounded-lg px-4 py-2"
+
+                    onChange={(e) =>
+                        setSortBy(e.target.value)
+                    }
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        px-4
+                        py-2.5
+                    "
+
                 >
+
                     <option value="nameAsc">
                         Name (A-Z)
                     </option>
@@ -88,16 +127,25 @@ const CategoryFilters = ({
                     <option value="latest">
                         Recently Created
                     </option>
-                    
+
                 </select>
 
-                {/* Button */}
+            </div>
+
+
+            {/* ==========================================
+                Add Category
+            ========================================== */}
+
+            <div className="mt-4">
 
                 <button
 
                     onClick={onAdd}
 
-                    className="bg-emerald-500 text-white px-5 py-2 rounded-lg"
+                    className="
+                        finance-add-button
+                    "
 
                 >
 
@@ -112,5 +160,6 @@ const CategoryFilters = ({
     );
 
 };
+
 
 export default CategoryFilters;

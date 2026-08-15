@@ -1,5 +1,5 @@
 import {
-    FaCheckCircle,
+    FaCircleCheck,
     FaArrowTrendUp,
     FaPiggyBank,
     FaBullseye,
@@ -8,7 +8,7 @@ import {
 
 const icons = {
 
-    success: FaCheckCircle,
+    success: FaCircleCheck,
 
     info: FaArrowTrendUp,
 
