@@ -6,45 +6,112 @@ import {
     getInvestment,
     updateInvestment,
     deleteInvestment,
+    previewAngelOneImport,
 } from "../controllers/investmentController.js";
 
-import protect from "../middleware/authMiddleware.js";
+import protect
+    from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+import uploadInvestmentFile
+    from "../middleware/uploadMiddleware.js";
 
-// Create
+
+const router =
+    express.Router();
+
+
+// ======================================================
+// PREVIEW ANGEL ONE IMPORT
+// ======================================================
+
 router.post(
-    "/",
+
+    "/import/angel-one",
+
     protect,
+
+    uploadInvestmentFile.single(
+        "file"
+    ),
+
+    previewAngelOneImport
+
+);
+
+
+// ======================================================
+// CREATE
+// ======================================================
+
+router.post(
+
+    "/",
+
+    protect,
+
     createInvestment
+
 );
 
-// Get All
+
+// ======================================================
+// GET ALL
+// ======================================================
+
 router.get(
+
     "/",
+
     protect,
+
     getInvestments
+
 );
 
-// Get One
+
+// ======================================================
+// GET ONE
+// ======================================================
+
 router.get(
+
     "/:id",
+
     protect,
+
     getInvestment
+
 );
 
-// Update
+
+// ======================================================
+// UPDATE
+// ======================================================
+
 router.put(
+
     "/:id",
+
     protect,
+
     updateInvestment
+
 );
 
-// Delete
+
+// ======================================================
+// DELETE
+// ======================================================
+
 router.delete(
+
     "/:id",
+
     protect,
+
     deleteInvestment
+
 );
+
 
 export default router;
