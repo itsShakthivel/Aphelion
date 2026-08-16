@@ -4,8 +4,6 @@ const ALLOWED_TYPES = [
 
     "mutual_fund",
 
-    "index_fund",
-
     "etf",
 
     "gold",
@@ -17,6 +15,29 @@ const ALLOWED_TYPES = [
     "real_estate",
 
     "bond",
+
+    "other",
+
+];
+
+
+const ALLOWED_CATEGORIES = [
+
+    "index_fund",
+
+    "flexicap",
+
+    "large_cap",
+
+    "mid_cap",
+
+    "small_cap",
+
+    "multicap",
+
+    "elss",
+
+    "debt",
 
     "other",
 
@@ -108,7 +129,7 @@ export const validateImportedHolding = (
 
 
     // ==============================================
-    // Name
+    // NAME
     // ==============================================
 
     if (
@@ -135,7 +156,7 @@ export const validateImportedHolding = (
 
 
     // ==============================================
-    // Type
+    // TYPE
     // ==============================================
 
     if (
@@ -154,7 +175,44 @@ export const validateImportedHolding = (
 
 
     // ==============================================
-    // Source
+    // CATEGORY
+    // ==============================================
+
+    if (
+        !ALLOWED_CATEGORIES.includes(
+            holding.category
+        )
+    ) {
+
+        throw new Error(
+
+            `Invalid investment category for ${holding.name}.`
+
+        );
+
+    }
+
+
+    // ==============================================
+    // MUTUAL FUND CATEGORY CONSISTENCY
+    // ==============================================
+
+    if (
+        holding.type !== "mutual_fund" &&
+        holding.category !== "other"
+    ) {
+
+        throw new Error(
+
+            `Category is only applicable to mutual funds for ${holding.name}.`
+
+        );
+
+    }
+
+
+    // ==============================================
+    // SOURCE
     // ==============================================
 
     if (
@@ -173,7 +231,7 @@ export const validateImportedHolding = (
 
 
     // ==============================================
-    // Financial fields
+    // FINANCIAL FIELDS
     // ==============================================
 
     validateNumber(
@@ -275,7 +333,7 @@ export const validateImportedHolding = (
 
 
     // ==============================================
-    // Date
+    // DATE
     // ==============================================
 
     if (
@@ -343,8 +401,6 @@ export const validateImportedHoldings = (
     }
 
 
-    // Safety limit for first version.
-
     if (
         holdings.length > 500
     ) {
@@ -365,6 +421,7 @@ export const validateImportedHoldings = (
 
 };
 
+
 // ======================================================
 // CHECK DUPLICATES INSIDE IMPORT
 // ======================================================
@@ -384,9 +441,12 @@ export const validateNoDuplicateHoldings = (
             String(
                 holding.name || ""
             )
-            .trim()
-            .toLowerCase()
-            .replace(/\s+/g, " ");
+                .trim()
+                .toLowerCase()
+                .replace(
+                    /\s+/g,
+                    " "
+                );
 
 
         const key =

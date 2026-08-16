@@ -10,13 +10,17 @@ const investmentSchema = new mongoose.Schema(
 
         user: {
 
-            type: mongoose.Schema.Types.ObjectId,
+            type:
+                mongoose.Schema.Types.ObjectId,
 
-            ref: "User",
+            ref:
+                "User",
 
-            required: true,
+            required:
+                true,
 
-            index: true,
+            index:
+                true,
 
         },
 
@@ -27,26 +31,32 @@ const investmentSchema = new mongoose.Schema(
 
         name: {
 
-            type: String,
+            type:
+                String,
 
-            required: true,
+            required:
+                true,
 
-            trim: true,
+            trim:
+                true,
 
         },
 
 
+        // ==========================================
+        // PRIMARY INVESTMENT TYPE
+        // ==========================================
+
         type: {
 
-            type: String,
+            type:
+                String,
 
             enum: [
 
                 "stock",
 
                 "mutual_fund",
-
-                "index_fund",
 
                 "etf",
 
@@ -64,7 +74,45 @@ const investmentSchema = new mongoose.Schema(
 
             ],
 
-            required: true,
+            required:
+                true,
+
+        },
+
+
+        // ==========================================
+        // MUTUAL FUND / INVESTMENT CATEGORY
+        // ==========================================
+
+        category: {
+
+            type:
+                String,
+
+            enum: [
+
+                "index_fund",
+
+                "flexicap",
+
+                "large_cap",
+
+                "mid_cap",
+
+                "small_cap",
+
+                "multicap",
+
+                "elss",
+
+                "debt",
+
+                "other",
+
+            ],
+
+            default:
+                "other",
 
         },
 
@@ -75,33 +123,42 @@ const investmentSchema = new mongoose.Schema(
 
         units: {
 
-            type: Number,
+            type:
+                Number,
 
-            default: null,
+            default:
+                null,
 
-            min: 0,
+            min:
+                0,
 
         },
 
 
         averagePrice: {
 
-            type: Number,
+            type:
+                Number,
 
-            default: null,
+            default:
+                null,
 
-            min: 0,
+            min:
+                0,
 
         },
 
 
         currentPrice: {
 
-            type: Number,
+            type:
+                Number,
 
-            default: null,
+            default:
+                null,
 
-            min: 0,
+            min:
+                0,
 
         },
 
@@ -112,22 +169,28 @@ const investmentSchema = new mongoose.Schema(
 
         investedAmount: {
 
-            type: Number,
+            type:
+                Number,
 
-            required: true,
+            required:
+                true,
 
-            min: 0,
+            min:
+                0,
 
         },
 
 
         currentValue: {
 
-            type: Number,
+            type:
+                Number,
 
-            required: true,
+            required:
+                true,
 
-            min: 0,
+            min:
+                0,
 
         },
 
@@ -138,27 +201,33 @@ const investmentSchema = new mongoose.Schema(
 
         profitLoss: {
 
-            type: Number,
+            type:
+                Number,
 
-            default: null,
+            default:
+                null,
 
         },
 
 
         roi: {
 
-            type: Number,
+            type:
+                Number,
 
-            default: null,
+            default:
+                null,
 
         },
 
 
         xirr: {
 
-            type: Number,
+            type:
+                Number,
 
-            default: null,
+            default:
+                null,
 
         },
 
@@ -169,18 +238,22 @@ const investmentSchema = new mongoose.Schema(
 
         purchaseDate: {
 
-            type: Date,
+            type:
+                Date,
 
-            default: Date.now,
+            default:
+                Date.now,
 
         },
 
 
         valuationDate: {
 
-            type: Date,
+            type:
+                Date,
 
-            default: null,
+            default:
+                null,
 
         },
 
@@ -191,11 +264,92 @@ const investmentSchema = new mongoose.Schema(
 
         source: {
 
-            type: String,
+            type:
+                String,
 
-            trim: true,
+            trim:
+                true,
 
-            default: "manual",
+            default:
+                "manual",
+
+        },
+
+
+        // ==========================================
+        // BROKER METADATA
+        // ==========================================
+
+        brokerData: {
+
+            isin: {
+
+                type:
+                    String,
+
+                default:
+                    null,
+
+                trim:
+                    true,
+
+            },
+
+
+            category: {
+
+                type:
+                    String,
+
+                default:
+                    null,
+
+                trim:
+                    true,
+
+            },
+
+
+            subCategory: {
+
+                type:
+                    String,
+
+                default:
+                    null,
+
+                trim:
+                    true,
+
+            },
+
+
+            folioNumber: {
+
+                type:
+                    String,
+
+                default:
+                    null,
+
+                trim:
+                    true,
+
+            },
+
+
+            source: {
+
+                type:
+                    String,
+
+                default:
+                    null,
+
+                trim:
+                    true,
+
+            },
 
         },
 
@@ -206,11 +360,14 @@ const investmentSchema = new mongoose.Schema(
 
         notes: {
 
-            type: String,
+            type:
+                String,
 
-            default: "",
+            default:
+                "",
 
-            trim: true,
+            trim:
+                true,
 
         },
 
@@ -218,7 +375,8 @@ const investmentSchema = new mongoose.Schema(
 
     {
 
-        timestamps: true,
+        timestamps:
+            true,
 
     }
 
@@ -231,16 +389,55 @@ const investmentSchema = new mongoose.Schema(
 
 investmentSchema.index({
 
-    user: 1,
+    user:
+        1,
 
 });
 
 
 investmentSchema.index({
 
-    user: 1,
+    user:
+        1,
 
-    name: 1,
+    name:
+        1,
+
+});
+
+
+investmentSchema.index({
+
+    user:
+        1,
+
+    type:
+        1,
+
+});
+
+
+investmentSchema.index({
+
+    user:
+        1,
+
+    category:
+        1,
+
+});
+
+
+investmentSchema.index({
+
+    user:
+        1,
+
+    source:
+        1,
+
+    "brokerData,isin":
+        1,
 
 });
 

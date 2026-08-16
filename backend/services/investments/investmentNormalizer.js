@@ -1,4 +1,8 @@
-const normalizeInvestmentType = (
+// ======================================================
+// NORMALIZE MUTUAL FUND CATEGORY
+// ======================================================
+
+const normalizeMutualFundCategory = (
     subCategory,
     category
 ) => {
@@ -19,9 +23,16 @@ const normalizeInvestmentType = (
             .toLowerCase();
 
 
+    // ==============================================
+    // INDEX FUND
+    // ==============================================
+
     if (
         normalizedSubCategory.includes(
             "index fund"
+        ) ||
+        normalizedSubCategory.includes(
+            "index"
         )
     ) {
 
@@ -30,49 +41,153 @@ const normalizeInvestmentType = (
     }
 
 
+    // ==============================================
+    // FLEXICAP
+    // ==============================================
+
     if (
         normalizedSubCategory.includes(
             "flexi cap"
+        ) ||
+        normalizedSubCategory.includes(
+            "flexicap"
         )
     ) {
 
-        return "mutual_fund";
+        return "flexicap";
 
     }
 
+
+    // ==============================================
+    // LARGE CAP
+    // ==============================================
+
+    if (
+        normalizedSubCategory.includes(
+            "large cap"
+        ) ||
+        normalizedSubCategory.includes(
+            "largecap"
+        )
+    ) {
+
+        return "large_cap";
+
+    }
+
+
+    // ==============================================
+    // MID CAP
+    // ==============================================
+
+    if (
+        normalizedSubCategory.includes(
+            "mid cap"
+        ) ||
+        normalizedSubCategory.includes(
+            "midcap"
+        )
+    ) {
+
+        return "mid_cap";
+
+    }
+
+
+    // ==============================================
+    // SMALL CAP
+    // ==============================================
+
+    if (
+        normalizedSubCategory.includes(
+            "small cap"
+        ) ||
+        normalizedSubCategory.includes(
+            "smallcap"
+        )
+    ) {
+
+        return "small_cap";
+
+    }
+
+
+    // ==============================================
+    // MULTICAP
+    // ==============================================
+
+    if (
+        normalizedSubCategory.includes(
+            "multi cap"
+        ) ||
+        normalizedSubCategory.includes(
+            "multicap"
+        )
+    ) {
+
+        return "multicap";
+
+    }
+
+
+    // ==============================================
+    // ELSS
+    // ==============================================
+
+    if (
+        normalizedSubCategory.includes(
+            "elss"
+        )
+    ) {
+
+        return "elss";
+
+    }
+
+
+    // ==============================================
+    // DEBT
+    // ==============================================
+
+    if (
+        normalizedSubCategory.includes(
+            "debt"
+        ) ||
+        normalizedSubCategory.includes(
+            "liquid"
+        ) ||
+        normalizedSubCategory.includes(
+            "money market"
+        ) ||
+        normalizedSubCategory.includes(
+            "gilt"
+        )
+    ) {
+
+        return "debt";
+
+    }
+
+
+    // ==============================================
+    // CATEGORY FALLBACK
+    // ==============================================
 
     if (
         normalizedCategory.includes(
-            "equity"
+            "debt"
         )
     ) {
 
-        return "mutual_fund";
+        return "debt";
 
     }
 
 
-    if (
-        normalizedSubCategory.includes(
-            "etf"
-        )
-    ) {
-
-        return "etf";
-
-    }
-
-
-    if (
-        normalizedSubCategory.includes(
-            "gold"
-        )
-    ) {
-
-        return "gold";
-
-    }
-
+    // ==============================================
+    // DEFAULT
+    // ==============================================
 
     return "other";
 
@@ -87,7 +202,9 @@ export const normalizeAngelOneHolding = (
     holding
 ) => {
 
-    if (!holding?.name) {
+    if (
+        !holding?.name
+    ) {
 
         throw new Error(
             "Investment name is required."
@@ -120,14 +237,104 @@ export const normalizeAngelOneHolding = (
     }
 
 
+    const normalizedSubCategory =
+        String(
+            holding.subCategory || ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    const normalizedCategory =
+        String(
+            holding.category || ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    // ==============================================
+    // ETF
+    // ==============================================
+
+    const isETF =
+        normalizedSubCategory.includes(
+            "etf"
+        ) ||
+        normalizedCategory.includes(
+            "etf"
+        );
+
+
+    // ==============================================
+    // GOLD
+    // ==============================================
+
+    const isGold =
+        normalizedSubCategory.includes(
+            "gold"
+        ) ||
+        normalizedCategory.includes(
+            "gold"
+        );
+
+
+    // ==============================================
+    // TYPE
+    // ==============================================
+
+    let type = "other";
+
+    let category = "other";
+
+
+    if (isETF) {
+
+        type = "etf";
+
+        category = "other";
+
+    }
+
+    else if (isGold) {
+
+        type = "gold";
+
+        category = "other";
+
+    }
+
+    else if (
+        normalizedCategory.includes(
+            "equity"
+        ) ||
+        normalizedCategory.includes(
+            "mutual fund"
+        ) ||
+        normalizedCategory.includes(
+            "mutual_fund"
+        )
+    ) {
+
+        type = "mutual_fund";
+
+        category =
+            normalizeMutualFundCategory(
+                holding.subCategory,
+                holding.category
+            );
+
+    }
+
+
     return {
 
-        name: holding.name.trim(),
+        name:
+            holding.name.trim(),
 
-        type: normalizeInvestmentType(
-            holding.subCategory,
-            holding.category
-        ),
+        type,
+
+        category,
 
         units:
             holding.units,
@@ -163,12 +370,13 @@ export const normalizeAngelOneHolding = (
             "angel_one",
 
         notes:
-            `Imported from Angel One. ISIN: ${holding.isin || "N/A"}`,
+            `Imported from Angel One. ISIN: ${
+                holding.isin || "N/A"
+            }`,
 
-        // Broker metadata.
-        // We will use this during duplicate
-        // detection, but won't put it directly
-        // into the current Investment model yet.
+        // ==========================================
+        // BROKER METADATA
+        // ==========================================
 
         brokerData: {
 
@@ -185,7 +393,8 @@ export const normalizeAngelOneHolding = (
                 holding.folioNumber || null,
 
             source:
-                holding.source || "Angel One",
+                holding.source ||
+                "Angel One",
 
         },
 

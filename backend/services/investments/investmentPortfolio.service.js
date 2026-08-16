@@ -29,7 +29,7 @@ const roundNumber = (
 
 
 // ======================================================
-// FORMAT INVESTMENT TYPE
+// FORMAT ASSET TYPE
 // ======================================================
 
 const formatInvestmentType = (
@@ -43,9 +43,6 @@ const formatInvestmentType = (
 
         mutual_fund:
             "Mutual Funds",
-
-        index_fund:
-            "Index Funds",
 
         etf:
             "ETFs",
@@ -80,7 +77,55 @@ const formatInvestmentType = (
 
 
 // ======================================================
-// CALCULATE PORTFOLIO
+// FORMAT MUTUAL FUND CATEGORY
+// ======================================================
+
+const formatMutualFundCategory = (
+    category
+) => {
+
+    const labels = {
+
+        index_fund:
+            "Index Funds",
+
+        flexicap:
+            "Flexicap",
+
+        large_cap:
+            "Large Cap",
+
+        mid_cap:
+            "Mid Cap",
+
+        small_cap:
+            "Small Cap",
+
+        multicap:
+            "Multicap",
+
+        elss:
+            "ELSS",
+
+        debt:
+            "Debt Funds",
+
+        other:
+            "Other",
+
+    };
+
+
+    return (
+        labels[category] ||
+        "Other"
+    );
+
+};
+
+
+// ======================================================
+// GET INVESTMENT PORTFOLIO
 // ======================================================
 
 export const getInvestmentPortfolio = async (
@@ -141,6 +186,8 @@ export const getInvestmentPortfolio = async (
 
             typeAllocation: [],
 
+            mutualFundCategoryAllocation: [],
+
             performance: [],
 
         };
@@ -149,7 +196,7 @@ export const getInvestmentPortfolio = async (
 
 
     // ==============================================
-    // TOTALS
+    // TOTAL PORTFOLIO VALUES
     // ==============================================
 
     let totalInvested = 0;
@@ -174,25 +221,16 @@ export const getInvestmentPortfolio = async (
                 ) || 0;
 
 
+            const profitLoss =
+                current - invested;
+
+
             totalInvested +=
                 invested;
 
 
             currentValue +=
                 current;
-
-
-            const profitLoss =
-                investment.profitLoss !==
-                null &&
-                investment.profitLoss !==
-                undefined
-
-                    ? Number(
-                        investment.profitLoss
-                    ) || 0
-
-                    : current - invested;
 
 
             totalProfitLoss +=
@@ -203,7 +241,7 @@ export const getInvestmentPortfolio = async (
 
 
     // ==============================================
-    // OVERALL ROI
+    // PORTFOLIO ROI
     // ==============================================
 
     const roi =
@@ -218,7 +256,7 @@ export const getInvestmentPortfolio = async (
 
 
     // ==============================================
-    // INDIVIDUAL ALLOCATION
+    // INDIVIDUAL HOLDING ALLOCATION
     // ==============================================
 
     const allocation =
@@ -253,6 +291,10 @@ export const getInvestmentPortfolio = async (
                     type:
                         investment.type,
 
+                    category:
+                        investment.category ||
+                        "other",
+
                     value:
                         roundNumber(
                             value
@@ -270,7 +312,7 @@ export const getInvestmentPortfolio = async (
 
 
     // ==============================================
-    // TYPE ALLOCATION
+    // ASSET TYPE ALLOCATION
     // ==============================================
 
     const typeMap = {};
@@ -354,7 +396,134 @@ export const getInvestmentPortfolio = async (
 
 
     // ==============================================
-    // PERFORMANCE
+    // MUTUAL FUND CATEGORY ALLOCATION
+    // ==============================================
+
+    const mutualFundCategoryMap =
+        {};
+
+
+    investments.forEach(
+        (investment) => {
+
+            if (
+                investment.type !==
+                "mutual_fund"
+            ) {
+
+                return;
+
+            }
+
+
+            const category =
+                investment.category ||
+                "other";
+
+
+            const value =
+                Number(
+                    investment.currentValue
+                ) || 0;
+
+
+            if (
+                !mutualFundCategoryMap[
+                    category
+                ]
+            ) {
+
+                mutualFundCategoryMap[
+                    category
+                ] = 0;
+
+            }
+
+
+            mutualFundCategoryMap[
+                category
+            ] += value;
+
+        }
+    );
+
+
+    const totalMutualFundValue =
+        investments
+            .filter(
+                (investment) =>
+                    investment.type ===
+                    "mutual_fund"
+            )
+            .reduce(
+                (
+                    total,
+                    investment
+                ) => {
+
+                    return (
+                        total +
+                        (
+                            Number(
+                                investment.currentValue
+                            ) || 0
+                        )
+                    );
+
+                },
+                0
+            );
+
+
+    const mutualFundCategoryAllocation =
+        Object.entries(
+            mutualFundCategoryMap
+        )
+        .map(
+            ([category, value]) => {
+
+                const percentage =
+                    totalMutualFundValue > 0
+
+                        ? (
+                            value /
+                            totalMutualFundValue
+                        ) * 100
+
+                        : 0;
+
+
+                return {
+
+                    category,
+
+                    label:
+                        formatMutualFundCategory(
+                            category
+                        ),
+
+                    value:
+                        roundNumber(
+                            value
+                        ),
+
+                    percentage:
+                        roundNumber(
+                            percentage
+                        ),
+
+                };
+
+            }
+        )
+        .sort(
+            (a, b) =>
+                b.value - a.value
+        );
+
+
+    // ==============================================
+    // HOLDING PERFORMANCE
     // ==============================================
 
     const performance =
@@ -407,6 +576,10 @@ export const getInvestmentPortfolio = async (
 
                     type:
                         investment.type,
+
+                    category:
+                        investment.category ||
+                        "other",
 
                     units:
                         investment.units,
@@ -504,6 +677,8 @@ export const getInvestmentPortfolio = async (
         allocation,
 
         typeAllocation,
+
+        mutualFundCategoryAllocation,
 
         performance,
 

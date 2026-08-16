@@ -4,37 +4,101 @@ const InvestmentFilters = ({
     type,
     setType,
     sortBy,
-    setSortBy,
-    onAdd,
 }) => {
 
     return (
 
-        <div className="finance-filter">
+        <div
+            className="
+                rounded-2xl
+                border
+                border-white/50
+                bg-white/60
+                p-4
+                shadow-sm
+                backdrop-blur-xl
+            "
+        >
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    gap-4
+                    lg:grid-cols-2
+                "
+            >
 
-                {/* Search */}
+                {/* ==================================================
+                    SEARCH
+                ================================================== */}
 
-                <input
-                    type="text"
-                    placeholder="Search investments..."
-                    value={search}
-                    onChange={(e) =>
-                        setSearch(e.target.value)
-                    }
-                    className="w-full rounded-lg px-4 py-2 border"
-                />
+                <div
+                    className="
+                        lg:col-span-2
+                    "
+                >
+
+                    <input
+                        type="text"
+                        placeholder="Search investments..."
+                        value={search}
+                        onChange={(e) =>
+                            setSearch(
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            rounded-xl
+                            border
+                            border-slate-200/80
+                            bg-white/70
+                            px-4
+                            py-2.5
+                            text-sm
+                            text-slate-700
+                            outline-none
+                            transition
+                            placeholder:text-slate-400
+                            focus:border-emerald-400
+                            focus:bg-white/90
+                            focus:ring-2
+                            focus:ring-emerald-100
+                        "
+                    />
+
+                </div>
 
 
-                {/* Type */}
+                {/* ==================================================
+                    TYPE
+                ================================================== */}
 
                 <select
                     value={type}
                     onChange={(e) =>
-                        setType(e.target.value)
+                        setType(
+                            e.target.value
+                        )
                     }
-                    className="rounded-lg px-4 py-2 border"
+                    className="
+                        w-full
+                        rounded-xl
+                        border
+                        border-slate-200/80
+                        bg-white/70
+                        px-4
+                        py-2.5
+                        text-sm
+                        text-slate-700
+                        outline-none
+                        transition
+                        focus:border-emerald-400
+                        focus:bg-white/90
+                        focus:ring-2
+                        focus:ring-emerald-100
+                    "
                 >
 
                     <option value="">
@@ -49,6 +113,10 @@ const InvestmentFilters = ({
                         Mutual Fund
                     </option>
 
+                    <option value="etf">
+                        ETF
+                    </option>
+
                     <option value="gold">
                         Gold
                     </option>
@@ -61,6 +129,14 @@ const InvestmentFilters = ({
                         Fixed Deposit
                     </option>
 
+                    <option value="real_estate">
+                        Real Estate
+                    </option>
+
+                    <option value="bond">
+                        Bond
+                    </option>
+
                     <option value="other">
                         Other
                     </option>
@@ -68,14 +144,34 @@ const InvestmentFilters = ({
                 </select>
 
 
-                {/* Sort */}
+                {/* ==================================================
+                    SORT
+                ================================================== */}
 
                 <select
                     value={sortBy}
                     onChange={(e) =>
-                        setSortBy(e.target.value)
+                        setSortBy(
+                            e.target.value
+                        )
                     }
-                    className="rounded-lg px-4 py-2 border"
+                    className="
+                        w-full
+                        rounded-xl
+                        border
+                        border-slate-200/80
+                        bg-white/70
+                        px-4
+                        py-2.5
+                        text-sm
+                        text-slate-700
+                        outline-none
+                        transition
+                        focus:border-emerald-400
+                        focus:bg-white/90
+                        focus:ring-2
+                        focus:ring-emerald-100
+                    "
                 >
 
                     <option value="latest">
@@ -102,26 +198,11 @@ const InvestmentFilters = ({
 
             </div>
 
-
-            {/* Add Button */}
-
-            <div className="mt-4">
-
-                <button
-                    onClick={onAdd}
-                    className="finance-add-button"
-                >
-
-                    + Add Investment
-
-                </button>
-
-            </div>
-
         </div>
 
     );
 
 };
+
 
 export default InvestmentFilters;

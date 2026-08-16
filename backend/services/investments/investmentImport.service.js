@@ -11,6 +11,7 @@ import {
 
 import {
     validateImportedHoldings,
+    validateNoDuplicateHoldings,
 } from "./investmentImport.validator.js";
 
 
@@ -68,6 +69,10 @@ export const prepareAngelOneImport = async ({
     // ==============================================
 
     validateImportedHoldings(
+        normalizedHoldings
+    );
+
+    validateNoDuplicateHoldings(
         normalizedHoldings
     );
 
@@ -170,6 +175,10 @@ export const importAngelOneHoldings = async ({
         holdings
     );
 
+    validateNoDuplicateHoldings(
+        holdings
+    );
+
 
     // ==============================================
     // START MONGODB TRANSACTION
@@ -230,6 +239,9 @@ export const importAngelOneHoldings = async ({
 
                             source:
                                 "angel_one",
+
+                            brokerData:
+                                holding.brokerData,
 
                             session,
 

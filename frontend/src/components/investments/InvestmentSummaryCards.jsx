@@ -1,120 +1,321 @@
-const InvestmentSummaryCards = ({ investments }) => {
+import {
+    FaWallet,
+    FaChartLine,
+    FaArrowTrendUp,
+} from "react-icons/fa6";
 
-    const totalInvested = investments.reduce(
 
-        (total, investment) =>
+const InvestmentSummaryCards = ({
+    investments,
+}) => {
 
-            total + investment.investedAmount,
+    // ======================================================
+    // TOTAL INVESTED
+    // ======================================================
 
-        0
+    const totalInvested =
+        investments.reduce(
 
-    );
+            (
+                total,
+                investment
+            ) => {
 
-    const currentValue = investments.reduce(
+                return (
+                    total +
+                    (
+                        Number(
+                            investment.investedAmount
+                        ) || 0
+                    )
+                );
 
-        (total, investment) =>
+            },
 
-            total + investment.currentValue,
+            0
 
-        0
+        );
 
-    );
 
-    const profitLoss = currentValue - totalInvested;
+    // ======================================================
+    // CURRENT VALUE
+    // ======================================================
+
+    const currentValue =
+        investments.reduce(
+
+            (
+                total,
+                investment
+            ) => {
+
+                return (
+                    total +
+                    (
+                        Number(
+                            investment.currentValue
+                        ) || 0
+                    )
+                );
+
+            },
+
+            0
+
+        );
+
+
+    // ======================================================
+    // PROFIT / LOSS
+    // ======================================================
+
+    const profitLoss =
+        currentValue -
+        totalInvested;
+
+
+    // ======================================================
+    // ROI
+    // ======================================================
 
     const roi =
-
         totalInvested === 0
 
             ? 0
 
-            : ((profitLoss / totalInvested) * 100);
+            : (
+                (
+                    profitLoss /
+                    totalInvested
+                ) * 100
+            );
+
+
+    // ======================================================
+    // FORMAT CURRENCY
+    // ======================================================
+
+    const formatCurrency = (
+        value
+    ) => {
+
+        return `₹${value.toLocaleString(
+            "en-IN",
+            {
+                maximumFractionDigits: 2,
+            }
+        )}`;
+
+    };
+
+
+    // ======================================================
+    // CARDS
+    // ======================================================
 
     const cards = [
 
         {
-            title: "Total Invested",
-            value: `₹${totalInvested.toLocaleString()}`,
-            color: "bg-blue-500",
-            icon: "💰",
-        },
+            title:
+                "Total Invested",
 
-        {
-            title: "Current Value",
-            value: `₹${currentValue.toLocaleString()}`,
-            color: "bg-emerald-500",
-            icon: "📈",
-        },
+            value:
+                formatCurrency(
+                    totalInvested
+                ),
 
-        {
-            title: "Profit / Loss",
-            value: `₹${profitLoss.toLocaleString()}`,
-            color:
-                profitLoss >= 0
-                    ? "bg-green-500"
-                    : "bg-red-500",
             icon:
-                profitLoss >= 0
-                    ? "🟢"
-                    : "🔴",
+                <FaWallet />,
+
+            iconClass:
+                "bg-blue-500/10 text-blue-600",
+
         },
 
         {
-            title: "ROI",
-            value: `${roi.toFixed(2)}%`,
-            color: "bg-purple-500",
-            icon: "📊",
+            title:
+                "Current Value",
+
+            value:
+                formatCurrency(
+                    currentValue
+                ),
+
+            icon:
+                <FaChartLine />,
+
+            iconClass:
+                "bg-emerald-500/10 text-emerald-600",
+
+        },
+
+        {
+            title:
+                "Profit / Loss",
+
+            value:
+                `${profitLoss >= 0 ? "+" : ""}${formatCurrency(
+                    profitLoss
+                )}`,
+
+            icon:
+                <FaArrowTrendUp />,
+
+            iconClass:
+                profitLoss >= 0
+
+                    ? "bg-emerald-500/10 text-emerald-600"
+
+                    : "bg-red-500/10 text-red-600",
+
+            valueClass:
+                profitLoss >= 0
+
+                    ? "text-emerald-600"
+
+                    : "text-red-600",
+
+        },
+
+        {
+            title:
+                "ROI",
+
+            value:
+                `${roi >= 0 ? "+" : ""}${roi.toFixed(2)}%`,
+
+            icon:
+                <FaChartLine />,
+
+            iconClass:
+                roi >= 0
+
+                    ? "bg-purple-500/10 text-purple-600"
+
+                    : "bg-red-500/10 text-red-600",
+
+            valueClass:
+                roi >= 0
+
+                    ? "text-purple-600"
+
+                    : "text-red-600",
+
         },
 
     ];
 
+
+    // ======================================================
+    // UI
+    // ======================================================
+
     return (
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div
+            className="
+                grid
+                grid-cols-1
+                gap-4
+                sm:grid-cols-2
+                xl:grid-cols-4
+            "
+        >
 
-            {cards.map((card) => (
+            {cards.map(
+                (card) => (
 
-                <div
-                    key={card.title}
-                    className="bg-white rounded-xl shadow-md p-6"
-                >
-
-                    <div className="flex justify-between items-center">
-
-                        <div>
-
-                            <p className="text-gray-500">
-
-                                {card.title}
-
-                            </p>
-
-                            <h2 className="text-2xl font-bold mt-2">
-
-                                {card.value}
-
-                            </h2>
-
-                        </div>
+                    <div
+                        key={
+                            card.title
+                        }
+                        className="
+                            rounded-2xl
+                            border
+                            border-white/50
+                            bg-white/60
+                            p-5
+                            shadow-sm
+                            backdrop-blur-xl
+                            transition
+                            duration-200
+                            hover:-translate-y-0.5
+                            hover:bg-white/70
+                            hover:shadow-md
+                        "
+                    >
 
                         <div
-                            className={`${card.color} text-white w-14 h-14 rounded-xl flex items-center justify-center text-2xl`}
+                            className="
+                                flex
+                                items-start
+                                justify-between
+                                gap-4
+                            "
                         >
 
-                            {card.icon}
+                            <div>
+
+                                <p
+                                    className="
+                                        text-sm
+                                        font-medium
+                                        text-slate-500
+                                    "
+                                >
+                                    {card.title}
+                                </p>
+
+
+                                <h2
+                                    className={`
+                                        mt-2
+                                        text-2xl
+                                        font-bold
+                                        tracking-tight
+                                        ${
+                                            card.valueClass ||
+                                            "text-slate-800"
+                                        }
+                                    `}
+                                >
+                                    {card.value}
+                                </h2>
+
+                            </div>
+
+
+                            <div
+                                className={`
+                                    flex
+                                    h-11
+                                    w-11
+                                    shrink-0
+                                    items-center
+                                    justify-center
+                                    rounded-xl
+                                    text-lg
+                                    ${card.iconClass}
+                                `}
+                            >
+
+                                {card.icon}
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                </div>
+                )
 
-            ))}
+            )}
 
         </div>
 
     );
 
 };
+
 
 export default InvestmentSummaryCards;

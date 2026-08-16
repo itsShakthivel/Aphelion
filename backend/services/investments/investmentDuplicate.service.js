@@ -42,6 +42,7 @@ export const findExistingInvestment = async ({
     userId,
     name,
     source,
+    brokerData = null,
     session = null,
 }) => {
 
@@ -63,9 +64,74 @@ export const findExistingInvestment = async ({
     }
 
 
-    const query = {
+    const isin =
+        brokerData?.isin
+            ? String(
+                brokerData.isin
+            )
+                .trim()
+                .toUpperCase()
+            : null;
 
-        user: userId,
+
+    // ==============================================
+    // FIRST PRIORITY: ISIN
+    // ==============================================
+
+    if (isin) {
+
+        const isinQuery = {
+
+            user:
+                userId,
+
+            source:
+                source || "manual",
+
+            "brokerData.isin":
+                isin,
+
+        };
+
+
+        const isinDatabaseQuery =
+            Investment.findOne(
+                isinQuery
+            );
+
+
+        if (session) {
+
+            isinDatabaseQuery.session(
+                session
+            );
+
+        }
+
+
+        const investmentByISIN =
+            await isinDatabaseQuery;
+
+
+        if (
+            investmentByISIN
+        ) {
+
+            return investmentByISIN;
+
+        }
+
+    }
+
+
+    // ==============================================
+    // FALLBACK: NAME
+    // ==============================================
+
+    const nameQuery = {
+
+        user:
+            userId,
 
         source:
             source || "manual",
@@ -77,29 +143,30 @@ export const findExistingInvestment = async ({
                     name.trim()
                 )}$`,
 
-            $options: "i",
+            $options:
+                "i",
 
         },
 
     };
 
 
-    const databaseQuery =
+    const nameDatabaseQuery =
         Investment.findOne(
-            query
+            nameQuery
         );
 
 
     if (session) {
 
-        databaseQuery.session(
+        nameDatabaseQuery.session(
             session
         );
 
     }
 
 
-    return await databaseQuery;
+    return await nameDatabaseQuery;
 
 };
 
@@ -152,6 +219,9 @@ export const checkInvestmentDuplicates = async ({
 
                 source:
                     holding.source,
+
+                brokerData:
+                    holding.brokerData,
 
             });
 
