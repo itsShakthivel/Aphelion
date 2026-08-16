@@ -1,59 +1,77 @@
 import * as analyticsService from "../services/analyticsService.js";
+
 import {
     getFinancialInsights,
 } from "../services/analyticsService.js";
 
-/*
-==========================================
-Analytics Controller
-==========================================
-*/
-
-/**
- * GET
- * /api/analytics/overview
- */
-export const getOverview = async (req, res) => {
+export const getOverview = async (
+    req,
+    res
+) => {
 
     try {
 
-        const analytics = await analyticsService.getOverview(
-            req.user.id,
-            req.query
-        );
+        const analytics =
+            await analyticsService.getOverview(
+                req.user.id,
+                req.query
+            );
 
         res.status(200).json({
+
             success: true,
-            message: "Analytics overview fetched successfully.",
-            data: analytics,
+
+            message:
+                "Analytics overview fetched successfully.",
+
+            data:
+                analytics,
+
         });
 
     } catch (error) {
 
-        console.error("Analytics Overview Error:", error);
+        console.error(
+            "Analytics Overview Error:",
+            error
+        );
 
         res.status(500).json({
+
             success: false,
-            message: "Failed to fetch analytics overview.",
-            error: error.message,
+
+            message:
+                "Failed to fetch analytics overview.",
+
+            error:
+                error.message,
+
         });
 
     }
 
 };
 
-export const getExpenses = async (req, res) => {
+export const getExpenses = async (
+    req,
+    res
+) => {
 
     try {
 
-        const analytics = await analyticsService.getExpenseAnalytics(
-            req.user.id,
-            req.query
-        );
+        const analytics =
+            await analyticsService.getExpenseAnalytics(
+                req.user.id,
+                req.query
+            );
 
         res.status(200).json({
+
             success: true,
-            data: analytics,
+
+            data:
+                analytics,
+
         });
 
     } catch (error) {
@@ -61,25 +79,29 @@ export const getExpenses = async (req, res) => {
         console.error(error);
 
         res.status(500).json({
+
             success: false,
-            message: "Failed to fetch expense analytics.",
+
+            message:
+                "Failed to fetch expense analytics.",
+
         });
 
     }
 
 };
 
-export const getMonthlyExpenses = async (req, res) => {
+export const getMonthlyExpenses = async (
+    req,
+    res
+) => {
 
     try {
 
         const data =
             await analyticsService.getMonthlyExpenseTrend(
-
                 req.user.id,
-
                 req.query
-
             );
 
         res.status(200).json({
@@ -92,11 +114,14 @@ export const getMonthlyExpenses = async (req, res) => {
 
     } catch (error) {
 
+        console.error(error);
+
         res.status(500).json({
 
             success: false,
 
-            message: "Failed to fetch monthly expense trend.",
+            message:
+                "Failed to fetch monthly expense trend.",
 
         });
 
@@ -104,7 +129,10 @@ export const getMonthlyExpenses = async (req, res) => {
 
 };
 
-export const getIncome = async (req, res) => {
+export const getIncome = async (
+    req,
+    res
+) => {
 
     try {
 
@@ -115,8 +143,11 @@ export const getIncome = async (req, res) => {
             );
 
         res.status(200).json({
+
             success: true,
+
             data,
+
         });
 
     } catch (error) {
@@ -124,15 +155,22 @@ export const getIncome = async (req, res) => {
         console.error(error);
 
         res.status(500).json({
+
             success: false,
-            message: "Failed to fetch income analytics.",
+
+            message:
+                "Failed to fetch income analytics.",
+
         });
 
     }
 
 };
 
-export const getCashFlow = async (req, res) => {
+export const getCashFlow = async (
+    req,
+    res
+) => {
 
     try {
 
@@ -158,7 +196,8 @@ export const getCashFlow = async (req, res) => {
 
             success: false,
 
-            message: "Failed to fetch cash flow analytics.",
+            message:
+                "Failed to fetch cash flow analytics.",
 
         });
 
@@ -166,14 +205,51 @@ export const getCashFlow = async (req, res) => {
 
 };
 
-/*
-==========================================
-Net Worth Analytics
-GET /api/analytics/net-worth
-==========================================
-*/
+export const getInvestments = async (
+    req,
+    res
+) => {
 
-export const getNetWorth = async (req, res) => {
+    try {
+
+        const data =
+            await analyticsService.getInvestmentAnalytics(
+                req.user.id,
+                req.query
+            );
+
+        res.status(200).json({
+
+            success: true,
+
+            data,
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                "Failed to fetch investment analytics.",
+
+            error:
+                error.message,
+
+        });
+
+    }
+
+};
+
+export const getNetWorth = async (
+    req,
+    res
+) => {
 
     try {
 
@@ -198,7 +274,8 @@ export const getNetWorth = async (req, res) => {
 
             success: false,
 
-            message: "Failed to fetch net worth analytics.",
+            message:
+                "Failed to fetch net worth analytics.",
 
         });
 
@@ -206,59 +283,101 @@ export const getNetWorth = async (req, res) => {
 
 };
 
-/*
-==========================================
-Net Worth Timeline
-GET /api/analytics/net-worth/timeline
-==========================================
-*/
+export const getNetWorthTimeline =
+    async (
+        req,
+        res
+    ) => {
 
-export const getNetWorthTimeline = async (req, res) => {
+        try {
 
-    try {
+            const data =
+                await analyticsService.getNetWorthTimeline(
+                    req.user.id
+                );
 
-        const data =
-            await analyticsService.getNetWorthTimeline(
-                req.user.id
+            res.status(200).json({
+
+                success: true,
+
+                data,
+
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Failed to fetch net worth timeline.",
+
+            });
+
+        }
+
+    };
+
+export const getFinancialHealth =
+    async (
+        req,
+        res
+    ) => {
+
+        try {
+
+            const data =
+                await analyticsService.getFinancialHealth(
+                    req.user.id,
+                    req.query
+                );
+
+            res.status(200).json({
+
+                success: true,
+
+                message:
+                    "Financial health fetched successfully.",
+
+                data,
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Financial Health Error:",
+                error
             );
 
-        res.status(200).json({
+            res.status(500).json({
 
-            success: true,
+                success: false,
 
-            data,
+                message:
+                    "Failed to fetch financial health.",
 
-        });
+                error:
+                    error.message,
 
-    } catch (error) {
+            });
 
-        console.error(error);
+        }
 
-        res.status(500).json({
+    };
 
-            success: false,
-
-            message: "Failed to fetch net worth timeline.",
-
-        });
-
-    }
-
-};
-
-/*
-==========================================
-Financial Health
-GET /api/analytics/financial-health
-==========================================
-*/
-
-export const getFinancialHealth = async (req, res) => {
+export const getInsights = async (
+    req,
+    res
+) => {
 
     try {
 
-        const data =
-            await analyticsService.getFinancialHealth(
+        const insights =
+            await getFinancialInsights(
                 req.user.id,
                 req.query
             );
@@ -267,45 +386,24 @@ export const getFinancialHealth = async (req, res) => {
 
             success: true,
 
-            message: "Financial health fetched successfully.",
-
-            data,
+            data:
+                insights,
 
         });
 
     } catch (error) {
 
-        console.error("Financial Health Error:", error);
-
-        res.status(500).json({
-
-            success: false,
-
-            message: "Failed to fetch financial health.",
-
-            error: error.message,
-
-        });
-
-    }
-
-};
-
-export const getInsights = async (req, res) => {
-    try {
-        const insights = await getFinancialInsights(req.user.id, req.query);
-
-        res.status(200).json({
-            success: true,
-            data: insights,
-        });
-
-    } catch (error) {
         console.error(error);
 
         res.status(500).json({
+
             success: false,
-            message: "Failed to fetch financial insights.",
+
+            message:
+                "Failed to fetch financial insights.",
+
         });
+
     }
+
 };

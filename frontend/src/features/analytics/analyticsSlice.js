@@ -9,237 +9,302 @@ import {
     getMonthlyExpenseTrend,
     getIncomeAnalytics,
     getCashFlowAnalytics,
+    getInvestmentAnalytics,
     getNetWorthAnalytics,
     getNetWorthTimeline,
     getFinancialHealth,
     getInsights,
 } from "../../api/analyticsAPI";
 
-/*
-==========================================
-Overview
-==========================================
-*/
-
-export const fetchOverview = createAsyncThunk(
-    "analytics/fetchOverview",
-    async (_, thunkAPI) => {
-        try {
-            const response = await getOverview();
-            return response.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(
-                error.response?.data?.message ||
-                "Failed to fetch analytics overview."
-            );
-        }
-    }
-);
-
-/*
-==========================================
-Expense Analytics
-==========================================
-*/
-
-export const fetchExpenseAnalytics = createAsyncThunk(
-    "analytics/fetchExpenseAnalytics",
-    async (params, thunkAPI) => {
-        try {
-            const response = await getExpenseAnalytics(params);
-            return response.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(
-                error.response?.data?.message ||
-                "Failed to fetch expense analytics."
-            );
-        }
-    }
-);
-
-/*
-==========================================
-Monthly Expense Trend
-==========================================
-*/
-
-export const fetchMonthlyExpenseTrend = createAsyncThunk(
-    "analytics/fetchMonthlyExpenseTrend",
-    async (params, thunkAPI) => {
-        try {
-            const response = await getMonthlyExpenseTrend(params);
-            return response.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(
-                error.response?.data?.message ||
-                "Failed to fetch monthly expense trend."
-            );
-        }
-    }
-);
-
-/*
-==========================================
-Income Analytics
-==========================================
-*/
-
-export const fetchIncomeAnalytics = createAsyncThunk(
-    "analytics/fetchIncomeAnalytics",
-    async (params, thunkAPI) => {
-        try {
-            const response = await getIncomeAnalytics(params);
-            return response.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(
-                error.response?.data?.message ||
-                "Failed to fetch income analytics."
-            );
-        }
-    }
-);
-
-
-export const fetchCashFlowAnalytics = createAsyncThunk(
-    "analytics/fetchCashFlowAnalytics",
-
-    async (params, thunkAPI) => {
-
-        try {
-
-            const response =
-                await getCashFlowAnalytics(params);
-
-            return response.data;
-
-        } catch (error) {
-
-            return thunkAPI.rejectWithValue(
-
-                error.response?.data?.message ||
-
-                "Failed to fetch cash flow analytics."
-
-            );
-
-        }
-
-    }
-
-);
-
-export const fetchNetWorthAnalytics = createAsyncThunk(
-
-    "analytics/fetchNetWorthAnalytics",
-
-    async (_, thunkAPI) => {
-
-        try {
-
-            const response =
-                await getNetWorthAnalytics();
-
-            return response.data;
-
-        } catch (error) {
-
-            return thunkAPI.rejectWithValue(
-
-                error.response?.data?.message ||
-
-                "Failed to fetch net worth."
-
-            );
-
-        }
-
-    }
-
-);
-
-export const fetchNetWorthTimeline = createAsyncThunk(
-
-    "analytics/fetchNetWorthTimeline",
-
-    async (_, thunkAPI) => {
-
-        try {
-
-            const response =
-                await getNetWorthTimeline();
-
-            return response.data;
-
-        } catch (error) {
-
-            return thunkAPI.rejectWithValue(
-
-                error.response?.data?.message ||
-
-                "Failed to fetch net worth timeline."
-
-            );
-
-        }
-
-    }
-
-);
-
-/*
-==========================================
-Financial Health
-==========================================
-*/
-
-export const fetchFinancialHealth = createAsyncThunk(
-
-        "analytics/fetchFinancialHealth",
-
-        async (params, thunkAPI) => {
+export const fetchOverview =
+    createAsyncThunk(
+        "analytics/fetchOverview",
+        async (
+            params = {},
+            thunkAPI
+        ) => {
 
             try {
 
-                const response = await getFinancialHealth(params);
+                const response =
+                    await getOverview(
+                        params
+                    );
 
                 return response.data;
 
             } catch (error) {
 
                 return thunkAPI.rejectWithValue(
-
                     error.response?.data?.message ||
-
-                    "Failed to fetch financial health."
-
+                    "Failed to fetch analytics overview."
                 );
 
             }
 
         }
-
     );
 
-export const fetchInsights = createAsyncThunk(
-    "analytics/fetchInsights",
-    async (params, thunkAPI) => {
-        try {
-            const response = await getInsights(params);
-            return response.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(
-                error.response?.data?.message ||
-                "Failed to fetch insights"
-            );
-        }
-    }
-);
+export const fetchExpenseAnalytics =
+    createAsyncThunk(
+        "analytics/fetchExpenseAnalytics",
+        async (
+            params,
+            thunkAPI
+        ) => {
 
-/*
-==========================================
-Initial State
-==========================================
-*/
+            try {
+
+                const response =
+                    await getExpenseAnalytics(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch expense analytics."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchMonthlyExpenseTrend =
+    createAsyncThunk(
+        "analytics/fetchMonthlyExpenseTrend",
+        async (
+            params,
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getMonthlyExpenseTrend(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch monthly expense trend."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchIncomeAnalytics =
+    createAsyncThunk(
+        "analytics/fetchIncomeAnalytics",
+        async (
+            params,
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getIncomeAnalytics(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch income analytics."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchCashFlowAnalytics =
+    createAsyncThunk(
+        "analytics/fetchCashFlowAnalytics",
+        async (
+            params,
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getCashFlowAnalytics(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch cash flow analytics."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchInvestmentAnalytics =
+    createAsyncThunk(
+        "analytics/fetchInvestmentAnalytics",
+        async (
+            params,
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getInvestmentAnalytics(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch investment analytics."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchNetWorthAnalytics =
+    createAsyncThunk(
+        "analytics/fetchNetWorthAnalytics",
+        async (
+            params = {},
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getNetWorthAnalytics(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch net worth."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchNetWorthTimeline =
+    createAsyncThunk(
+        "analytics/fetchNetWorthTimeline",
+        async (
+            params = {},
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getNetWorthTimeline(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch net worth timeline."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchFinancialHealth =
+    createAsyncThunk(
+        "analytics/fetchFinancialHealth",
+        async (
+            params,
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getFinancialHealth(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch financial health."
+                );
+
+            }
+
+        }
+    );
+
+export const fetchInsights =
+    createAsyncThunk(
+        "analytics/fetchInsights",
+        async (
+            params,
+            thunkAPI
+        ) => {
+
+            try {
+
+                const response =
+                    await getInsights(
+                        params
+                    );
+
+                return response.data;
+
+            } catch (error) {
+
+                return thunkAPI.rejectWithValue(
+                    error.response?.data?.message ||
+                    "Failed to fetch insights."
+                );
+
+            }
+
+        }
+    );
 
 const initialState = {
 
@@ -259,7 +324,7 @@ const initialState = {
 
     savings: [],
 
-    investmentAnalytics: [],
+    investmentAnalytics: null,
 
     financialHealth: null,
 
@@ -319,225 +384,473 @@ const initialState = {
 
 };
 
-/*
-==========================================
-Slice
-==========================================
-*/
+const analyticsSlice =
+    createSlice({
 
-const analyticsSlice = createSlice({
+        name:
+            "analytics",
 
-    name: "analytics",
+        initialState,
 
-    initialState,
+        reducers: {},
 
-    reducers: {},
+        extraReducers:
+            (builder) => {
 
-    extraReducers: (builder) => {
+                builder
 
-        builder
+                    .addCase(
+                        fetchOverview.pending,
+                        (state) => {
 
-            /*
-            ==========================================
-            Overview
-            ==========================================
-            */
+                            state.loading.overview =
+                                true;
 
-            .addCase(fetchOverview.pending, (state) => {
+                            state.error.overview =
+                                null;
 
-                state.loading.overview = true;
-                state.error.overview = null;
+                        }
+                    )
 
-            })
+                    .addCase(
+                        fetchOverview.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
 
-            .addCase(fetchOverview.fulfilled, (state, action) => {
+                            state.loading.overview =
+                                false;
 
-                state.loading.overview = false;
-                state.overview = action.payload.data;
+                            state.overview =
+                                action.payload.data;
 
-            })
+                        }
+                    )
 
-            .addCase(fetchOverview.rejected, (state, action) => {
+                    .addCase(
+                        fetchOverview.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
 
-                state.loading.overview = false;
-                state.error.overview = action.payload;
+                            state.loading.overview =
+                                false;
 
-            })
+                            state.error.overview =
+                                action.payload;
 
-            /*
-            ==========================================
-            Expense Analytics
-            ==========================================
-            */
+                        }
+                    )
 
-            .addCase(fetchExpenseAnalytics.pending, (state) => {
+                    .addCase(
+                        fetchExpenseAnalytics.pending,
+                        (state) => {
 
-                state.loading.expenseAnalytics = true;
-                state.error.expenseAnalytics = null;
+                            state.loading.expenseAnalytics =
+                                true;
 
-            })
+                            state.error.expenseAnalytics =
+                                null;
 
-            .addCase(fetchExpenseAnalytics.fulfilled, (state, action) => {
+                        }
+                    )
 
-                state.loading.expenseAnalytics = false;
-                state.expenseAnalytics = action.payload.data;
+                    .addCase(
+                        fetchExpenseAnalytics.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
 
-            })
+                            state.loading.expenseAnalytics =
+                                false;
 
-            .addCase(fetchExpenseAnalytics.rejected, (state, action) => {
+                            state.expenseAnalytics =
+                                action.payload.data;
 
-                state.loading.expenseAnalytics = false;
-                state.error.expenseAnalytics = action.payload;
+                        }
+                    )
 
-            })
+                    .addCase(
+                        fetchExpenseAnalytics.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
 
-            /*
-            ==========================================
-            Monthly Expense Trend
-            ==========================================
-            */
+                            state.loading.expenseAnalytics =
+                                false;
 
-            .addCase(fetchMonthlyExpenseTrend.pending, (state) => {
+                            state.error.expenseAnalytics =
+                                action.payload;
 
-                state.loading.monthlyExpenseTrend = true;
-                state.error.monthlyExpenseTrend = null;
+                        }
+                    )
 
-            })
+                    .addCase(
+                        fetchMonthlyExpenseTrend.pending,
+                        (state) => {
 
-            .addCase(fetchMonthlyExpenseTrend.fulfilled, (state, action) => {
+                            state.loading.monthlyExpenseTrend =
+                                true;
 
-                state.loading.monthlyExpenseTrend = false;
-                state.monthlyExpenseTrend = action.payload.data;
+                            state.error.monthlyExpenseTrend =
+                                null;
 
-            })
+                        }
+                    )
 
-            .addCase(fetchMonthlyExpenseTrend.rejected, (state, action) => {
+                    .addCase(
+                        fetchMonthlyExpenseTrend.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
 
-                state.loading.monthlyExpenseTrend = false;
-                state.error.monthlyExpenseTrend = action.payload;
+                            state.loading.monthlyExpenseTrend =
+                                false;
 
-            })
+                            state.monthlyExpenseTrend =
+                                action.payload.data;
 
-            /*
-            ==========================================
-            Income Analytics
-            ==========================================
-            */
+                        }
+                    )
 
-            .addCase(fetchIncomeAnalytics.pending, (state) => {
+                    .addCase(
+                        fetchMonthlyExpenseTrend.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
 
-                state.loading.incomeAnalytics = true;
-                state.error.incomeAnalytics = null;
+                            state.loading.monthlyExpenseTrend =
+                                false;
 
-            })
+                            state.error.monthlyExpenseTrend =
+                                action.payload;
 
-            .addCase(fetchIncomeAnalytics.fulfilled, (state, action) => {
+                        }
+                    )
 
-                state.loading.incomeAnalytics = false;
-                state.incomeAnalytics = action.payload.data;
+                    .addCase(
+                        fetchIncomeAnalytics.pending,
+                        (state) => {
 
-            })
+                            state.loading.incomeAnalytics =
+                                true;
 
-            .addCase(fetchIncomeAnalytics.rejected, (state, action) => {
+                            state.error.incomeAnalytics =
+                                null;
 
-                state.loading.incomeAnalytics = false;
-                state.error.incomeAnalytics = action.payload;
+                        }
+                    )
 
-            })
+                    .addCase(
+                        fetchIncomeAnalytics.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
 
-            .addCase(fetchCashFlowAnalytics.pending, (state) => {
-                state.loading.cashFlow = true;
+                            state.loading.incomeAnalytics =
+                                false;
 
-                state.error.cashFlow = null;
-            })
+                            state.incomeAnalytics =
+                                action.payload.data;
 
-            .addCase(fetchCashFlowAnalytics.fulfilled, (state, action) => {
-                state.loading.cashFlow = false;
+                        }
+                    )
 
-                state.cashFlow = action.payload.data;
-            })
+                    .addCase(
+                        fetchIncomeAnalytics.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
 
-            .addCase(fetchCashFlowAnalytics.rejected, (state, action) => {
-                state.loading.cashFlow = false;
+                            state.loading.incomeAnalytics =
+                                false;
 
-                state.error.cashFlow = action.payload;
-            })
+                            state.error.incomeAnalytics =
+                                action.payload;
 
-            .addCase(fetchNetWorthAnalytics.pending, (state) => {
-                state.loading.netWorth = true;
+                        }
+                    )
 
-                state.error.netWorth = null;
-            })
+                    .addCase(
+                        fetchCashFlowAnalytics.pending,
+                        (state) => {
 
-            .addCase(fetchNetWorthAnalytics.fulfilled, (state, action) => {
-                state.loading.netWorth = false;
+                            state.loading.cashFlow =
+                                true;
 
-                state.netWorth = action.payload.data;
-            })
+                            state.error.cashFlow =
+                                null;
 
-            .addCase(fetchNetWorthAnalytics.rejected, (state, action) => {
+                        }
+                    )
 
-                state.loading.netWorth = false;
+                    .addCase(
+                        fetchCashFlowAnalytics.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
 
-                state.error.netWorth = action.payload;
-            })
+                            state.loading.cashFlow =
+                                false;
 
-            .addCase(fetchNetWorthTimeline.pending, (state) => {
-                state.loading.netWorthTimeline = true;
+                            state.cashFlow =
+                                action.payload.data;
 
-                state.error.netWorthTimeline = null;
-            })
+                        }
+                    )
 
-            .addCase(fetchNetWorthTimeline.fulfilled, (state, action) => {
-                state.loading.netWorthTimeline = false;
+                    .addCase(
+                        fetchCashFlowAnalytics.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
 
-                state.netWorthTimeline = action.payload.data;
-            })
+                            state.loading.cashFlow =
+                                false;
 
-            .addCase(fetchNetWorthTimeline.rejected, (state, action) => {
-                state.loading.netWorthTimeline = false;
+                            state.error.cashFlow =
+                                action.payload;
 
-                state.error.netWorthTimeline = action.payload;
-            })
+                        }
+                    )
 
-            .addCase(fetchFinancialHealth.pending, (state) => {
-                state.loading.financialHealth = true;
+                    .addCase(
+                        fetchInvestmentAnalytics.pending,
+                        (state) => {
 
-                state.error.financialHealth = null;
-            })
+                            state.loading.investmentAnalytics =
+                                true;
 
-            .addCase(fetchFinancialHealth.fulfilled, (state, action) => {
-                state.loading.financialHealth = false;
-                
-                state.financialHealth = action.payload.data;
-            })
+                            state.error.investmentAnalytics =
+                                null;
 
-            .addCase(fetchFinancialHealth.rejected, (state, action) => {
-                state.loading.financialHealth = false;
+                        }
+                    )
 
-                state.error.financialHealth = action.payload.data;
-            })
+                    .addCase(
+                        fetchInvestmentAnalytics.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
 
-            .addCase(fetchInsights.pending, (state) => {
-                state.loading.insights = true;
+                            state.loading.investmentAnalytics =
+                                false;
 
-                state.error.insights = null;
-            })
+                            state.investmentAnalytics =
+                                action.payload.data;
 
-            .addCase(fetchInsights.fulfilled, (state, action) => {
-                state.loading.insights = false;
+                        }
+                    )
 
-                state.insights = action.payload.data;
-            })
+                    .addCase(
+                        fetchInvestmentAnalytics.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
 
-            .addCase(fetchInsights.rejected, (state, action) => {
-                state.loading.insights = false;
+                            state.loading.investmentAnalytics =
+                                false;
 
-                state.error.insights = action.payload;
-            })
+                            state.error.investmentAnalytics =
+                                action.payload;
 
-    },
+                        }
+                    )
 
-});
+                    .addCase(
+                        fetchNetWorthAnalytics.pending,
+                        (state) => {
+
+                            state.loading.netWorth =
+                                true;
+
+                            state.error.netWorth =
+                                null;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchNetWorthAnalytics.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.netWorth =
+                                false;
+
+                            state.netWorth =
+                                action.payload.data;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchNetWorthAnalytics.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.netWorth =
+                                false;
+
+                            state.error.netWorth =
+                                action.payload;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchNetWorthTimeline.pending,
+                        (state) => {
+
+                            state.loading.netWorthTimeline =
+                                true;
+
+                            state.error.netWorthTimeline =
+                                null;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchNetWorthTimeline.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.netWorthTimeline =
+                                false;
+
+                            state.netWorthTimeline =
+                                action.payload.data;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchNetWorthTimeline.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.netWorthTimeline =
+                                false;
+
+                            state.error.netWorthTimeline =
+                                action.payload;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchFinancialHealth.pending,
+                        (state) => {
+
+                            state.loading.financialHealth =
+                                true;
+
+                            state.error.financialHealth =
+                                null;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchFinancialHealth.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.financialHealth =
+                                false;
+
+                            state.financialHealth =
+                                action.payload.data;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchFinancialHealth.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.financialHealth =
+                                false;
+
+                            state.error.financialHealth =
+                                action.payload;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchInsights.pending,
+                        (state) => {
+
+                            state.loading.insights =
+                                true;
+
+                            state.error.insights =
+                                null;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchInsights.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.insights =
+                                false;
+
+                            state.insights =
+                                action.payload.data;
+
+                        }
+                    )
+
+                    .addCase(
+                        fetchInsights.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.loading.insights =
+                                false;
+
+                            state.error.insights =
+                                action.payload;
+
+                        }
+                    );
+
+            },
+
+    });
 
 export default analyticsSlice.reducer;

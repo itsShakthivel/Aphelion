@@ -1,4 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+    createSlice,
+    createAsyncThunk,
+} from "@reduxjs/toolkit";
 
 import {
     getTransactions,
@@ -11,11 +14,76 @@ import {
     fetchDashboard,
 } from "../dashboard/dashboardSlice";
 
+import {
+    fetchOverview,
+    fetchExpenseAnalytics,
+    fetchMonthlyExpenseTrend,
+    fetchIncomeAnalytics,
+    fetchCashFlowAnalytics,
+    fetchInvestmentAnalytics,
+    fetchNetWorthAnalytics,
+    fetchNetWorthTimeline,
+    fetchFinancialHealth,
+    fetchInsights,
+} from "../analytics/analyticsSlice";
+
+const refreshFinancialData = (
+    dispatch
+) => {
+
+    dispatch(
+        fetchDashboard()
+    );
+
+    dispatch(
+        fetchOverview()
+    );
+
+    dispatch(
+        fetchExpenseAnalytics()
+    );
+
+    dispatch(
+        fetchMonthlyExpenseTrend()
+    );
+
+    dispatch(
+        fetchIncomeAnalytics()
+    );
+
+    dispatch(
+        fetchCashFlowAnalytics()
+    );
+
+    dispatch(
+        fetchInvestmentAnalytics()
+    );
+
+    dispatch(
+        fetchNetWorthAnalytics()
+    );
+
+    dispatch(
+        fetchNetWorthTimeline()
+    );
+
+    dispatch(
+        fetchFinancialHealth()
+    );
+
+    dispatch(
+        fetchInsights()
+    );
+
+};
+
 export const fetchTransactions =
     createAsyncThunk(
         "transaction/fetchTransactions",
-
-        async (_, thunkAPI) => {
+        async (
+            _,
+            thunkAPI
+        ) => {
 
             try {
 
@@ -39,7 +107,6 @@ export const fetchTransactions =
 export const addTransaction =
     createAsyncThunk(
         "transaction/addTransaction",
-
         async (
             transactionData,
             thunkAPI
@@ -52,8 +119,8 @@ export const addTransaction =
                         transactionData
                     );
 
-                thunkAPI.dispatch(
-                    fetchDashboard()
+                refreshFinancialData(
+                    thunkAPI.dispatch
                 );
 
                 return response.data;
@@ -73,7 +140,6 @@ export const addTransaction =
 export const editTransaction =
     createAsyncThunk(
         "transaction/editTransaction",
-
         async (
             { id, data },
             thunkAPI
@@ -87,8 +153,8 @@ export const editTransaction =
                         data
                     );
 
-                thunkAPI.dispatch(
-                    fetchDashboard()
+                refreshFinancialData(
+                    thunkAPI.dispatch
                 );
 
                 return response.data;
@@ -108,7 +174,6 @@ export const editTransaction =
 export const removeTransaction =
     createAsyncThunk(
         "transaction/removeTransaction",
-
         async (
             id,
             thunkAPI
@@ -116,10 +181,12 @@ export const removeTransaction =
 
             try {
 
-                await deleteTransaction(id);
+                await deleteTransaction(
+                    id
+                );
 
-                thunkAPI.dispatch(
-                    fetchDashboard()
+                refreshFinancialData(
+                    thunkAPI.dispatch
                 );
 
                 return id;
@@ -137,126 +204,139 @@ export const removeTransaction =
     );
 
 const initialState = {
+
     transactions: [],
+
     loading: false,
+
     error: null,
+
 };
 
 const transactionSlice =
     createSlice({
 
-        name: "transaction",
+        name:
+            "transaction",
 
         initialState,
 
         reducers: {},
 
-        extraReducers: (
-            builder
-        ) => {
+        extraReducers:
+            (builder) => {
 
-            builder
+                builder
 
-                .addCase(
-                    fetchTransactions.pending,
-                    (state) => {
+                    .addCase(
+                        fetchTransactions.pending,
+                        (state) => {
 
-                        state.loading = true;
-                        state.error = null;
+                            state.loading =
+                                true;
 
-                    }
-                )
+                            state.error =
+                                null;
 
-                .addCase(
-                    fetchTransactions.fulfilled,
-                    (
-                        state,
-                        action
-                    ) => {
+                        }
+                    )
 
-                        state.loading = false;
+                    .addCase(
+                        fetchTransactions.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
 
-                        state.transactions =
-                            action.payload;
+                            state.loading =
+                                false;
 
-                    }
-                )
-
-                .addCase(
-                    fetchTransactions.rejected,
-                    (
-                        state,
-                        action
-                    ) => {
-
-                        state.loading = false;
-
-                        state.error =
-                            action.payload;
-
-                    }
-                )
-
-                .addCase(
-                    addTransaction.fulfilled,
-                    (
-                        state,
-                        action
-                    ) => {
-
-                        state.transactions.unshift(
-                            action.payload
-                        );
-
-                    }
-                )
-
-                .addCase(
-                    editTransaction.fulfilled,
-                    (
-                        state,
-                        action
-                    ) => {
-
-                        const index =
-                            state.transactions.findIndex(
-                                (transaction) =>
-                                    transaction._id ===
-                                    action.payload._id
-                            );
-
-                        if (
-                            index !== -1
-                        ) {
-
-                            state.transactions[
-                                index
-                            ] =
+                            state.transactions =
                                 action.payload;
 
                         }
+                    )
 
-                    }
-                )
+                    .addCase(
+                        fetchTransactions.rejected,
+                        (
+                            state,
+                            action
+                        ) => {
 
-                .addCase(
-                    removeTransaction.fulfilled,
-                    (
-                        state,
-                        action
-                    ) => {
+                            state.loading =
+                                false;
 
-                        state.transactions =
-                            state.transactions.filter(
-                                (transaction) =>
-                                    transaction._id !==
-                                    action.payload
+                            state.error =
+                                action.payload;
+
+                        }
+                    )
+
+                    .addCase(
+                        addTransaction.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.transactions.unshift(
+                                action.payload
                             );
 
-                    }
-                );
+                        }
+                    )
 
-        },
+                    .addCase(
+                        editTransaction.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            const index =
+                                state.transactions.findIndex(
+                                    (
+                                        transaction
+                                    ) =>
+                                        transaction._id ===
+                                        action.payload._id
+                                );
+
+                            if (
+                                index !== -1
+                            ) {
+
+                                state.transactions[
+                                    index
+                                ] =
+                                    action.payload;
+
+                            }
+
+                        }
+                    )
+
+                    .addCase(
+                        removeTransaction.fulfilled,
+                        (
+                            state,
+                            action
+                        ) => {
+
+                            state.transactions =
+                                state.transactions.filter(
+                                    (
+                                        transaction
+                                    ) =>
+                                        transaction._id !==
+                                        action.payload
+                                );
+
+                        }
+                    );
+
+            },
 
     });
 

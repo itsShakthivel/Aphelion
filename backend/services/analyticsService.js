@@ -14,6 +14,10 @@ export {
 } from "./analytics/cashFlow.service.js";
 
 export {
+    getInvestmentAnalytics,
+} from "./analytics/investment.service.js";
+
+export {
     getNetWorthAnalytics,
     getNetWorthTimeline,
 } from "./analytics/netWorth.service.js";
