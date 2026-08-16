@@ -4,6 +4,7 @@ const InvestmentFilters = ({
     type,
     setType,
     sortBy,
+    setSortBy,
 }) => {
 
     return (
@@ -12,11 +13,11 @@ const InvestmentFilters = ({
             className="
                 rounded-2xl
                 border
-                border-white/50
-                bg-white/60
+                border-white/[0.04]
+                bg-[#0b1428]
                 p-4
-                shadow-sm
-                backdrop-blur-xl
+                shadow-lg
+                shadow-black/10
             "
         >
 
@@ -24,8 +25,8 @@ const InvestmentFilters = ({
                 className="
                     grid
                     grid-cols-1
-                    gap-4
-                    lg:grid-cols-2
+                    gap-3
+                    md:grid-cols-2
                 "
             >
 
@@ -35,36 +36,39 @@ const InvestmentFilters = ({
 
                 <div
                     className="
-                        lg:col-span-2
+                        md:col-span-2
                     "
                 >
 
                     <input
                         type="text"
                         placeholder="Search investments..."
-                        value={search}
-                        onChange={(e) =>
+                        value={
+                            search
+                        }
+                        onChange={(
+                            event
+                        ) =>
                             setSearch(
-                                e.target.value
+                                event.target.value
                             )
                         }
                         className="
                             w-full
                             rounded-xl
                             border
-                            border-slate-200/80
-                            bg-white/70
+                            border-white/[0.06]
+                            bg-[#071126]
                             px-4
-                            py-2.5
+                            py-3
                             text-sm
-                            text-slate-700
+                            text-white
                             outline-none
+                            placeholder:text-slate-500
                             transition
-                            placeholder:text-slate-400
-                            focus:border-emerald-400
-                            focus:bg-white/90
+                            focus:border-blue-500/40
                             focus:ring-2
-                            focus:ring-emerald-100
+                            focus:ring-blue-500/10
                         "
                     />
 
@@ -76,28 +80,31 @@ const InvestmentFilters = ({
                 ================================================== */}
 
                 <select
-                    value={type}
-                    onChange={(e) =>
+                    value={
+                        type
+                    }
+                    onChange={(
+                        event
+                    ) =>
                         setType(
-                            e.target.value
+                            event.target.value
                         )
                     }
                     className="
                         w-full
                         rounded-xl
                         border
-                        border-slate-200/80
-                        bg-white/70
+                        border-white/[0.06]
+                        bg-[#071126]
                         px-4
-                        py-2.5
+                        py-3
                         text-sm
-                        text-slate-700
+                        text-slate-300
                         outline-none
                         transition
-                        focus:border-emerald-400
-                        focus:bg-white/90
+                        focus:border-blue-500/40
                         focus:ring-2
-                        focus:ring-emerald-100
+                        focus:ring-blue-500/10
                     "
                 >
 
@@ -149,28 +156,31 @@ const InvestmentFilters = ({
                 ================================================== */}
 
                 <select
-                    value={sortBy}
-                    onChange={(e) =>
+                    value={
+                        sortBy
+                    }
+                    onChange={(
+                        event
+                    ) =>
                         setSortBy(
-                            e.target.value
+                            event.target.value
                         )
                     }
                     className="
                         w-full
                         rounded-xl
                         border
-                        border-slate-200/80
-                        bg-white/70
+                        border-white/[0.06]
+                        bg-[#071126]
                         px-4
-                        py-2.5
+                        py-3
                         text-sm
-                        text-slate-700
+                        text-slate-300
                         outline-none
                         transition
-                        focus:border-emerald-400
-                        focus:bg-white/90
+                        focus:border-blue-500/40
                         focus:ring-2
-                        focus:ring-emerald-100
+                        focus:ring-blue-500/10
                     "
                 >
 

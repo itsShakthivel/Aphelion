@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { FaUpload } from "react-icons/fa";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 
@@ -11,9 +12,14 @@ import InvestmentFilters from "../../components/investments/InvestmentFilters";
 import InvestmentPagination from "../../components/investments/InvestmentPagination";
 import PortfolioAllocationChart from "../../components/investments/PortfolioAllocationChart";
 import InvestmentGrowthChart from "../../components/investments/InvestmentGrowthChart";
+import InvestmentImportPreviewModal from "../../components/investments/InvestmentImportPreviewModal";
 
 import {
     fetchInvestments,
+    previewInvestmentImport,
+    confirmInvestmentImport,
+    clearInvestmentImportPreview,
+    clearInvestmentImportResult,
 } from "../../features/investment/investmentSlice";
 
 
@@ -21,12 +27,8 @@ const Investments = () => {
 
     const dispatch = useDispatch();
 
-
-    // ======================================================
-    // MODAL STATE
-    // ======================================================
-
-    const [openModal, setOpenModal] = useState(false);
+    const [openModal, setOpenModal] =
+        useState(false);
 
     const [selectedInvestment, setSelectedInvestment] =
         useState(null);
@@ -34,43 +36,37 @@ const Investments = () => {
     const [deleteModalOpen, setDeleteModalOpen] =
         useState(false);
 
+    const [importModalOpen, setImportModalOpen] =
+        useState(false);
 
-    // ======================================================
-    // FILTER STATE
-    // ======================================================
+    const [search, setSearch] =
+        useState("");
 
-    const [search, setSearch] = useState("");
+    const [type, setType] =
+        useState("");
 
-    const [type, setType] = useState("");
+    const [sortBy, setSortBy] =
+        useState("latest");
 
-    const [sortBy, setSortBy] = useState("latest");
+    const [currentPage, setCurrentPage] =
+        useState(1);
 
-
-    // ======================================================
-    // PAGINATION STATE
-    // ======================================================
-
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const [pageSize, setPageSize] = useState(10);
-
-
-    // ======================================================
-    // REDUX
-    // ======================================================
+    const [pageSize, setPageSize] =
+        useState(10);
 
     const {
-        investments,
+        investments = [],
         loading,
         error,
+        importPreview,
+        importPreviewLoading,
+        importPreviewError,
+        importLoading,
+        importError,
     } = useSelector(
         (state) => state.investment
     );
 
-
-    // ======================================================
-    // FETCH INVESTMENTS
-    // ======================================================
 
     useEffect(() => {
 
@@ -80,10 +76,6 @@ const Investments = () => {
 
     }, [dispatch]);
 
-
-    // ======================================================
-    // RESET PAGINATION
-    // ======================================================
 
     useEffect(() => {
 
@@ -96,10 +88,6 @@ const Investments = () => {
     ]);
 
 
-    // ======================================================
-    // ADD INVESTMENT
-    // ======================================================
-
     const handleAdd = () => {
 
         setSelectedInvestment(null);
@@ -108,10 +96,6 @@ const Investments = () => {
 
     };
 
-
-    // ======================================================
-    // EDIT INVESTMENT
-    // ======================================================
 
     const handleEdit = (
         investment
@@ -126,10 +110,6 @@ const Investments = () => {
     };
 
 
-    // ======================================================
-    // DELETE INVESTMENT
-    // ======================================================
-
     const handleDelete = (
         investment
     ) => {
@@ -143,10 +123,6 @@ const Investments = () => {
     };
 
 
-    // ======================================================
-    // CLOSE FORM MODAL
-    // ======================================================
-
     const handleCloseModal = () => {
 
         setOpenModal(false);
@@ -155,10 +131,6 @@ const Investments = () => {
 
     };
 
-
-    // ======================================================
-    // CLOSE DELETE MODAL
-    // ======================================================
 
     const handleCloseDeleteModal = () => {
 
@@ -169,253 +141,284 @@ const Investments = () => {
     };
 
 
-    // ======================================================
-    // FILTER + SORT
-    // ======================================================
+    const handleUploadXLSX = async (
+        event
+    ) => {
 
-    const filteredInvestments = [
-        ...investments
-    ]
+        const file =
+            event.target.files?.[0];
 
-        .filter(
-            (investment) => {
+        event.target.value = "";
 
-                const investmentName =
-                    String(
-                        investment.name || ""
-                    )
-                        .toLowerCase();
+        if (!file) {
+            return;
+        }
+
+        const isExcel =
+            file.name
+                .toLowerCase()
+                .endsWith(".xlsx");
+
+        if (!isExcel) {
+            return;
+        }
+
+        setImportModalOpen(true);
+
+        await dispatch(
+            previewInvestmentImport(
+                file
+            )
+        );
+
+    };
 
 
-                const matchesSearch =
-                    investmentName.includes(
-                        search.toLowerCase()
+    const handleConfirmImport = async () => {
+
+        if (!importPreview) {
+            return;
+        }
+
+        const data =
+            importPreview.data ||
+            importPreview;
+
+        const holdings =
+            data.holdings;
+
+        if (
+            !Array.isArray(
+                holdings
+            ) ||
+            holdings.length === 0
+        ) {
+            return;
+        }
+
+        const result =
+            await dispatch(
+                confirmInvestmentImport(
+                    holdings
+                )
+            );
+
+        if (
+            confirmInvestmentImport.fulfilled.match(
+                result
+            )
+        ) {
+
+            setImportModalOpen(false);
+
+            dispatch(
+                clearInvestmentImportPreview()
+            );
+
+        }
+
+    };
+
+
+    const handleCloseImportModal = () => {
+
+        if (importLoading) {
+            return;
+        }
+
+        setImportModalOpen(false);
+
+        dispatch(
+            clearInvestmentImportPreview()
+        );
+
+        dispatch(
+            clearInvestmentImportResult()
+        );
+
+    };
+
+
+    const filteredInvestments =
+        [...investments]
+            .filter(
+                (investment) => {
+
+                    const name =
+                        String(
+                            investment.name || ""
+                        )
+                            .toLowerCase();
+
+                    const searchValue =
+                        search
+                            .toLowerCase()
+                            .trim();
+
+                    const matchesSearch =
+                        name.includes(
+                            searchValue
+                        );
+
+                    const matchesType =
+                        type === "" ||
+                        investment.type === type;
+
+                    return (
+                        matchesSearch &&
+                        matchesType
                     );
 
+                }
+            )
+            .sort(
+                (a, b) => {
 
-                const matchesType =
-                    type === "" ||
-                    investment.type === type;
+                    switch (sortBy) {
 
+                        case "nameAsc":
 
-                return (
-                    matchesSearch &&
-                    matchesType
-                );
-
-            }
-        )
-
-        .sort(
-            (a, b) => {
-
-                switch (sortBy) {
-
-                    // ==================================
-                    // NAME A-Z
-                    // ==================================
-
-                    case "nameAsc":
-
-                        return (
-                            String(a.name || "")
-                                .localeCompare(
-                                    String(b.name || "")
+                            return String(
+                                a.name || ""
+                            ).localeCompare(
+                                String(
+                                    b.name || ""
                                 )
-                        );
+                            );
 
+                        case "nameDesc":
 
-                    // ==================================
-                    // NAME Z-A
-                    // ==================================
-
-                    case "nameDesc":
-
-                        return (
-                            String(b.name || "")
-                                .localeCompare(
-                                    String(a.name || "")
+                            return String(
+                                b.name || ""
+                            ).localeCompare(
+                                String(
+                                    a.name || ""
                                 )
-                        );
+                            );
 
+                        case "profit": {
 
-                    // ==================================
-                    // HIGHEST PROFIT
-                    // ==================================
+                            const profitA =
+                                (
+                                    Number(
+                                        a.currentValue
+                                    ) || 0
+                                ) -
+                                (
+                                    Number(
+                                        a.investedAmount
+                                    ) || 0
+                                );
 
-                    case "profit":
+                            const profitB =
+                                (
+                                    Number(
+                                        b.currentValue
+                                    ) || 0
+                                ) -
+                                (
+                                    Number(
+                                        b.investedAmount
+                                    ) || 0
+                                );
 
-                        return (
+                            return (
+                                profitB -
+                                profitA
+                            );
 
-                            (
-                                Number(
-                                    b.currentValue
-                                ) || 0
-                            )
+                        }
 
-                            -
+                        case "roi": {
 
-                            (
-                                Number(
-                                    b.investedAmount
-                                ) || 0
-                            )
-
-                        )
-
-                        -
-
-                        (
-
-                            (
-                                Number(
-                                    a.currentValue
-                                ) || 0
-                            )
-
-                            -
-
-                            (
+                            const investedA =
                                 Number(
                                     a.investedAmount
-                                ) || 0
-                            )
+                                ) || 0;
 
-                        );
+                            const investedB =
+                                Number(
+                                    b.investedAmount
+                                ) || 0;
 
+                            const profitA =
+                                (
+                                    Number(
+                                        a.currentValue
+                                    ) || 0
+                                ) -
+                                investedA;
 
-                    // ==================================
-                    // HIGHEST ROI
-                    // ==================================
+                            const profitB =
+                                (
+                                    Number(
+                                        b.currentValue
+                                    ) || 0
+                                ) -
+                                investedB;
 
-                    case "roi": {
-
-                        const investedA =
-                            Number(
-                                a.investedAmount
-                            ) || 0;
-
-
-                        const investedB =
-                            Number(
-                                b.investedAmount
-                            ) || 0;
-
-
-                        const roiA =
-                            investedA > 0
-
-                                ? (
-
-                                    (
-                                        (
-                                            Number(
-                                                a.currentValue
-                                            ) || 0
-                                        )
-
-                                        -
-
+                            const roiA =
+                                investedA > 0
+                                    ? (
+                                        profitA /
                                         investedA
                                     )
+                                    : 0;
 
-                                    /
-
-                                    investedA
-
-                                ) * 100
-
-                                : 0;
-
-
-                        const roiB =
-                            investedB > 0
-
-                                ? (
-
-                                    (
-                                        (
-                                            Number(
-                                                b.currentValue
-                                            ) || 0
-                                        )
-
-                                        -
-
+                            const roiB =
+                                investedB > 0
+                                    ? (
+                                        profitB /
                                         investedB
                                     )
+                                    : 0;
 
-                                    /
+                            return (
+                                roiB -
+                                roiA
+                            );
 
-                                    investedB
+                        }
 
-                                ) * 100
+                        case "latest":
 
-                                : 0;
+                        default:
 
-
-                        return (
-                            roiB - roiA
-                        );
+                            return (
+                                new Date(
+                                    b.purchaseDate || 0
+                                ) -
+                                new Date(
+                                    a.purchaseDate || 0
+                                )
+                            );
 
                     }
 
-
-                    // ==================================
-                    // LATEST
-                    // ==================================
-
-                    case "latest":
-
-                    default:
-
-                        return (
-
-                            new Date(
-                                b.purchaseDate
-                            )
-
-                            -
-
-                            new Date(
-                                a.purchaseDate
-                            )
-
-                        );
-
                 }
+            );
 
-            }
-        );
-
-
-    // ======================================================
-    // PAGINATION
-    // ======================================================
 
     const totalPages =
         Math.max(
-
             1,
-
             Math.ceil(
-
                 filteredInvestments.length /
                 pageSize
-
             )
-
         );
 
 
     const startIndex =
         (
             currentPage - 1
-        ) * pageSize;
+        ) *
+        pageSize;
 
 
     const endIndex =
-        startIndex + pageSize;
+        startIndex +
+        pageSize;
 
 
     const paginatedInvestments =
@@ -424,10 +427,6 @@ const Investments = () => {
             endIndex
         );
 
-
-    // ======================================================
-    // PREVIOUS PAGE
-    // ======================================================
 
     const handlePreviousPage = () => {
 
@@ -445,10 +444,6 @@ const Investments = () => {
     };
 
 
-    // ======================================================
-    // NEXT PAGE
-    // ======================================================
-
     const handleNextPage = () => {
 
         if (
@@ -465,24 +460,16 @@ const Investments = () => {
     };
 
 
-    // ======================================================
-    // UI
-    // ======================================================
-
     return (
 
         <DashboardLayout>
 
             <div
                 className="
-                    min-h-full
+                    finance-page
                     space-y-6
                 "
             >
-
-                {/* ==================================================
-                    PAGE HEADER
-                ================================================== */}
 
                 <div
                     className="
@@ -490,7 +477,7 @@ const Investments = () => {
                         flex-col
                         gap-4
                         sm:flex-row
-                        sm:items-center
+                        sm:items-end
                         sm:justify-between
                     "
                 >
@@ -501,8 +488,7 @@ const Investments = () => {
                             className="
                                 text-3xl
                                 font-bold
-                                tracking-tight
-                                text-slate-800
+                                text-white
                             "
                         >
                             Investments
@@ -510,63 +496,104 @@ const Investments = () => {
 
                         <p
                             className="
-                                mt-1
+                                mt-2
                                 text-sm
-                                text-slate-500
+                                text-slate-400
                             "
                         >
-                            Manage and track your investment portfolio.
+                            Manage your investment portfolio.
                         </p>
 
                     </div>
 
 
-                    {/* ==============================================
-                        ADD BUTTON
-                    ============================================== */}
-
-                    <button
-                        onClick={handleAdd}
+                    <div
                         className="
-                            inline-flex
-                            items-center
-                            justify-center
-                            gap-2
-                            rounded-xl
-                            bg-emerald-500
-                            px-5
-                            py-2.5
-                            text-sm
-                            font-semibold
-                            text-white
-                            shadow-sm
-                            transition
-                            duration-200
-                            hover:bg-emerald-600
-                            hover:shadow-md
-                            active:scale-[0.98]
+                            flex
+                            w-full
+                            flex-col
+                            gap-3
+                            sm:w-auto
+                            sm:flex-row
                         "
                     >
 
-                        <span
+                        <label
                             className="
-                                text-lg
-                                leading-none
+                                inline-flex
+                                w-full
+                                cursor-pointer
+                                items-center
+                                justify-center
+                                gap-2
+                                rounded-xl
+                                border
+                                border-white/[0.06]
+                                bg-[#0b1428]
+                                px-5
+                                py-2.5
+                                text-sm
+                                font-semibold
+                                text-slate-300
+                                shadow-lg
+                                shadow-black/10
+                                transition
+                                hover:border-blue-500/20
+                                hover:bg-[#0d1830]
+                                hover:text-white
+                                sm:w-auto
                             "
                         >
-                            +
-                        </span>
 
-                        Add Investment
+                            <FaUpload
+                                className="
+                                    text-blue-400
+                                "
+                            />
 
-                    </button>
+                            Upload XLSX
+
+                            <input
+                                type="file"
+                                accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                className="hidden"
+                                onChange={
+                                    handleUploadXLSX
+                                }
+                            />
+
+                        </label>
+
+
+                        <button
+                            type="button"
+                            onClick={
+                                handleAdd
+                            }
+                            className="
+                                w-full
+                                rounded-xl
+                                bg-emerald-500
+                                px-5
+                                py-2.5
+                                text-sm
+                                font-semibold
+                                text-white
+                                shadow-lg
+                                shadow-emerald-500/10
+                                transition
+                                hover:bg-emerald-400
+                                active:scale-[0.98]
+                                sm:w-auto
+                            "
+                        >
+                            + Add Investment
+                        </button>
+
+                    </div>
 
                 </div>
 
-
-                {/* ==================================================
-                    SUMMARY CARDS
-                ================================================== */}
 
                 <InvestmentSummaryCards
                     investments={
@@ -574,38 +601,6 @@ const Investments = () => {
                     }
                 />
 
-
-                {/* ==================================================
-                    CHARTS
-                ================================================== */}
-
-                <div
-                    className="
-                        grid
-                        grid-cols-1
-                        gap-6
-                        xl:grid-cols-2
-                    "
-                >
-
-                    <PortfolioAllocationChart
-                        investments={
-                            filteredInvestments
-                        }
-                    />
-
-                    <InvestmentGrowthChart
-                        investments={
-                            filteredInvestments
-                        }
-                    />
-
-                </div>
-
-
-                {/* ==================================================
-                    FILTERS
-                ================================================== */}
 
                 <InvestmentFilters
 
@@ -633,16 +628,8 @@ const Investments = () => {
                         setSortBy
                     }
 
-                    onAdd={
-                        handleAdd
-                    }
-
                 />
 
-
-                {/* ==================================================
-                    TABLE
-                ================================================== */}
 
                 <InvestmentTable
 
@@ -660,10 +647,6 @@ const Investments = () => {
 
                 />
 
-
-                {/* ==================================================
-                    PAGINATION
-                ================================================== */}
 
                 <InvestmentPagination
 
@@ -692,12 +675,10 @@ const Investments = () => {
                     }
 
                     endIndex={
-
                         Math.min(
                             endIndex,
                             filteredInvestments.length
                         )
-
                     }
 
                     onPrevious={
@@ -711,9 +692,29 @@ const Investments = () => {
                 />
 
 
-                {/* ==================================================
-                    ADD / EDIT MODAL
-                ================================================== */}
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        gap-6
+                        xl:grid-cols-2
+                    "
+                >
+
+                    <PortfolioAllocationChart
+                        investments={
+                            filteredInvestments
+                        }
+                    />
+
+                    <InvestmentGrowthChart
+                        investments={
+                            filteredInvestments
+                        }
+                    />
+
+                </div>
+
 
                 <InvestmentFormModal
 
@@ -738,10 +739,6 @@ const Investments = () => {
                 />
 
 
-                {/* ==================================================
-                    DELETE MODAL
-                ================================================== */}
-
                 <DeleteInvestmentModal
 
                     open={
@@ -759,24 +756,52 @@ const Investments = () => {
                 />
 
 
-                {/* ==================================================
-                    LOADING
-                ================================================== */}
+                <InvestmentImportPreviewModal
+
+                    open={
+                        importModalOpen
+                    }
+
+                    preview={
+                        importPreview
+                    }
+
+                    loading={
+                        importPreviewLoading
+                    }
+
+                    importLoading={
+                        importLoading
+                    }
+
+                    error={
+                        importPreviewError ||
+                        importError
+                    }
+
+                    onClose={
+                        handleCloseImportModal
+                    }
+
+                    onConfirm={
+                        handleConfirmImport
+                    }
+
+                />
+
 
                 {loading && (
 
                     <div
                         className="
-                            rounded-xl
+                            rounded-2xl
                             border
-                            border-white/40
-                            bg-white/60
+                            border-white/5
+                            bg-[#0b1428]
                             px-5
-                            py-3
+                            py-4
                             text-sm
-                            text-slate-500
-                            shadow-sm
-                            backdrop-blur-xl
+                            text-slate-400
                         "
                     >
                         Loading investments...
@@ -785,24 +810,18 @@ const Investments = () => {
                 )}
 
 
-                {/* ==================================================
-                    ERROR
-                ================================================== */}
-
                 {error && (
 
                     <div
                         className="
-                            rounded-xl
+                            rounded-2xl
                             border
-                            border-red-200
-                            bg-red-50/70
+                            border-red-500/20
+                            bg-red-500/10
                             px-5
-                            py-3
+                            py-4
                             text-sm
-                            text-red-600
-                            shadow-sm
-                            backdrop-blur-xl
+                            text-red-400
                         "
                     >
                         {error}

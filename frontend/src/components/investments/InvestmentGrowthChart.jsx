@@ -9,68 +9,297 @@ import {
     Legend,
 } from "recharts";
 
+
+const formatCurrency = (
+    value
+) => {
+
+    return `₹${(
+        Number(value) || 0
+    ).toLocaleString(
+        "en-IN",
+        {
+            maximumFractionDigits: 0,
+        }
+    )}`;
+
+};
+
+
 const InvestmentGrowthChart = ({
-    investments,
+    investments = [],
 }) => {
 
-    const data = investments.map((investment) => ({
+    const data =
+        investments.map(
+            (
+                investment
+            ) => ({
 
-        name: investment.name,
+                name:
+                    investment.name,
 
-        Invested: investment.investedAmount,
+                Invested:
+                    Number(
+                        investment.investedAmount
+                    ) || 0,
 
-        Current: investment.currentValue,
+                Current:
+                    Number(
+                        investment.currentValue
+                    ) || 0,
 
-    }));
+            })
+        );
+
 
     return (
 
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div
+            className="
+                rounded-2xl
+                border
+                border-white/[0.04]
+                bg-[#0b1428]
+                p-5
+                shadow-lg
+                shadow-black/10
+            "
+        >
 
-            <h2 className="text-xl font-bold mb-6">
+            {/* ==================================================
+                HEADER
+            ================================================== */}
 
-                Investment Growth
+            <div
+                className="
+                    mb-4
+                "
+            >
 
-            </h2>
+                <h2
+                    className="
+                        text-base
+                        font-semibold
+                        text-white
+                    "
+                >
+                    Investment Growth
+                </h2>
 
-            <div className="h-96">
-
-                <ResponsiveContainer>
-
-                    <BarChart
-                        data={data}
-                    >
-
-                        <CartesianGrid strokeDasharray="3 3" />
-
-                        <XAxis dataKey="name" />
-
-                        <YAxis />
-
-                        <Tooltip />
-
-                        <Legend />
-
-                        <Bar
-                            dataKey="Invested"
-                            fill="#3B82F6"
-                        />
-
-                        <Bar
-                            dataKey="Current"
-                            fill="#10B981"
-                        />
-
-                    </BarChart>
-
-                </ResponsiveContainer>
+                <p
+                    className="
+                        mt-1
+                        text-xs
+                        text-slate-500
+                    "
+                >
+                    Invested amount versus current value.
+                </p>
 
             </div>
+
+
+            {/* ==================================================
+                EMPTY
+            ================================================== */}
+
+            {data.length === 0 ? (
+
+                <div
+                    className="
+                        flex
+                        h-80
+                        items-center
+                        justify-center
+                        text-sm
+                        text-slate-500
+                    "
+                >
+                    No investment data available.
+                </div>
+
+            ) : (
+
+                <div
+                    className="
+                        h-80
+                        w-full
+                    "
+                >
+
+                    <ResponsiveContainer
+                        width="100%"
+                        height="100%"
+                    >
+
+                        <BarChart
+                            data={
+                                data
+                            }
+                            margin={{
+                                top: 10,
+                                right: 10,
+                                left: 0,
+                                bottom: 10,
+                            }}
+                        >
+
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                vertical={false}
+                                stroke="rgba(148,163,184,0.08)"
+                            />
+
+
+                            <XAxis
+                                dataKey="name"
+                                tick={{
+                                    fill:
+                                        "#64748b",
+                                    fontSize:
+                                        10,
+                                }}
+                                axisLine={{
+                                    stroke:
+                                        "rgba(148,163,184,0.08)",
+                                }}
+                                tickLine={false}
+                                tickFormatter={(
+                                    value
+                                ) =>
+                                    value.length >
+                                    14
+
+                                        ? `${value.slice(
+                                            0,
+                                            14
+                                        )}...`
+
+                                        : value
+                                }
+                            />
+
+
+                            <YAxis
+                                tick={{
+                                    fill:
+                                        "#64748b",
+                                    fontSize:
+                                        10,
+                                }}
+                                axisLine={false}
+                                tickLine={false}
+                                tickFormatter={(
+                                    value
+                                ) =>
+                                    `₹${(
+                                        value /
+                                        1000
+                                    ).toFixed(
+                                        0
+                                    )}k`
+                                }
+                            />
+
+
+                            <Tooltip
+                                contentStyle={{
+                                    background:
+                                        "#101b31",
+
+                                    border:
+                                        "1px solid rgba(255,255,255,0.08)",
+
+                                    borderRadius:
+                                        "12px",
+
+                                    color:
+                                        "#ffffff",
+
+                                    boxShadow:
+                                        "0 20px 40px rgba(0,0,0,0.35)",
+                                }}
+                                labelStyle={{
+                                    color:
+                                        "#ffffff",
+                                    marginBottom:
+                                        "6px",
+                                }}
+                                formatter={(
+                                    value,
+                                    name
+                                ) => [
+
+                                    formatCurrency(
+                                        value
+                                    ),
+
+                                    name,
+
+                                ]}
+                            />
+
+
+                            <Legend
+                                iconType="circle"
+                                formatter={(
+                                    value
+                                ) => (
+
+                                    <span
+                                        style={{
+                                            color:
+                                                "#94a3b8",
+                                            fontSize:
+                                                "12px",
+                                        }}
+                                    >
+                                        {value}
+                                    </span>
+
+                                )}
+                            />
+
+
+                            <Bar
+                                dataKey="Invested"
+                                fill="#3B82F6"
+                                radius={[
+                                    5,
+                                    5,
+                                    0,
+                                    0,
+                                ]}
+                                maxBarSize={28}
+                            />
+
+
+                            <Bar
+                                dataKey="Current"
+                                fill="#10B981"
+                                radius={[
+                                    5,
+                                    5,
+                                    0,
+                                    0,
+                                ]}
+                                maxBarSize={28}
+                            />
+
+                        </BarChart>
+
+                    </ResponsiveContainer>
+
+                </div>
+
+            )}
 
         </div>
 
     );
 
 };
+
 
 export default InvestmentGrowthChart;

@@ -1,5 +1,9 @@
 import { useDispatch } from "react-redux";
-import { removeInvestment } from "../../features/investment/investmentSlice";
+
+import {
+    removeInvestment,
+} from "../../features/investment/investmentSlice";
+
 
 const DeleteInvestmentModal = ({
     open,
@@ -7,58 +11,194 @@ const DeleteInvestmentModal = ({
     investment,
 }) => {
 
-    const dispatch = useDispatch();
+    const dispatch =
+        useDispatch();
 
-    if (!open || !investment) return null;
+
+    if (
+        !open ||
+        !investment
+    ) {
+
+        return null;
+
+    }
+
 
     const handleDelete = async () => {
 
         await dispatch(
-            removeInvestment(investment._id)
+            removeInvestment(
+                investment._id
+            )
         );
 
         onClose();
 
     };
 
+
     return (
 
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+        <div
+            className="
+                fixed
+                inset-0
+                z-50
+                flex
+                items-center
+                justify-center
+                bg-black/70
+                p-4
+                backdrop-blur-sm
+            "
+        >
 
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <div
+                className="
+                    w-full
+                    max-w-md
+                    rounded-2xl
+                    border
+                    border-white/[0.06]
+                    bg-[#0b1428]
+                    p-6
+                    shadow-2xl
+                    shadow-black/50
+                "
+            >
 
-                <h2 className="text-2xl font-bold mb-4">
+                {/* ==================================================
+                    ICON
+                ================================================== */}
+
+                <div
+                    className="
+                        flex
+                        h-12
+                        w-12
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-red-500/10
+                        text-xl
+                        font-bold
+                        text-red-400
+                    "
+                >
+                    !
+                </div>
+
+
+                {/* ==================================================
+                    TITLE
+                ================================================== */}
+
+                <h2
+                    className="
+                        mt-5
+                        text-xl
+                        font-bold
+                        text-white
+                    "
+                >
                     Delete Investment
                 </h2>
 
-                <p className="text-gray-600">
 
-                    Are you sure you want to delete
+                {/* ==================================================
+                    MESSAGE
+                ================================================== */}
 
-                    <span className="font-semibold">
+                <p
+                    className="
+                        mt-3
+                        text-sm
+                        leading-6
+                        text-slate-400
+                    "
+                >
+                    Are you sure you want to delete{" "}
 
-                        {" "}
-
+                    <span
+                        className="
+                            font-semibold
+                            text-white
+                        "
+                    >
                         {investment.name}
-
                     </span>
 
                     ?
-
                 </p>
 
-                <div className="flex justify-end gap-3 mt-8">
+
+                <p
+                    className="
+                        mt-2
+                        text-xs
+                        text-slate-500
+                    "
+                >
+                    This action cannot be undone.
+                </p>
+
+
+                {/* ==================================================
+                    ACTIONS
+                ================================================== */}
+
+                <div
+                    className="
+                        mt-7
+                        flex
+                        justify-end
+                        gap-3
+                    "
+                >
 
                     <button
-                        onClick={onClose}
-                        className="border px-5 py-2 rounded-lg"
+                        type="button"
+                        onClick={
+                            onClose
+                        }
+                        className="
+                            rounded-xl
+                            border
+                            border-white/[0.06]
+                            bg-white/5
+                            px-5
+                            py-2.5
+                            text-sm
+                            font-semibold
+                            text-slate-300
+                            transition
+                            hover:bg-white/10
+                            hover:text-white
+                        "
                     >
                         Cancel
                     </button>
 
+
                     <button
-                        onClick={handleDelete}
-                        className="bg-red-600 text-white px-5 py-2 rounded-lg"
+                        type="button"
+                        onClick={
+                            handleDelete
+                        }
+                        className="
+                            rounded-xl
+                            bg-red-500
+                            px-5
+                            py-2.5
+                            text-sm
+                            font-semibold
+                            text-white
+                            shadow-lg
+                            shadow-red-500/10
+                            transition
+                            hover:bg-red-400
+                        "
                     >
                         Delete
                     </button>
@@ -72,5 +212,6 @@ const DeleteInvestmentModal = ({
     );
 
 };
+
 
 export default DeleteInvestmentModal;

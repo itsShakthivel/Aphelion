@@ -6,7 +6,7 @@ import {
 
 
 const InvestmentSummaryCards = ({
-    investments,
+    investments = [],
 }) => {
 
     // ======================================================
@@ -79,16 +79,14 @@ const InvestmentSummaryCards = ({
     // ======================================================
 
     const roi =
-        totalInvested === 0
+        totalInvested > 0
 
-            ? 0
+            ? (
+                profitLoss /
+                totalInvested
+            ) * 100
 
-            : (
-                (
-                    profitLoss /
-                    totalInvested
-                ) * 100
-            );
+            : 0;
 
 
     // ======================================================
@@ -99,10 +97,12 @@ const InvestmentSummaryCards = ({
         value
     ) => {
 
-        return `₹${value.toLocaleString(
+        return `₹${(
+            Number(value) || 0
+        ).toLocaleString(
             "en-IN",
             {
-                maximumFractionDigits: 2,
+                maximumFractionDigits: 0,
             }
         )}`;
 
@@ -110,7 +110,7 @@ const InvestmentSummaryCards = ({
 
 
     // ======================================================
-    // CARDS
+    // CARD DATA
     // ======================================================
 
     const cards = [
@@ -128,7 +128,10 @@ const InvestmentSummaryCards = ({
                 <FaWallet />,
 
             iconClass:
-                "bg-blue-500/10 text-blue-600",
+                "bg-blue-50 text-blue-600",
+
+            valueClass:
+                "text-white",
 
         },
 
@@ -145,7 +148,10 @@ const InvestmentSummaryCards = ({
                 <FaChartLine />,
 
             iconClass:
-                "bg-emerald-500/10 text-emerald-600",
+                "bg-emerald-50 text-emerald-600",
+
+            valueClass:
+                "text-white",
 
         },
 
@@ -154,8 +160,10 @@ const InvestmentSummaryCards = ({
                 "Profit / Loss",
 
             value:
-                `${profitLoss >= 0 ? "+" : ""}${formatCurrency(
-                    profitLoss
+                `${profitLoss >= 0 ? "+" : "-"}${formatCurrency(
+                    Math.abs(
+                        profitLoss
+                    )
                 )}`,
 
             icon:
@@ -164,16 +172,16 @@ const InvestmentSummaryCards = ({
             iconClass:
                 profitLoss >= 0
 
-                    ? "bg-emerald-500/10 text-emerald-600"
+                    ? "bg-emerald-50 text-emerald-600"
 
-                    : "bg-red-500/10 text-red-600",
+                    : "bg-red-50 text-red-600",
 
             valueClass:
                 profitLoss >= 0
 
-                    ? "text-emerald-600"
+                    ? "text-emerald-400"
 
-                    : "text-red-600",
+                    : "text-red-400",
 
         },
 
@@ -188,27 +196,19 @@ const InvestmentSummaryCards = ({
                 <FaChartLine />,
 
             iconClass:
-                roi >= 0
-
-                    ? "bg-purple-500/10 text-purple-600"
-
-                    : "bg-red-500/10 text-red-600",
+                "bg-purple-50 text-purple-600",
 
             valueClass:
                 roi >= 0
 
-                    ? "text-purple-600"
+                    ? "text-purple-400"
 
-                    : "text-red-600",
+                    : "text-red-400",
 
         },
 
     ];
 
-
-    // ======================================================
-    // UI
-    // ======================================================
 
     return (
 
@@ -232,25 +232,23 @@ const InvestmentSummaryCards = ({
                         className="
                             rounded-2xl
                             border
-                            border-white/50
-                            bg-white/60
+                            border-white/[0.04]
+                            bg-[#0b1428]
                             p-5
-                            shadow-sm
-                            backdrop-blur-xl
+                            shadow-lg
+                            shadow-black/10
                             transition
                             duration-200
                             hover:-translate-y-0.5
-                            hover:bg-white/70
-                            hover:shadow-md
+                            hover:bg-[#0d1830]
                         "
                     >
 
                         <div
                             className="
                                 flex
-                                items-start
+                                items-center
                                 justify-between
-                                gap-4
                             "
                         >
 
@@ -258,9 +256,9 @@ const InvestmentSummaryCards = ({
 
                                 <p
                                     className="
-                                        text-sm
+                                        text-xs
                                         font-medium
-                                        text-slate-500
+                                        text-slate-400
                                     "
                                 >
                                     {card.title}
@@ -274,8 +272,7 @@ const InvestmentSummaryCards = ({
                                         font-bold
                                         tracking-tight
                                         ${
-                                            card.valueClass ||
-                                            "text-slate-800"
+                                            card.valueClass
                                         }
                                     `}
                                 >
@@ -293,14 +290,12 @@ const InvestmentSummaryCards = ({
                                     shrink-0
                                     items-center
                                     justify-center
-                                    rounded-xl
+                                    rounded-full
                                     text-lg
                                     ${card.iconClass}
                                 `}
                             >
-
                                 {card.icon}
-
                             </div>
 
                         </div>
@@ -308,7 +303,6 @@ const InvestmentSummaryCards = ({
                     </div>
 
                 )
-
             )}
 
         </div>
