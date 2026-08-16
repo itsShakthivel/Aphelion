@@ -5,7 +5,6 @@ const InsuranceFilters = ({
     setType,
     status,
     setStatus,
-    onAdd,
 }) => {
 
     return (
@@ -13,8 +12,6 @@ const InsuranceFilters = ({
         <div className="finance-filter">
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                {/* Search */}
 
                 <input
                     type="text"
@@ -25,9 +22,6 @@ const InsuranceFilters = ({
                     }
                     className="w-full rounded-lg px-4 py-2 border"
                 />
-
-
-                {/* Type */}
 
                 <select
                     value={type}
@@ -63,9 +57,6 @@ const InsuranceFilters = ({
 
                 </select>
 
-
-                {/* Status */}
-
                 <select
                     value={status}
                     onChange={(e) =>
@@ -91,22 +82,6 @@ const InsuranceFilters = ({
                     </option>
 
                 </select>
-
-            </div>
-
-
-            {/* Add Button */}
-
-            <div className="mt-4">
-
-                <button
-                    onClick={onAdd}
-                    className="finance-add-button"
-                >
-
-                    + Add Insurance
-
-                </button>
 
             </div>
 

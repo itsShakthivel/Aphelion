@@ -1,8 +1,6 @@
 import {
-    FaPlus,
     FaMagnifyingGlass,
 } from "react-icons/fa6";
-
 
 const TransactionFilters = ({
     search,
@@ -18,29 +16,19 @@ const TransactionFilters = ({
     sortBy,
     setSortBy,
     categories,
-    onAdd,
 }) => {
 
     return (
 
         <div className="finance-filter">
 
-
-            {/* ==========================
-                Filter Controls
-            ========================== */}
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-
-                {/* Search */}
 
                 <div className="relative">
 
                     <FaMagnifyingGlass
                         className="absolute left-3 top-3 text-gray-400"
                     />
-
 
                     <input
                         type="text"
@@ -53,9 +41,6 @@ const TransactionFilters = ({
                     />
 
                 </div>
-
-
-                {/* Type */}
 
                 <select
                     value={type}
@@ -79,9 +64,6 @@ const TransactionFilters = ({
 
                 </select>
 
-
-                {/* Category */}
-
                 <select
                     value={category}
                     onChange={(e) =>
@@ -94,24 +76,18 @@ const TransactionFilters = ({
                         All Categories
                     </option>
 
-
                     {categories.map((cat) => (
 
                         <option
                             key={cat._id}
                             value={cat._id}
                         >
-
                             {cat.name}
-
                         </option>
 
                     ))}
 
                 </select>
-
-
-                {/* Sort */}
 
                 <select
                     value={sortBy}
@@ -139,9 +115,6 @@ const TransactionFilters = ({
 
                 </select>
 
-
-                {/* Start Date */}
-
                 <input
                     type="date"
                     value={startDate}
@@ -150,9 +123,6 @@ const TransactionFilters = ({
                     }
                     className="border rounded-lg px-3 py-2"
                 />
-
-
-                {/* End Date */}
 
                 <input
                     type="date"
@@ -165,31 +135,10 @@ const TransactionFilters = ({
 
             </div>
 
-
-            {/* ==========================
-                Add Button
-            ========================== */}
-
-            <div className="mt-4">
-
-                <button
-                    onClick={onAdd}
-                    className="finance-add-button"
-                >
-
-                    <FaPlus />
-
-                    Add Transaction
-
-                </button>
-
-            </div>
-
         </div>
 
     );
 
 };
-
 
 export default TransactionFilters;

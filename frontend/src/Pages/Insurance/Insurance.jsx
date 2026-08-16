@@ -16,30 +16,33 @@ import {
     fetchInsurances,
 } from "../../features/insurance/insuranceSlice";
 
-
 const Insurance = () => {
 
     const dispatch = useDispatch();
 
+    const [openModal, setOpenModal] =
+        useState(false);
 
-    const [openModal, setOpenModal] = useState(false);
+    const [selectedInsurance, setSelectedInsurance] =
+        useState(null);
 
-    const [selectedInsurance, setSelectedInsurance] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] =
+        useState(false);
 
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [search, setSearch] =
+        useState("");
 
+    const [type, setType] =
+        useState("");
 
-    const [search, setSearch] = useState("");
+    const [status, setStatus] =
+        useState("");
 
-    const [type, setType] = useState("");
+    const [curretPage, setCurrentPage] =
+        useState(1);
 
-    const [status, setStatus] = useState("");
-
-
-    const [curretPage, setCurrentPage] = useState(1);
-
-    const [pageSize, setPageSize] = useState(10);
-
+    const [pageSize, setPageSize] =
+        useState(10);
 
     const {
         insurances,
@@ -49,21 +52,11 @@ const Insurance = () => {
         (state) => state.insurance
     );
 
-
-    /* ==========================================
-       FETCH
-    ========================================== */
-
     useEffect(() => {
 
         dispatch(fetchInsurances());
 
     }, [dispatch]);
-
-
-    /* ==========================================
-       RESET PAGE
-    ========================================== */
 
     useEffect(() => {
 
@@ -75,11 +68,6 @@ const Insurance = () => {
         status,
     ]);
 
-
-    /* ==========================================
-       HANDLERS
-    ========================================== */
-
     const handleAdd = () => {
 
         setSelectedInsurance(null);
@@ -87,7 +75,6 @@ const Insurance = () => {
         setOpenModal(true);
 
     };
-
 
     const handleEdit = (insurance) => {
 
@@ -97,7 +84,6 @@ const Insurance = () => {
 
     };
 
-
     const handleDelete = (insurance) => {
 
         setSelectedInsurance(insurance);
@@ -105,7 +91,6 @@ const Insurance = () => {
         setDeleteModalOpen(true);
 
     };
-
 
     const handleCloseModal = () => {
 
@@ -115,7 +100,6 @@ const Insurance = () => {
 
     };
 
-
     const handleCloseDeleteModal = () => {
 
         setDeleteModalOpen(false);
@@ -123,11 +107,6 @@ const Insurance = () => {
         setSelectedInsurance(null);
 
     };
-
-
-    /* ==========================================
-       PAGINATION
-    ========================================== */
 
     const handlePreviousPage = () => {
 
@@ -141,7 +120,6 @@ const Insurance = () => {
 
     };
 
-
     const handleNextPage = () => {
 
         if (curretPage < totalPages) {
@@ -154,38 +132,27 @@ const Insurance = () => {
 
     };
 
-
-    /* ==========================================
-       FILTER
-    ========================================== */
-
     const filteredInsurances =
         insurances.filter((insurance) => {
 
             const matchesSearch =
-
                 insurance.policyName
                     .toLowerCase()
                     .includes(
                         search.toLowerCase()
                     )
-
                 ||
-
                 insurance.provider
                     .toLowerCase()
                     .includes(
                         search.toLowerCase()
                     );
 
-
             const matchesType =
                 type === "" ||
                 insurance.type === type;
 
-
             let insuranceStatus = "active";
-
 
             const today = new Date();
 
@@ -193,7 +160,6 @@ const Insurance = () => {
                 new Date(
                     insurance.expiryDate
                 );
-
 
             const days = Math.ceil(
                 (
@@ -207,26 +173,21 @@ const Insurance = () => {
                 )
             );
 
-
             if (days < 0) {
 
                 insuranceStatus =
                     "expired";
 
-            }
-
-            else if (days <= 30) {
+            } else if (days <= 30) {
 
                 insuranceStatus =
                     "expiring";
 
             }
 
-
             const matchesStatus =
                 status === "" ||
                 insuranceStatus === status;
-
 
             return (
                 matchesSearch &&
@@ -236,11 +197,6 @@ const Insurance = () => {
 
         });
 
-
-    /* ==========================================
-       PAGINATION DATA
-    ========================================== */
-
     const totalPages = Math.max(
         1,
         Math.ceil(
@@ -249,16 +205,13 @@ const Insurance = () => {
         )
     );
 
-
     const startIndex =
         (curretPage - 1) *
         pageSize;
 
-
     const endIndex =
         startIndex +
         pageSize;
-
 
     const paginatedInsurances =
         filteredInsurances.slice(
@@ -266,110 +219,83 @@ const Insurance = () => {
             endIndex
         );
 
-
     return (
 
         <DashboardLayout>
 
             <div className="finance-page space-y-8">
 
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-                {/* HEADER */}
+                    <div>
 
-                <div>
+                        <h1 className="text-3xl font-bold">
 
-                    <h1 className="text-3xl font-bold">
+                            Insurance
 
-                        Insurance
+                        </h1>
 
-                    </h1>
+                        <p className="text-gray-500 mt-2">
 
-                    <p className="text-gray-500 mt-2">
+                            Manage all your insurance policies.
 
-                        Manage all your insurance policies.
+                        </p>
 
-                    </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handleAdd}
+                        className="finance-add-button"
+                    >
+                        + Add Insurance
+                    </button>
 
                 </div>
-
-
-                {/* SUMMARY */}
 
                 <InsuranceSummaryCards
                     insurances={insurances}
                 />
 
-
-                {/* FILTERS */}
-
                 <InsuranceFilters
-
                     search={search}
                     setSearch={setSearch}
-
                     type={type}
                     setType={setType}
-
                     status={status}
                     setStatus={setStatus}
-
-                    onAdd={handleAdd}
-
                 />
 
-
-                {/* TABLE */}
-
                 <InsuranceTable
-
                     insurances={
                         paginatedInsurances
                     }
-
                     onEdit={handleEdit}
-
                     onDelete={handleDelete}
-
                 />
 
-
-                {/* PAGINATION */}
-
                 <InsurancePagination
-
                     curretPage={curretPage}
-
                     totalPages={totalPages}
-
                     pageSize={pageSize}
-
                     setPageSize={setPageSize}
-
                     totalItems={
                         filteredInsurances.length
                     }
-
                     startIndex={startIndex}
-
                     endIndex={
                         Math.min(
                             endIndex,
                             filteredInsurances.length
                         )
                     }
-
                     onPrevious={
                         handlePreviousPage
                     }
-
                     onNext={
                         handleNextPage
                     }
-
                 />
-
-
-                {/* CHARTS */}
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
@@ -387,25 +313,15 @@ const Insurance = () => {
 
                 </div>
 
-
-                {/* DELETE MODAL */}
-
                 <DeleteInsuranceModal
-
                     open={deleteModalOpen}
-
                     onClose={
                         handleCloseDeleteModal
                     }
-
                     insurance={
                         selectedInsurance
                     }
-
                 />
-
-
-                {/* LOADING */}
 
                 {loading && (
 
@@ -417,9 +333,6 @@ const Insurance = () => {
 
                 )}
 
-
-                {/* ERROR */}
-
                 {error && (
 
                     <p className="text-red-500">
@@ -430,25 +343,17 @@ const Insurance = () => {
 
                 )}
 
-
-                {/* FORM MODAL */}
-
                 <InsuranceFormModal
-
                     open={openModal}
-
                     onClose={handleCloseModal}
-
                     mode={
                         selectedInsurance
                             ? "edit"
                             : "add"
                     }
-
                     insurance={
                         selectedInsurance
                     }
-
                 />
 
             </div>

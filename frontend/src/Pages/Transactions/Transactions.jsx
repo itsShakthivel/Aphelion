@@ -20,11 +20,9 @@ import DeleteTransactionModal from "../../components/transactions/DeleteTransact
 import TransactionPagination from "../../components/transactions/TransactionPagination";
 import TransactionDetailsModal from "../../components/transactions/TransactionDetailsModal";
 
-
 const Transactions = () => {
 
     const dispatch = useDispatch();
-
 
     const {
         transactions,
@@ -33,11 +31,6 @@ const Transactions = () => {
     } = useSelector(
         (state) => state.transaction
     );
-
-
-    // ==========================
-    // Filter States
-    // ==========================
 
     const [search, setSearch] = useState("");
 
@@ -55,11 +48,6 @@ const Transactions = () => {
 
     const [pageSize, setPageSize] = useState(10);
 
-
-    // ==========================
-    // Modal States
-    // ==========================
-
     const [openModal, setOpenModal] = useState(false);
 
     const [selectedTransaction, setSelectedTransaction] =
@@ -71,21 +59,11 @@ const Transactions = () => {
     const [detailsOpen, setDetailsOpen] =
         useState(false);
 
-
-    // ==========================
-    // Fetch Transactions
-    // ==========================
-
     useEffect(() => {
 
         dispatch(fetchTransactions());
 
     }, [dispatch]);
-
-
-    // ==========================
-    // Reset Pagination
-    // ==========================
 
     useEffect(() => {
 
@@ -100,11 +78,6 @@ const Transactions = () => {
         sortBy,
     ]);
 
-
-    // ==========================
-    // Handlers
-    // ==========================
-
     const handleAdd = () => {
 
         setSelectedTransaction(null);
@@ -112,7 +85,6 @@ const Transactions = () => {
         setOpenModal(true);
 
     };
-
 
     const handleEdit = (transaction) => {
 
@@ -122,7 +94,6 @@ const Transactions = () => {
 
     };
 
-
     const handleView = (transaction) => {
 
         setSelectedTransaction(transaction);
@@ -130,7 +101,6 @@ const Transactions = () => {
         setDetailsOpen(true);
 
     };
-
 
     const handleDelete = (transaction) => {
 
@@ -140,7 +110,6 @@ const Transactions = () => {
 
     };
 
-
     const handleCloseModal = () => {
 
         setOpenModal(false);
@@ -148,7 +117,6 @@ const Transactions = () => {
         setSelectedTransaction(null);
 
     };
-
 
     const handleCloseDeleteModal = () => {
 
@@ -158,7 +126,6 @@ const Transactions = () => {
 
     };
 
-
     const handleCloseDetails = () => {
 
         setDetailsOpen(false);
@@ -166,11 +133,6 @@ const Transactions = () => {
         setSelectedTransaction(null);
 
     };
-
-
-    // ==========================
-    // Active Filters
-    // ==========================
 
     const hasFilters = Boolean(
         search ||
@@ -180,11 +142,6 @@ const Transactions = () => {
         endDate
     );
 
-
-    // ==========================
-    // Filter + Sort
-    // ==========================
-
     const filteredTransactions = useMemo(() => {
 
         const searchTerm =
@@ -192,48 +149,38 @@ const Transactions = () => {
                 .trim()
                 .toLowerCase();
 
-
         const filtered =
             transactions.filter(
                 (transaction) => {
 
                     const matchesSearch =
-
                         transaction.description
                             ?.toLowerCase()
                             .includes(searchTerm)
-
                         ||
-
                         transaction.category?.name
                             ?.toLowerCase()
                             .includes(searchTerm);
-
 
                     const matchesType =
                         type === "" ||
                         transaction.type === type;
 
-
                     const matchesCategory =
                         category === "" ||
                         transaction.category?._id === category;
-
 
                     const transactionDate =
                         new Date(
                             transaction.date
                         );
 
-
                     const matchesStartDate =
                         !startDate ||
                         transactionDate >=
                         new Date(startDate);
 
-
                     let matchesEndDate = true;
-
 
                     if (endDate) {
 
@@ -247,30 +194,21 @@ const Transactions = () => {
                             999
                         );
 
-
                         matchesEndDate =
                             transactionDate <= end;
 
                     }
 
-
                     return (
-
                         matchesSearch &&
-
                         matchesType &&
-
                         matchesCategory &&
-
                         matchesStartDate &&
-
                         matchesEndDate
-
                     );
 
                 }
             );
-
 
         switch (sortBy) {
 
@@ -284,7 +222,6 @@ const Transactions = () => {
 
                 break;
 
-
             case "oldest":
 
                 filtered.sort(
@@ -294,7 +231,6 @@ const Transactions = () => {
                 );
 
                 break;
-
 
             case "highest":
 
@@ -306,7 +242,6 @@ const Transactions = () => {
 
                 break;
 
-
             case "lowest":
 
                 filtered.sort(
@@ -317,13 +252,11 @@ const Transactions = () => {
 
                 break;
 
-
             default:
 
                 break;
 
         }
-
 
         return filtered;
 
@@ -337,33 +270,24 @@ const Transactions = () => {
         sortBy,
     ]);
 
-
-    // ==========================
-    // Pagination
-    // ==========================
-
     const totalPages = Math.ceil(
         filteredTransactions.length /
         pageSize
     );
 
-
     const startIndex =
         (currentPage - 1) *
         pageSize;
 
-
     const endIndex =
         startIndex +
         pageSize;
-
 
     const paginatedTransactions =
         filteredTransactions.slice(
             startIndex,
             endIndex
         );
-
 
     const handlePreviousPage = () => {
 
@@ -377,7 +301,6 @@ const Transactions = () => {
 
     };
 
-
     const handleNextPage = () => {
 
         if (currentPage < totalPages) {
@@ -390,11 +313,6 @@ const Transactions = () => {
 
     };
 
-
-    // ==========================
-    // Export
-    // ==========================
-
     const handleExportCSV = () => {
 
         exportCSV(
@@ -402,7 +320,6 @@ const Transactions = () => {
         );
 
     };
-
 
     const handleExportExcel = () => {
 
@@ -412,21 +329,11 @@ const Transactions = () => {
 
     };
 
-
-    // ==========================
-    // UI
-    // ==========================
-
     return (
 
         <DashboardLayout>
 
             <div className="finance-page space-y-8">
-
-
-                {/* ==========================
-                    Header
-                ========================== */}
 
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
 
@@ -438,7 +345,6 @@ const Transactions = () => {
 
                         </h1>
 
-
                         <p className="text-gray-500 mt-1">
 
                             Manage all your financial transactions.
@@ -447,76 +353,52 @@ const Transactions = () => {
 
                     </div>
 
-
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-3">
 
                         <button
                             onClick={handleExportCSV}
                             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
                         >
-
                             Export CSV
-
                         </button>
-
 
                         <button
                             onClick={handleExportExcel}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
                         >
-
                             Export Excel
+                        </button>
 
+                        <button
+                            onClick={handleAdd}
+                            className="finance-add-button"
+                        >
+                            + Add Transaction
                         </button>
 
                     </div>
 
                 </div>
 
-
-                {/* ==========================
-                    Summary Cards
-                ========================== */}
-
                 <TransactionSummaryCards
                     transactions={transactions}
                 />
 
-
-                {/* ==========================
-                    Filters
-                ========================== */}
-
                 <TransactionFilters
-
                     search={search}
                     setSearch={setSearch}
-
                     type={type}
                     setType={setType}
-
                     category={category}
                     setCategory={setCategory}
-
                     startDate={startDate}
                     setStartDate={setStartDate}
-
                     endDate={endDate}
                     setEndDate={setEndDate}
-
                     sortBy={sortBy}
                     setSortBy={setSortBy}
-
                     categories={[]}
-
-                    onAdd={handleAdd}
-
                 />
-
-
-                {/* ==========================
-                    Table
-                ========================== */}
 
                 {loading ? (
 
@@ -545,120 +427,71 @@ const Transactions = () => {
                 ) : (
 
                     <TransactionTable
-
                         transactions={
                             paginatedTransactions
                         }
-
                         hasFilters={hasFilters}
-
                         onView={handleView}
-
                         onEdit={handleEdit}
-
                         onDelete={handleDelete}
-
                     />
 
                 )}
 
-
-                {/* ==========================
-                    Pagination
-                ========================== */}
-
                 <TransactionPagination
-
                     currentPage={currentPage}
-
                     totalPages={totalPages}
-
                     pageSize={pageSize}
-
                     setPageSize={setPageSize}
-
                     totalItems={
                         filteredTransactions.length
                     }
-
                     startIndex={startIndex}
-
                     endIndex={
                         Math.min(
                             endIndex,
                             filteredTransactions.length
                         )
                     }
-
                     onPrevious={
                         handlePreviousPage
                     }
-
                     onNext={
                         handleNextPage
                     }
-
                 />
 
-
-                {/* ==========================
-                    Add / Edit
-                ========================== */}
-
                 <TransactionFormModal
-
                     open={openModal}
-
                     onClose={handleCloseModal}
-
                     mode={
                         selectedTransaction
                             ? "edit"
                             : "add"
                     }
-
                     transaction={
                         selectedTransaction
                     }
-
                 />
 
-
-                {/* ==========================
-                    Delete
-                ========================== */}
-
                 <DeleteTransactionModal
-
                     open={deleteModalOpen}
-
                     onClose={
                         handleCloseDeleteModal
                     }
-
                     transaction={
                         selectedTransaction
                     }
-
                 />
 
-
-                {/* ==========================
-                    Details
-                ========================== */}
-
                 <TransactionDetailsModal
-
                     open={detailsOpen}
-
                     onClose={
                         handleCloseDetails
                     }
-
                     transaction={
                         selectedTransaction
                     }
-
                 />
 
             </div>
@@ -668,6 +501,5 @@ const Transactions = () => {
     );
 
 };
-
 
 export default Transactions;

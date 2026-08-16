@@ -15,21 +15,14 @@ import CategoryTable from "../../components/categories/CategoryTable";
 import CategoryFormModal from "../../components/categories/CategoryFormModal";
 import DeleteCategoryModal from "../../components/categories/DeleteCategoryModal";
 import CategoryFilters from "../../components/categories/CategoryFilters";
-import CategoryPagination from "../../components/categories/CategoryPagination";
 
 import {
     fetchCategories,
 } from "../../features/category/categorySlice";
 
-
 const Categories = () => {
 
     const dispatch = useDispatch();
-
-
-    // ==========================
-    // Modal State
-    // ==========================
 
     const [openModal, setOpenModal] =
         useState(false);
@@ -40,35 +33,11 @@ const Categories = () => {
     const [selectedCategory, setSelectedCategory] =
         useState(null);
 
-
-    // ==========================
-    // Filter State
-    // ==========================
-
     const [search, setSearch] =
         useState("");
 
     const [type, setType] =
         useState("");
-
-    const [sortBy, setSortBy] =
-        useState("nameAsc");
-
-
-    // ==========================
-    // Pagination
-    // ==========================
-
-    const [currentPage, setCurrentPage] =
-        useState(1);
-
-    const [pageSize, setPageSize] =
-        useState(10);
-
-
-    // ==========================
-    // Redux
-    // ==========================
 
     const {
         categories,
@@ -78,36 +47,11 @@ const Categories = () => {
         (state) => state.category
     );
 
-
-    // ==========================
-    // Fetch
-    // ==========================
-
     useEffect(() => {
 
         dispatch(fetchCategories());
 
     }, [dispatch]);
-
-
-    // ==========================
-    // Reset Pagination
-    // ==========================
-
-    useEffect(() => {
-
-        setCurrentPage(1);
-
-    }, [
-        search,
-        type,
-        sortBy,
-    ]);
-
-
-    // ==========================
-    // Handlers
-    // ==========================
 
     const handleEdit = (category) => {
 
@@ -117,7 +61,6 @@ const Categories = () => {
 
     };
 
-
     const handleAdd = () => {
 
         setSelectedCategory(null);
@@ -125,7 +68,6 @@ const Categories = () => {
         setOpenModal(true);
 
     };
-
 
     const handleDelete = (category) => {
 
@@ -135,7 +77,6 @@ const Categories = () => {
 
     };
 
-
     const handleCloseDeleteModal = () => {
 
         setDeleteModalOpen(false);
@@ -144,40 +85,8 @@ const Categories = () => {
 
     };
 
-
-    const handlePreviousPage = () => {
-
-        if (currentPage > 1) {
-
-            setCurrentPage(
-                (prev) => prev - 1
-            );
-
-        }
-
-    };
-
-
-    const handleNextPage = () => {
-
-        if (currentPage < totalPages) {
-
-            setCurrentPage(
-                (prev) => prev + 1
-            );
-
-        }
-
-    };
-
-
-    // ==========================
-    // Filter + Sort
-    // ==========================
-
     const filteredCategories =
         [...categories]
-
             .filter((category) => {
 
                 const matchesSearch =
@@ -187,11 +96,9 @@ const Categories = () => {
                             search.toLowerCase()
                         );
 
-
                 const matchesType =
                     type === "" ||
                     category.type === type;
-
 
                 return (
                     matchesSearch &&
@@ -199,82 +106,9 @@ const Categories = () => {
                 );
 
             })
-
-            .sort((a, b) => {
-
-                switch (sortBy) {
-
-                    case "nameAsc":
-
-                        return a.name.localeCompare(
-                            b.name
-                        );
-
-
-                    case "nameDesc":
-
-                        return b.name.localeCompare(
-                            a.name
-                        );
-
-
-                    case "type":
-
-                        return a.type.localeCompare(
-                            b.type
-                        );
-
-
-                    case "latest":
-
-                        return (
-                            new Date(b.createdAt) -
-                            new Date(a.createdAt)
-                        );
-
-
-                    default:
-
-                        return 0;
-
-                }
-
-            });
-
-
-    // ==========================
-    // Pagination Data
-    // ==========================
-
-    const totalPages = Math.max(
-        1,
-        Math.ceil(
-            filteredCategories.length /
-            pageSize
-        )
-    );
-
-
-    const startIndex =
-        (currentPage - 1) *
-        pageSize;
-
-
-    const endIndex =
-        startIndex +
-        pageSize;
-
-
-    const paginatedCategories =
-        filteredCategories.slice(
-            startIndex,
-            endIndex
-        );
-
-
-    // ==========================
-    // UI
-    // ==========================
+            .sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
 
     return (
 
@@ -282,70 +116,52 @@ const Categories = () => {
 
             <div className="finance-page space-y-8">
 
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-                {/* ==========================
-                    Header
-                ========================== */}
+                    <div>
 
-                <div>
+                        <h1 className="text-3xl font-bold text-white">
 
-                    <h1 className="text-3xl font-bold">
+                            Categories
 
-                        Categories
+                        </h1>
 
-                    </h1>
+                        <p className="text-slate-400 mt-2">
 
+                            Manage all your financial categories.
 
-                    <p className="text-gray-500 mt-2">
+                        </p>
 
-                        Manage all your financial categories.
+                    </div>
 
-                    </p>
+                    <button
+                        type="button"
+                        onClick={handleAdd}
+                        className="finance-add-button"
+                    >
+                        + Add Category
+                    </button>
 
                 </div>
-
-
-                {/* ==========================
-                    Summary
-                ========================== */}
 
                 <CategorySummaryCards
                     categories={categories}
                 />
 
-
-                {/* ==========================
-                    Filters
-                ========================== */}
-
                 <CategoryFilters
-
                     search={search}
                     setSearch={setSearch}
-
                     type={type}
                     setType={setType}
-
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-
-                    onAdd={handleAdd}
-
                 />
-
-
-                {/* ==========================
-                    Content
-                ========================== */}
 
                 <div className="space-y-8">
 
-
                     {loading && (
 
-                        <div className="bg-white rounded-xl shadow-md p-8 text-center">
+                        <div className="bg-[#0f1b2d] border border-blue-900/40 rounded-xl shadow-md p-8 text-center">
 
-                            <p className="text-gray-500">
+                            <p className="text-slate-400">
 
                                 Loading categories...
 
@@ -355,12 +171,11 @@ const Categories = () => {
 
                     )}
 
-
                     {error && (
 
-                        <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+                        <div className="bg-red-950/30 border border-red-900/50 rounded-xl p-6">
 
-                            <p className="text-red-500">
+                            <p className="text-red-400">
 
                                 {error}
 
@@ -370,109 +185,44 @@ const Categories = () => {
 
                     )}
 
-
                     {!loading && !error && (
 
                         <CategoryTable
-
                             categories={
-                                paginatedCategories
+                                filteredCategories
                             }
-
                             onEdit={handleEdit}
-
                             onDelete={handleDelete}
-
                         />
 
                     )}
 
                 </div>
 
-
-                {/* ==========================
-                    Pagination
-                ========================== */}
-
-                <CategoryPagination
-
-                    currentPage={currentPage}
-
-                    totalPages={totalPages}
-
-                    pageSize={pageSize}
-
-                    setPageSize={setPageSize}
-
-                    totalItems={
-                        filteredCategories.length
-                    }
-
-                    startIndex={startIndex}
-
-                    endIndex={
-                        Math.min(
-                            endIndex,
-                            filteredCategories.length
-                        )
-                    }
-
-                    onPrevious={
-                        handlePreviousPage
-                    }
-
-                    onNext={
-                        handleNextPage
-                    }
-
-                />
-
-
-                {/* ==========================
-                    Form Modal
-                ========================== */}
-
                 <CategoryFormModal
-
                     open={openModal}
-
                     onClose={() => {
-
                         setOpenModal(false);
-
                         setSelectedCategory(null);
-
                     }}
-
                     mode={
                         selectedCategory
                             ? "edit"
                             : "add"
                     }
-
                     category={
                         selectedCategory
                     }
-
                 />
 
-
-                {/* ==========================
-                    Delete Modal
-                ========================== */}
-
                 <DeleteCategoryModal
-
                     open={deleteModalOpen}
-
                     onClose={
                         handleCloseDeleteModal
                     }
-
                     category={
                         selectedCategory
                     }
-
                 />
 
             </div>
@@ -482,6 +232,5 @@ const Categories = () => {
     );
 
 };
-
 
 export default Categories;

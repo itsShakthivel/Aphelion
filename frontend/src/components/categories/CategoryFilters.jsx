@@ -3,155 +3,68 @@ const CategoryFilters = ({
     setSearch,
     type,
     setType,
-    sortBy,
-    setSortBy,
-    onAdd,
 }) => {
+
+    const tabs = [
+        {
+            label: "All",
+            value: "",
+        },
+        {
+            label: "Expense",
+            value: "expense",
+        },
+        {
+            label: "Income",
+            value: "income",
+        },
+        {
+            label: "Investment",
+            value: "investment",
+        },
+        {
+            label: "Saving",
+            value: "saving",
+        },
+    ];
 
     return (
 
-        <div className="finance-filter">
+        <div className="space-y-5">
 
-            {/* ==========================================
-                Search
-            ========================================== */}
-
-            <div className="w-full">
+            <div className="w-full lg:max-w-md">
 
                 <input
-
                     type="text"
-
-                    placeholder="Search category..."
-
+                    placeholder="Search categories..."
                     value={search}
-
                     onChange={(e) =>
                         setSearch(e.target.value)
                     }
-
-                    className="
-                        w-full
-                        border
-                        rounded-lg
-                        px-4
-                        py-2.5
-                    "
-
+                    className="w-full bg-[#0f1b2d] border border-blue-900/40 text-white placeholder:text-slate-500 rounded-xl px-4 py-3 outline-none focus:border-blue-500/60 transition-colors"
                 />
 
             </div>
 
+            <div className="flex flex-wrap gap-2">
 
-            {/* ==========================================
-                Type + Sort
-            ========================================== */}
+                {tabs.map((tab) => (
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <button
+                        key={tab.value}
+                        onClick={() =>
+                            setType(tab.value)
+                        }
+                        className={`px-5 py-2.5 rounded-xl border transition-all duration-200 ${
+                            type === tab.value
+                                ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/20"
+                                : "bg-[#0f1b2d] border-blue-900/40 text-slate-400 hover:bg-[#172b46] hover:text-white"
+                        }`}
+                    >
+                        {tab.label}
+                    </button>
 
-                {/* Type */}
-
-                <select
-
-                    value={type}
-
-                    onChange={(e) =>
-                        setType(e.target.value)
-                    }
-
-                    className="
-                        w-full
-                        border
-                        rounded-lg
-                        px-4
-                        py-2.5
-                    "
-
-                >
-
-                    <option value="">
-                        All Types
-                    </option>
-
-                    <option value="expense">
-                        Expense
-                    </option>
-
-                    <option value="income">
-                        Income
-                    </option>
-
-                    <option value="investment">
-                        Investment
-                    </option>
-
-                    <option value="saving">
-                        Saving
-                    </option>
-
-                </select>
-
-
-                {/* Sort */}
-
-                <select
-
-                    value={sortBy}
-
-                    onChange={(e) =>
-                        setSortBy(e.target.value)
-                    }
-
-                    className="
-                        w-full
-                        border
-                        rounded-lg
-                        px-4
-                        py-2.5
-                    "
-
-                >
-
-                    <option value="nameAsc">
-                        Name (A-Z)
-                    </option>
-
-                    <option value="nameDesc">
-                        Name (Z-A)
-                    </option>
-
-                    <option value="type">
-                        Type
-                    </option>
-
-                    <option value="latest">
-                        Recently Created
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            {/* ==========================================
-                Add Category
-            ========================================== */}
-
-            <div className="mt-4">
-
-                <button
-
-                    onClick={onAdd}
-
-                    className="
-                        finance-add-button
-                    "
-
-                >
-
-                    + Add Category
-
-                </button>
+                ))}
 
             </div>
 
@@ -160,6 +73,5 @@ const CategoryFilters = ({
     );
 
 };
-
 
 export default CategoryFilters;

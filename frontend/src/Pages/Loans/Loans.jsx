@@ -16,30 +16,33 @@ import {
     fetchLoans,
 } from "../../features/loan/loanSlice";
 
-
 const Loans = () => {
 
     const dispatch = useDispatch();
 
+    const [openModal, setOpenModal] =
+        useState(false);
 
-    const [openModal, setOpenModal] = useState(false);
+    const [selectedLoan, setSelectedLoan] =
+        useState(null);
 
-    const [selectedLoan, setSelectedLoan] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] =
+        useState(false);
 
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [search, setSearch] =
+        useState("");
 
+    const [type, setType] =
+        useState("");
 
-    const [search, setSearch] = useState("");
+    const [lender, setLender] =
+        useState("");
 
-    const [type, setType] = useState("");
+    const [currentPage, setCurrentPage] =
+        useState(1);
 
-    const [lender, setLender] = useState("");
-
-
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const [pageSize, setPageSize] = useState(10);
-
+    const [pageSize, setPageSize] =
+        useState(10);
 
     const {
         loans,
@@ -49,13 +52,11 @@ const Loans = () => {
         (state) => state.loan
     );
 
-
     useEffect(() => {
 
         dispatch(fetchLoans());
 
     }, [dispatch]);
-
 
     useEffect(() => {
 
@@ -67,7 +68,6 @@ const Loans = () => {
         lender,
     ]);
 
-
     const handleAdd = () => {
 
         setSelectedLoan(null);
@@ -75,7 +75,6 @@ const Loans = () => {
         setOpenModal(true);
 
     };
-
 
     const handleEdit = (loan) => {
 
@@ -85,7 +84,6 @@ const Loans = () => {
 
     };
 
-
     const handleDelete = (loan) => {
 
         setSelectedLoan(loan);
@@ -93,7 +91,6 @@ const Loans = () => {
         setDeleteModalOpen(true);
 
     };
-
 
     const handleCloseModal = () => {
 
@@ -103,7 +100,6 @@ const Loans = () => {
 
     };
 
-
     const handleCloseDeleteModal = () => {
 
         setDeleteModalOpen(false);
@@ -111,7 +107,6 @@ const Loans = () => {
         setSelectedLoan(null);
 
     };
-
 
     const handlePreviousPage = () => {
 
@@ -125,6 +120,63 @@ const Loans = () => {
 
     };
 
+    const filteredLoans =
+        loans.filter((loan) => {
+
+            const matchesSearch =
+                loan.loanName
+                    .toLowerCase()
+                    .includes(
+                        search.toLowerCase()
+                    )
+                ||
+                loan.lender
+                    .toLowerCase()
+                    .includes(
+                        search.toLowerCase()
+                    );
+
+            const matchesType =
+                type === "" ||
+                loan.type === type;
+
+            const matchesLender =
+                lender === "" ||
+                loan.lender
+                    .toLowerCase()
+                    .includes(
+                        lender.toLowerCase()
+                    );
+
+            return (
+                matchesSearch &&
+                matchesType &&
+                matchesLender
+            );
+
+        });
+
+    const totalPages = Math.max(
+        1,
+        Math.ceil(
+            filteredLoans.length /
+            pageSize
+        )
+    );
+
+    const startIndex =
+        (currentPage - 1) *
+        pageSize;
+
+    const endIndex =
+        startIndex +
+        pageSize;
+
+    const paginatedLoans =
+        filteredLoans.slice(
+            startIndex,
+            endIndex
+        );
 
     const handleNextPage = () => {
 
@@ -138,178 +190,81 @@ const Loans = () => {
 
     };
 
-
-    const filteredLoans = loans.filter(
-        (loan) => {
-
-            const matchesSearch =
-
-                loan.loanName
-                    .toLowerCase()
-                    .includes(
-                        search.toLowerCase()
-                    )
-
-                ||
-
-                loan.lender
-                    .toLowerCase()
-                    .includes(
-                        search.toLowerCase()
-                    );
-
-
-            const matchesType =
-                type === "" ||
-                loan.type === type;
-
-
-            const matchesLender =
-                lender === "" ||
-                loan.lender
-                    .toLowerCase()
-                    .includes(
-                        lender.toLowerCase()
-                    );
-
-
-            return (
-                matchesSearch &&
-                matchesType &&
-                matchesLender
-            );
-
-        }
-    );
-
-
-    const totalPages = Math.max(
-        1,
-        Math.ceil(
-            filteredLoans.length /
-            pageSize
-        )
-    );
-
-
-    const startIndex =
-        (currentPage - 1) *
-        pageSize;
-
-
-    const endIndex =
-        startIndex +
-        pageSize;
-
-
-    const paginatedLoans =
-        filteredLoans.slice(
-            startIndex,
-            endIndex
-        );
-
-
     return (
 
         <DashboardLayout>
 
             <div className="finance-page space-y-8">
 
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-                {/* HEADER */}
+                    <div>
 
-                <div>
+                        <h1 className="text-3xl font-bold">
 
-                    <h1 className="text-3xl font-bold">
+                            Loans
 
-                        Loans
+                        </h1>
 
-                    </h1>
+                        <p className="text-gray-500 mt-2">
 
-                    <p className="text-gray-500 mt-2">
+                            Manage all your loans.
 
-                        Manage all your loans.
+                        </p>
 
-                    </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handleAdd}
+                        className="finance-add-button"
+                    >
+                        + Add Loan
+                    </button>
 
                 </div>
-
-
-                {/* SUMMARY */}
 
                 <LoanSummaryCards
                     loans={loans}
                 />
 
-
-                {/* FILTERS */}
-
                 <LoanFilters
-
                     search={search}
                     setSearch={setSearch}
-
                     type={type}
                     setType={setType}
-
                     lender={lender}
                     setLender={setLender}
-
-                    onAdd={handleAdd}
-
                 />
-
-
-                {/* TABLE */}
 
                 <LoanTable
-
                     loans={paginatedLoans}
-
                     onEdit={handleEdit}
-
                     onDelete={handleDelete}
-
                 />
 
-
-                {/* PAGINATION */}
-
                 <LoanPagination
-
                     currentPage={currentPage}
-
                     totalPages={totalPages}
-
                     pageSize={pageSize}
-
                     setPageSize={setPageSize}
-
                     totalItems={
                         filteredLoans.length
                     }
-
                     startIndex={startIndex}
-
                     endIndex={
                         Math.min(
                             endIndex,
                             filteredLoans.length
                         )
                     }
-
                     onPrevious={
                         handlePreviousPage
                     }
-
                     onNext={
                         handleNextPage
                     }
-
                 />
-
-
-                {/* CHARTS */}
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
@@ -323,23 +278,13 @@ const Loans = () => {
 
                 </div>
 
-
-                {/* DELETE */}
-
                 <DeleteLoanModal
-
                     open={deleteModalOpen}
-
                     onClose={
                         handleCloseDeleteModal
                     }
-
                     loan={selectedLoan}
-
                 />
-
-
-                {/* LOADING */}
 
                 {loading && (
 
@@ -351,9 +296,6 @@ const Loans = () => {
 
                 )}
 
-
-                {/* ERROR */}
-
                 {error && (
 
                     <p className="text-red-500">
@@ -364,23 +306,15 @@ const Loans = () => {
 
                 )}
 
-
-                {/* FORM */}
-
                 <LoanFormModal
-
                     open={openModal}
-
                     onClose={handleCloseModal}
-
                     mode={
                         selectedLoan
                             ? "edit"
                             : "add"
                     }
-
                     loan={selectedLoan}
-
                 />
 
             </div>
