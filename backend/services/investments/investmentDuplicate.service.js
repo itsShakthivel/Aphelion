@@ -5,7 +5,7 @@ import Investment from "../../models/Investment.js";
 // NORMALIZE INVESTMENT NAME
 // ======================================================
 
-const normalizeInvestmentName = (
+export const normalizeInvestmentName = (
     name
 ) => {
 
@@ -18,6 +18,23 @@ const normalizeInvestmentName = (
 
 
 // ======================================================
+// ESCAPE REGEX
+// ======================================================
+
+export const escapeRegex = (
+    value
+) => {
+
+    return String(value)
+        .replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+        );
+
+};
+
+
+// ======================================================
 // FIND EXISTING INVESTMENT
 // ======================================================
 
@@ -25,6 +42,7 @@ export const findExistingInvestment = async ({
     userId,
     name,
     source,
+    session = null,
 }) => {
 
     if (!userId) {
@@ -45,33 +63,43 @@ export const findExistingInvestment = async ({
     }
 
 
-    const normalizedName =
-        normalizeInvestmentName(
-            name
+    const query = {
+
+        user: userId,
+
+        source:
+            source || "manual",
+
+        name: {
+
+            $regex:
+                `^${escapeRegex(
+                    name.trim()
+                )}$`,
+
+            $options: "i",
+
+        },
+
+    };
+
+
+    const databaseQuery =
+        Investment.findOne(
+            query
         );
 
 
-    const investments =
-        await Investment.find({
+    if (session) {
 
-            user: userId,
-
-            source:
-                source || "manual",
-
-        });
-
-
-    const existingInvestment =
-        investments.find(
-            (investment) =>
-                normalizeInvestmentName(
-                    investment.name
-                ) === normalizedName
+        databaseQuery.session(
+            session
         );
 
+    }
 
-    return existingInvestment || null;
+
+    return await databaseQuery;
 
 };
 
@@ -95,7 +123,9 @@ export const checkInvestmentDuplicates = async ({
 
 
     if (
-        !Array.isArray(holdings)
+        !Array.isArray(
+            holdings
+        )
     ) {
 
         throw new Error(

@@ -3,7 +3,11 @@ import parseAngelOneFundHoldings from "../services/investments/angelOneParser.js
 
 import {
     prepareAngelOneImport,
+    importAngelOneHoldings,
 } from "../services/investments/investmentImport.service.js";
+import {
+    getInvestmentPortfolio,
+} from "../services/investments/investmentPortfolio.service.js";
 
 
 // ======================================================
@@ -129,6 +133,85 @@ export const previewAngelOneImport = async (
 
         console.error(
             "Angel One Import Preview Error:",
+            error
+        );
+
+
+        res.status(400).json({
+
+            success: false,
+
+            message:
+                error.message,
+
+        });
+
+    }
+
+};
+
+// ======================================================
+// CONFIRM ANGEL ONE IMPORT
+// ======================================================
+
+export const confirmAngelOneImport = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const {
+            holdings,
+        } = req.body;
+
+
+        if (
+            !Array.isArray(holdings) ||
+            holdings.length === 0
+        ) {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    "No investment holdings were provided.",
+
+            });
+
+        }
+
+
+        const result =
+            await importAngelOneHoldings({
+
+                userId:
+                    req.user.id,
+
+                holdings,
+
+            });
+
+
+        res.status(200).json({
+
+            success: true,
+
+            message:
+                "Angel One portfolio imported successfully.",
+
+            data:
+                result,
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Angel One Import Error:",
             error
         );
 
@@ -423,6 +506,55 @@ export const deleteInvestment = async (
         res.status(500).json({
 
             message: error.message,
+
+        });
+
+    }
+
+};
+
+// ======================================================
+// GET INVESTMENT PORTFOLIO
+// ======================================================
+
+export const getInvestmentPortfolioController = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const portfolio =
+            await getInvestmentPortfolio(
+                req.user.id
+            );
+
+
+        res.status(200).json({
+
+            success: true,
+
+            data:
+                portfolio,
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Get Investment Portfolio Error:",
+            error
+        );
+
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message,
 
         });
 

@@ -544,7 +544,7 @@ export const parseAngelOneFundHoldings = (
 
 
     // ==============================================
-    // Find dynamic date columns
+    // Find dynamic value/NAV columns
     // ==============================================
 
     const currentValueHeader =

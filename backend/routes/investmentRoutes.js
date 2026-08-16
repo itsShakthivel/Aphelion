@@ -7,6 +7,8 @@ import {
     updateInvestment,
     deleteInvestment,
     previewAngelOneImport,
+    confirmAngelOneImport,
+    getInvestmentPortfolioController,
 } from "../controllers/investmentController.js";
 
 import protect
@@ -38,6 +40,19 @@ router.post(
 
 );
 
+// ======================================================
+// CONFIRM ANGEL ONE IMPORT
+// ======================================================
+
+router.post(
+
+    "/import/angel-one/confirm",
+
+    protect,
+
+    confirmAngelOneImport
+
+);
 
 // ======================================================
 // CREATE
@@ -65,6 +80,20 @@ router.get(
     protect,
 
     getInvestments
+
+);
+
+// ======================================================
+// GET INVESTMENT PORTFOLIO
+// ======================================================
+
+router.get(
+
+    "/portfolio",
+
+    protect,
+
+    getInvestmentPortfolioController
 
 );
 
