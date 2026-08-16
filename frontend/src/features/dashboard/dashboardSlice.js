@@ -3,11 +3,12 @@ import { getDashboard } from "../../api/dashboardApi.js";
 
 export const fetchDashboard = createAsyncThunk(
     "dashboard/fetch",
-
     async (_, thunkAPI) => {
+
         try {
 
-            const response = await getDashboard();
+            const response =
+                await getDashboard();
 
             return response.data;
 
@@ -19,6 +20,7 @@ export const fetchDashboard = createAsyncThunk(
             );
 
         }
+
     }
 );
 
@@ -39,26 +41,37 @@ const dashboardSlice = createSlice({
 
         builder
 
-            .addCase(fetchDashboard.pending, (state) => {
+            .addCase(
+                fetchDashboard.pending,
+                (state) => {
 
-                state.loading = true;
-                state.error = null;
+                    state.loading = true;
+                    state.error = null;
 
-            })
+                }
+            )
 
-            .addCase(fetchDashboard.fulfilled, (state, action) => {
+            .addCase(
+                fetchDashboard.fulfilled,
+                (state, action) => {
 
-                state.loading = false;
-                state.data = action.payload;
+                    state.loading = false;
+                    state.data =
+                        action.payload;
 
-            })
+                }
+            )
 
-            .addCase(fetchDashboard.rejected, (state, action) => {
+            .addCase(
+                fetchDashboard.rejected,
+                (state, action) => {
 
-                state.loading = false;
-                state.error = action.payload;
+                    state.loading = false;
+                    state.error =
+                        action.payload;
 
-            });
+                }
+            );
 
     },
 });

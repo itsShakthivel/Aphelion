@@ -1,156 +1,441 @@
 import Transaction from "../models/Transaction.js";
+import Investment from "../models/Investment.js";
 
-//Create
-export const createTransaction = async (req, res) => {
-    try {
-        const transaction = await Transaction.create({
-            user: req.user.id,
-            amount: req.body.amount,
-            type: req.body.type,
-            category: req.body.category,
-            description: req.body.description,
-            date: req.body.date,
+const investmentModes = [
+    "sip",
+    "one_time",
+];
+
+const validateInvestmentData = async ({
+    userId,
+    type,
+    investmentId,
+    investmentMode,
+}) => {
+
+    if (type !== "investment") {
+
+        return {
+            valid: true,
+            investment: null,
+        };
+
+    }
+
+    if (!investmentId) {
+
+        return {
+            valid: false,
+            status: 400,
+            message:
+                "Investment is required for investment transactions.",
+        };
+
+    }
+
+    if (
+        !investmentMode ||
+        !investmentModes.includes(
+            investmentMode
+        )
+    ) {
+
+        return {
+            valid: false,
+            status: 400,
+            message:
+                "Investment mode must be SIP or One-Time.",
+        };
+
+    }
+
+    const investment =
+        await Investment.findOne({
+            _id: investmentId,
+            user: userId,
         });
+
+    if (!investment) {
+
+        return {
+            valid: false,
+            status: 404,
+            message:
+                "Investment not found.",
+        };
+
+    }
+
+    return {
+        valid: true,
+        investment,
+    };
+
+};
+
+export const createTransaction = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const {
+            amount,
+            type,
+            category,
+            description,
+            date,
+            investmentId,
+            investmentMode,
+        } = req.body;
+
+        const investmentValidation =
+            await validateInvestmentData({
+                userId:
+                    req.user.id,
+
+                type,
+
+                investmentId,
+
+                investmentMode,
+            });
+
+        if (
+            !investmentValidation.valid
+        ) {
+
+            return res.status(
+                investmentValidation.status
+            ).json({
+                message:
+                    investmentValidation.message,
+            });
+
+        }
+
+        const transactionData = {
+            user:
+                req.user.id,
+
+            amount,
+
+            type,
+
+            category,
+
+            description,
+
+            date,
+        };
+
+        if (
+            type === "investment"
+        ) {
+
+            transactionData.investmentId =
+                investmentId;
+
+            transactionData.investmentMode =
+                investmentMode;
+
+        }
+
+        const transaction =
+            await Transaction.create(
+                transactionData
+            );
+
+        const populatedTransaction =
+            await Transaction.findById(
+                transaction._id
+            )
+                .populate("category")
+                .populate("investmentId");
 
         res
             .status(201)
-            .json(transaction);
+            .json(
+                populatedTransaction
+            );
 
     } catch (error) {
+
+        console.error(
+            "Create Transaction Error:",
+            error
+        );
+
         res
             .status(500)
             .json({
-                message: error.message,
+                message:
+                    error.message,
             });
+
     }
+
 };
 
-//GET All
+export const getTransactions = async (
+    req,
+    res
+) => {
 
-export const getTransactions = async (req, res) => {
     try {
-        const transaction = await Transaction.find({
-            user: req.user.id
-        })
-        .populate(
-            "category"
-        )
-        .sort({
-            date: -1
-        });
+
+        const transactions =
+            await Transaction.find({
+                user:
+                    req.user.id,
+            })
+                .populate("category")
+                .populate("investmentId")
+                .sort({
+                    date: -1,
+                });
 
         res.json(
-            transaction
+            transactions
         );
 
     } catch (error) {
-        res
-            .status(500)
-            .json({
-                message: error.message,
-            });
-    }
-};
 
-//GET One
-
-export const getTransaction = async (req, res) => {
-    try {
-        const transaction = await Transaction.findOne({
-            _id: req.params.id,
-            user: req.user.id,
-        }).populate("category");
-
-        if(!transaction) {
-            return res.status(404).json({
-                message: "Transaction not found",
-            });
-        }
-        res.json(
-            transaction
+        console.error(
+            "Get Transactions Error:",
+            error
         );
 
-    } catch(error) {
         res
             .status(500)
             .json({
-                message: error.message,
+                message:
+                    error.message,
             });
+
     }
+
 };
 
-// UPDATE
-export const updateTransaction = async (req, res) => {
+export const getTransaction = async (
+    req,
+    res
+) => {
 
     try {
 
         const transaction =
-            await Transaction.findOneAndUpdate(
+            await Transaction.findOne({
+                _id:
+                    req.params.id,
 
-                {
-                    _id: req.params.id,
-                    user: req.user.id,
-                },
-
-                req.body,
-
-                {
-                    new: true,
-                }
-
-            );
+                user:
+                    req.user.id,
+            })
+                .populate("category")
+                .populate("investmentId");
 
         if (!transaction) {
 
             return res.status(404).json({
-                message: "Transaction not found",
+                message:
+                    "Transaction not found",
             });
 
         }
 
-        res.json(transaction);
+        res.json(
+            transaction
+        );
 
     } catch (error) {
 
-        res.status(500).json({
-            message: error.message,
-        });
+        console.error(
+            "Get Transaction Error:",
+            error
+        );
+
+        res
+            .status(500)
+            .json({
+                message:
+                    error.message,
+            });
 
     }
 
 };
 
-// DELETE
-export const deleteTransaction = async (req, res) => {
+export const updateTransaction = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const transaction =
+            await Transaction.findOne({
+                _id:
+                    req.params.id,
+
+                user:
+                    req.user.id,
+            });
+
+        if (!transaction) {
+
+            return res.status(404).json({
+                message:
+                    "Transaction not found",
+            });
+
+        }
+
+        const {
+            amount,
+            type,
+            category,
+            description,
+            date,
+            investmentId,
+            investmentMode,
+        } = req.body;
+
+        const investmentValidation =
+            await validateInvestmentData({
+                userId:
+                    req.user.id,
+
+                type,
+
+                investmentId,
+
+                investmentMode,
+            });
+
+        if (
+            !investmentValidation.valid
+        ) {
+
+            return res.status(
+                investmentValidation.status
+            ).json({
+                message:
+                    investmentValidation.message,
+            });
+
+        }
+
+        transaction.amount =
+            amount;
+
+        transaction.type =
+            type;
+
+        transaction.category =
+            category;
+
+        transaction.description =
+            description;
+
+        transaction.date =
+            date;
+
+        if (
+            type === "investment"
+        ) {
+
+            transaction.investmentId =
+                investmentId;
+
+            transaction.investmentMode =
+                investmentMode;
+
+        } else {
+
+            transaction.investmentId =
+                null;
+
+            transaction.investmentMode =
+                null;
+
+        }
+
+        await transaction.save();
+
+        const updatedTransaction =
+            await Transaction.findById(
+                transaction._id
+            )
+                .populate("category")
+                .populate("investmentId");
+
+        res.json(
+            updatedTransaction
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Update Transaction Error:",
+            error
+        );
+
+        res
+            .status(500)
+            .json({
+                message:
+                    error.message,
+            });
+
+    }
+
+};
+
+export const deleteTransaction = async (
+    req,
+    res
+) => {
 
     try {
 
         const transaction =
             await Transaction.findOneAndDelete({
+                _id:
+                    req.params.id,
 
-                _id: req.params.id,
-
-                user: req.user.id,
-
+                user:
+                    req.user.id,
             });
 
         if (!transaction) {
 
             return res.status(404).json({
-                message: "Transaction not found",
+                message:
+                    "Transaction not found",
             });
 
         }
 
         res.json({
-            message: "Transaction deleted",
+            message:
+                "Transaction deleted",
         });
 
     } catch (error) {
 
-        res.status(500).json({
-            message: error.message,
-        });
+        console.error(
+            "Delete Transaction Error:",
+            error
+        );
+
+        res
+            .status(500)
+            .json({
+                message:
+                    error.message,
+            });
 
     }
 
