@@ -15,8 +15,23 @@ import {
     fetchInvestments,
 } from "../../features/investment/investmentSlice";
 
-import InvestmentTransactionOptions from "./InvestmentTransactionOptions";
-import InvestmentSelector from "./InvestmentSelector";
+import InvestmentTransactionOptions
+    from "./InvestmentTransactionOptions";
+
+import InvestmentSelector
+    from "./InvestmentSelector";
+
+import LoanTransactionOptions
+    from "./LoanTransactionOptions";
+
+import LoanSelector
+    from "./LoanSelector";
+
+import InsuranceTransactionOptions
+    from "./InsuranceTransactionOptions";
+
+import InsuranceSelector
+    from "./InsuranceSelector";
 
 const TransactionFormModal = ({
     open,
@@ -30,31 +45,62 @@ const TransactionFormModal = ({
     const {
         categories = [],
     } = useSelector(
-        (state) => state.category
+        (state) =>
+            state.category
     );
 
     const {
         investments = [],
-        loading: investmentsLoading,
+        loading:
+            investmentsLoading,
     } = useSelector(
-        (state) => state.investment
+        (state) =>
+            state.investment
     );
 
-    const [formData, setFormData] = useState({
+    const [
+        formData,
+        setFormData,
+    ] = useState({
         amount: "",
         type: "expense",
         category: "",
         description: "",
-        date: new Date()
-            .toISOString()
-            .split("T")[0],
+        date:
+            new Date()
+                .toISOString()
+                .split("T")[0],
     });
 
-    const [investmentMode, setInvestmentMode] =
-        useState("");
+    const [
+        investmentMode,
+        setInvestmentMode,
+    ] = useState("");
 
-    const [investmentId, setInvestmentId] =
-        useState("");
+    const [
+        investmentId,
+        setInvestmentId,
+    ] = useState("");
+
+    const [
+        loanTransactionType,
+        setLoanTransactionType,
+    ] = useState("");
+
+    const [
+        loanId,
+        setLoanId,
+    ] = useState("");
+
+    const [
+        insuranceTransactionType,
+        setInsuranceTransactionType,
+    ] = useState("");
+
+    const [
+        insuranceId,
+        setInsuranceId,
+    ] = useState("");
 
     useEffect(() => {
 
@@ -106,14 +152,23 @@ const TransactionFormModal = ({
                 type: "expense",
                 category: "",
                 description: "",
-                date: new Date()
-                    .toISOString()
-                    .split("T")[0],
+                date:
+                    new Date()
+                        .toISOString()
+                        .split("T")[0],
             });
 
             setInvestmentMode("");
 
             setInvestmentId("");
+
+            setLoanTransactionType("");
+
+            setLoanId("");
+
+            setInsuranceTransactionType("");
+
+            setInsuranceId("");
 
         }
 
@@ -131,7 +186,8 @@ const TransactionFormModal = ({
 
             setFormData({
                 amount:
-                    transaction.amount ?? "",
+                    transaction.amount ??
+                    "",
 
                 type:
                     transaction.type ??
@@ -146,7 +202,9 @@ const TransactionFormModal = ({
                     "",
 
                 date:
-                    transaction.date?.split("T")[0] ||
+                    transaction.date?.split(
+                        "T"
+                    )[0] ||
                     new Date()
                         .toISOString()
                         .split("T")[0],
@@ -160,6 +218,28 @@ const TransactionFormModal = ({
             setInvestmentId(
                 transaction.investmentId?._id ||
                 transaction.investmentId ||
+                ""
+            );
+
+            setLoanTransactionType(
+                transaction.loanTransactionType ||
+                ""
+            );
+
+            setLoanId(
+                transaction.loanId?._id ||
+                transaction.loanId ||
+                ""
+            );
+
+            setInsuranceTransactionType(
+                transaction.insuranceTransactionType ||
+                ""
+            );
+
+            setInsuranceId(
+                transaction.insuranceId?._id ||
+                transaction.insuranceId ||
                 ""
             );
 
@@ -177,7 +257,16 @@ const TransactionFormModal = ({
     }
 
     const isInvestment =
-        formData.type === "investment";
+        formData.type ===
+        "investment";
+
+    const isLoan =
+        formData.type ===
+        "loan";
+
+    const isInsurance =
+        formData.type ===
+        "insurance";
 
     const availableCategories =
         categories.filter(
@@ -207,15 +296,17 @@ const TransactionFormModal = ({
                 })
             );
 
-            if (
-                value !== "investment"
-            ) {
+            setInvestmentMode("");
 
-                setInvestmentMode("");
+            setInvestmentId("");
 
-                setInvestmentId("");
+            setLoanTransactionType("");
 
-            }
+            setLoanId("");
+
+            setInsuranceTransactionType("");
+
+            setInsuranceId("");
 
             return;
 
@@ -230,23 +321,71 @@ const TransactionFormModal = ({
 
     };
 
-    const handleInvestmentModeChange = (
+    const handleInvestmentModeChange =
+        (
+            value
+        ) => {
+
+            setInvestmentMode(
+                value
+            );
+
+            setInvestmentId("");
+
+        };
+
+    const handleInvestmentChange =
+        (
+            value
+        ) => {
+
+            setInvestmentId(
+                value
+            );
+
+        };
+
+    const handleLoanTransactionTypeChange =
+        (
+            value
+        ) => {
+
+            setLoanTransactionType(
+                value
+            );
+
+            setLoanId("");
+
+        };
+
+    const handleLoanChange = (
         value
     ) => {
 
-        setInvestmentMode(
+        setLoanId(
             value
         );
 
-        setInvestmentId("");
-
     };
 
-    const handleInvestmentChange = (
+    const handleInsuranceTransactionTypeChange =
+        (
+            value
+        ) => {
+
+            setInsuranceTransactionType(
+                value
+            );
+
+            setInsuranceId("");
+
+        };
+
+    const handleInsuranceChange = (
         value
     ) => {
 
-        setInvestmentId(
+        setInsuranceId(
             value
         );
 
@@ -271,6 +410,8 @@ const TransactionFormModal = ({
         }
 
         if (
+            !isLoan &&
+            !isInsurance &&
             !formData.category
         ) {
 
@@ -309,6 +450,58 @@ const TransactionFormModal = ({
         }
 
         if (
+            isLoan &&
+            !loanTransactionType
+        ) {
+
+            toast.error(
+                "Please select a loan transaction type"
+            );
+
+            return;
+
+        }
+
+        if (
+            isLoan &&
+            !loanId
+        ) {
+
+            toast.error(
+                "Please select a loan"
+            );
+
+            return;
+
+        }
+
+        if (
+            isInsurance &&
+            !insuranceTransactionType
+        ) {
+
+            toast.error(
+                "Please select an insurance transaction type"
+            );
+
+            return;
+
+        }
+
+        if (
+            isInsurance &&
+            !insuranceId
+        ) {
+
+            toast.error(
+                "Please select an insurance policy"
+            );
+
+            return;
+
+        }
+
+        if (
             !formData.description.trim()
         ) {
 
@@ -323,7 +516,9 @@ const TransactionFormModal = ({
         try {
 
             const transactionData = {
+
                 ...formData,
+
                 ...(isInvestment
                     ? {
                         investmentMode,
@@ -333,7 +528,38 @@ const TransactionFormModal = ({
                         investmentMode: "",
                         investmentId: "",
                     }),
+
+                ...(isLoan
+                    ? {
+                        loanTransactionType,
+                        loanId,
+                    }
+                    : {
+                        loanTransactionType: "",
+                        loanId: "",
+                    }),
+
+                ...(isInsurance
+                    ? {
+                        insuranceTransactionType,
+                        insuranceId,
+                    }
+                    : {
+                        insuranceTransactionType: "",
+                        insuranceId: "",
+                    }),
+
             };
+
+            if (
+                isLoan ||
+                isInsurance
+            ) {
+
+                transactionData.category =
+                    "";
+
+            }
 
             if (
                 mode === "add"
@@ -389,14 +615,18 @@ const TransactionFormModal = ({
 
                 <h2 className="text-2xl font-bold mb-6">
 
-                    {mode === "add"
-                        ? "Add Transaction"
-                        : "Edit Transaction"}
+                    {
+                        mode === "add"
+                            ? "Add Transaction"
+                            : "Edit Transaction"
+                    }
 
                 </h2>
 
                 <form
-                    onSubmit={handleSubmit}
+                    onSubmit={
+                        handleSubmit
+                    }
                     className="space-y-5"
                 >
 
@@ -458,6 +688,14 @@ const TransactionFormModal = ({
 
                             <option value="investment">
                                 Investment
+                            </option>
+
+                            <option value="loan">
+                                Loan
+                            </option>
+
+                            <option value="insurance">
+                                Insurance
                             </option>
 
                         </select>
@@ -533,50 +771,158 @@ const TransactionFormModal = ({
 
                     )}
 
-                    <div>
+                    {isLoan && (
 
-                        <label className="block text-sm font-medium mb-2">
+                        <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 space-y-5">
 
-                            Category
+                            <div>
 
-                        </label>
+                                <p className="text-sm font-semibold text-blue-700">
 
-                        <select
-                            name="category"
-                            value={
-                                formData.category
-                            }
-                            onChange={
-                                handleChange
-                            }
-                            className="w-full border rounded-lg p-3"
-                        >
+                                    Loan Transaction
 
-                            <option value="">
-                                Select Category
-                            </option>
+                                </p>
 
-                            {availableCategories.map(
-                                (category) => (
+                                <p className="text-sm text-blue-600 mt-1">
 
-                                    <option
-                                        key={
-                                            category._id
-                                        }
-                                        value={
-                                            category._id
-                                        }
-                                    >
-                                        {category.icon}{" "}
-                                        {category.name}
-                                    </option>
+                                    Select the loan and the type of loan activity.
 
-                                )
+                                </p>
+
+                            </div>
+
+                            <LoanTransactionOptions
+                                value={
+                                    loanTransactionType
+                                }
+                                onChange={
+                                    handleLoanTransactionTypeChange
+                                }
+                            />
+
+                            {loanTransactionType && (
+
+                                <LoanSelector
+                                    value={
+                                        loanId
+                                    }
+                                    onChange={
+                                        handleLoanChange
+                                    }
+                                />
+
                             )}
 
-                        </select>
+                        </div>
 
-                    </div>
+                    )}
+
+                    {isInsurance && (
+
+                        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 space-y-5">
+
+                            <div>
+
+                                <p className="text-sm font-semibold text-emerald-700">
+
+                                    Insurance Transaction
+
+                                </p>
+
+                                <p className="text-sm text-emerald-600 mt-1">
+
+                                    Select the insurance policy and transaction type.
+
+                                </p>
+
+                            </div>
+
+                            <InsuranceTransactionOptions
+                                value={
+                                    insuranceTransactionType
+                                }
+                                onChange={
+                                    handleInsuranceTransactionTypeChange
+                                }
+                            />
+
+                            {insuranceTransactionType && (
+
+                                <InsuranceSelector
+                                    value={
+                                        insuranceId
+                                    }
+                                    onChange={
+                                        handleInsuranceChange
+                                    }
+                                />
+
+                            )}
+
+                        </div>
+
+                    )}
+
+                    {!isLoan &&
+                        !isInsurance && (
+
+                            <div>
+
+                                <label className="block text-sm font-medium mb-2">
+
+                                    Category
+
+                                </label>
+
+                                <select
+                                    name="category"
+                                    value={
+                                        formData.category
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    className="w-full border rounded-lg p-3"
+                                >
+
+                                    <option value="">
+                                        Select Category
+                                    </option>
+
+                                    {
+                                        availableCategories.map(
+                                            (
+                                                category
+                                            ) => (
+
+                                                <option
+                                                    key={
+                                                        category._id
+                                                    }
+                                                    value={
+                                                        category._id
+                                                    }
+                                                >
+
+                                                    {
+                                                        category.icon
+                                                    }{" "}
+
+                                                    {
+                                                        category.name
+                                                    }
+
+                                                </option>
+
+                                            )
+                                        )
+                                    }
+
+                                </select>
+
+                            </div>
+
+                        )}
 
                     <div>
 
@@ -627,7 +973,9 @@ const TransactionFormModal = ({
 
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={
+                                onClose
+                            }
                             className="px-5 py-2 rounded-lg border"
                         >
                             Cancel
@@ -637,9 +985,11 @@ const TransactionFormModal = ({
                             type="submit"
                             className="px-5 py-2 rounded-lg bg-blue-600 text-white"
                         >
-                            {mode === "add"
-                                ? "Add"
-                                : "Update"}
+                            {
+                                mode === "add"
+                                    ? "Add"
+                                    : "Update"
+                            }
                         </button>
 
                     </div>

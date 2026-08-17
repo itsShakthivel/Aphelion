@@ -1,9 +1,23 @@
 import Transaction from "../models/Transaction.js";
 import Investment from "../models/Investment.js";
+import Loan from "../models/Loan.js";
+import Insurance from "../models/Insurance.js";
 
 const investmentModes = [
     "sip",
     "one_time",
+];
+
+const loanTransactionTypes = [
+    "disbursement",
+    "emi",
+    "principal",
+    "interest",
+];
+
+const insuranceTransactionTypes = [
+    "premium",
+    "policy_expense",
 ];
 
 const validateInvestmentData = async ({
@@ -73,6 +87,140 @@ const validateInvestmentData = async ({
 
 };
 
+const validateLoanData = async ({
+    userId,
+    type,
+    loanId,
+    loanTransactionType,
+}) => {
+
+    if (type !== "loan") {
+
+        return {
+            valid: true,
+            loan: null,
+        };
+
+    }
+
+    if (!loanId) {
+
+        return {
+            valid: false,
+            status: 400,
+            message:
+                "Loan is required for loan transactions.",
+        };
+
+    }
+
+    if (
+        !loanTransactionType ||
+        !loanTransactionTypes.includes(
+            loanTransactionType
+        )
+    ) {
+
+        return {
+            valid: false,
+            status: 400,
+            message:
+                "Invalid loan transaction type.",
+        };
+
+    }
+
+    const loan =
+        await Loan.findOne({
+            _id: loanId,
+            user: userId,
+        });
+
+    if (!loan) {
+
+        return {
+            valid: false,
+            status: 404,
+            message:
+                "Loan not found.",
+        };
+
+    }
+
+    return {
+        valid: true,
+        loan,
+    };
+
+};
+
+const validateInsuranceData = async ({
+    userId,
+    type,
+    insuranceId,
+    insuranceTransactionType,
+}) => {
+
+    if (type !== "insurance") {
+
+        return {
+            valid: true,
+            insurance: null,
+        };
+
+    }
+
+    if (!insuranceId) {
+
+        return {
+            valid: false,
+            status: 400,
+            message:
+                "Insurance policy is required for insurance transactions.",
+        };
+
+    }
+
+    if (
+        !insuranceTransactionType ||
+        !insuranceTransactionTypes.includes(
+            insuranceTransactionType
+        )
+    ) {
+
+        return {
+            valid: false,
+            status: 400,
+            message:
+                "Invalid insurance transaction type.",
+        };
+
+    }
+
+    const insurance =
+        await Insurance.findOne({
+            _id: insuranceId,
+            user: userId,
+        });
+
+    if (!insurance) {
+
+        return {
+            valid: false,
+            status: 404,
+            message:
+                "Insurance policy not found.",
+        };
+
+    }
+
+    return {
+        valid: true,
+        insurance,
+    };
+
+};
+
 export const createTransaction = async (
     req,
     res
@@ -88,6 +236,10 @@ export const createTransaction = async (
             date,
             investmentId,
             investmentMode,
+            loanId,
+            loanTransactionType,
+            insuranceId,
+            insuranceTransactionType,
         } = req.body;
 
         const investmentValidation =
@@ -115,6 +267,56 @@ export const createTransaction = async (
 
         }
 
+        const loanValidation =
+            await validateLoanData({
+                userId:
+                    req.user.id,
+
+                type,
+
+                loanId,
+
+                loanTransactionType,
+            });
+
+        if (
+            !loanValidation.valid
+        ) {
+
+            return res.status(
+                loanValidation.status
+            ).json({
+                message:
+                    loanValidation.message,
+            });
+
+        }
+
+        const insuranceValidation =
+            await validateInsuranceData({
+                userId:
+                    req.user.id,
+
+                type,
+
+                insuranceId,
+
+                insuranceTransactionType,
+            });
+
+        if (
+            !insuranceValidation.valid
+        ) {
+
+            return res.status(
+                insuranceValidation.status
+            ).json({
+                message:
+                    insuranceValidation.message,
+            });
+
+        }
+
         const transactionData = {
             user:
                 req.user.id,
@@ -123,12 +325,20 @@ export const createTransaction = async (
 
             type,
 
-            category,
-
             description,
 
             date,
         };
+
+        if (
+            type !== "loan" &&
+            type !== "insurance"
+        ) {
+
+            transactionData.category =
+                category;
+
+        }
 
         if (
             type === "investment"
@@ -142,6 +352,30 @@ export const createTransaction = async (
 
         }
 
+        if (
+            type === "loan"
+        ) {
+
+            transactionData.loanId =
+                loanId;
+
+            transactionData.loanTransactionType =
+                loanTransactionType;
+
+        }
+
+        if (
+            type === "insurance"
+        ) {
+
+            transactionData.insuranceId =
+                insuranceId;
+
+            transactionData.insuranceTransactionType =
+                insuranceTransactionType;
+
+        }
+
         const transaction =
             await Transaction.create(
                 transactionData
@@ -152,13 +386,13 @@ export const createTransaction = async (
                 transaction._id
             )
                 .populate("category")
-                .populate("investmentId");
+                .populate("investmentId")
+                .populate("loanId")
+                .populate("insuranceId");
 
-        res
-            .status(201)
-            .json(
-                populatedTransaction
-            );
+        res.status(201).json(
+            populatedTransaction
+        );
 
     } catch (error) {
 
@@ -167,12 +401,10 @@ export const createTransaction = async (
             error
         );
 
-        res
-            .status(500)
-            .json({
-                message:
-                    error.message,
-            });
+        res.status(500).json({
+            message:
+                error.message,
+        });
 
     }
 
@@ -192,6 +424,8 @@ export const getTransactions = async (
             })
                 .populate("category")
                 .populate("investmentId")
+                .populate("loanId")
+                .populate("insuranceId")
                 .sort({
                     date: -1,
                 });
@@ -207,12 +441,10 @@ export const getTransactions = async (
             error
         );
 
-        res
-            .status(500)
-            .json({
-                message:
-                    error.message,
-            });
+        res.status(500).json({
+            message:
+                error.message,
+        });
 
     }
 
@@ -234,7 +466,9 @@ export const getTransaction = async (
                     req.user.id,
             })
                 .populate("category")
-                .populate("investmentId");
+                .populate("investmentId")
+                .populate("loanId")
+                .populate("insuranceId");
 
         if (!transaction) {
 
@@ -256,12 +490,10 @@ export const getTransaction = async (
             error
         );
 
-        res
-            .status(500)
-            .json({
-                message:
-                    error.message,
-            });
+        res.status(500).json({
+            message:
+                error.message,
+        });
 
     }
 
@@ -300,6 +532,10 @@ export const updateTransaction = async (
             date,
             investmentId,
             investmentMode,
+            loanId,
+            loanTransactionType,
+            insuranceId,
+            insuranceTransactionType,
         } = req.body;
 
         const investmentValidation =
@@ -327,20 +563,82 @@ export const updateTransaction = async (
 
         }
 
+        const loanValidation =
+            await validateLoanData({
+                userId:
+                    req.user.id,
+
+                type,
+
+                loanId,
+
+                loanTransactionType,
+            });
+
+        if (
+            !loanValidation.valid
+        ) {
+
+            return res.status(
+                loanValidation.status
+            ).json({
+                message:
+                    loanValidation.message,
+            });
+
+        }
+
+        const insuranceValidation =
+            await validateInsuranceData({
+                userId:
+                    req.user.id,
+
+                type,
+
+                insuranceId,
+
+                insuranceTransactionType,
+            });
+
+        if (
+            !insuranceValidation.valid
+        ) {
+
+            return res.status(
+                insuranceValidation.status
+            ).json({
+                message:
+                    insuranceValidation.message,
+            });
+
+        }
+
         transaction.amount =
             amount;
 
         transaction.type =
             type;
 
-        transaction.category =
-            category;
-
         transaction.description =
             description;
 
         transaction.date =
             date;
+
+        if (
+            type !== "loan" &&
+            type !== "insurance"
+        ) {
+
+            transaction.category =
+                category;
+
+        } else {
+
+            transaction.category =
+                null;
+
+        }
 
         if (
             type === "investment"
@@ -362,6 +660,46 @@ export const updateTransaction = async (
 
         }
 
+        if (
+            type === "loan"
+        ) {
+
+            transaction.loanId =
+                loanId;
+
+            transaction.loanTransactionType =
+                loanTransactionType;
+
+        } else {
+
+            transaction.loanId =
+                null;
+
+            transaction.loanTransactionType =
+                null;
+
+        }
+
+        if (
+            type === "insurance"
+        ) {
+
+            transaction.insuranceId =
+                insuranceId;
+
+            transaction.insuranceTransactionType =
+                insuranceTransactionType;
+
+        } else {
+
+            transaction.insuranceId =
+                null;
+
+            transaction.insuranceTransactionType =
+                null;
+
+        }
+
         await transaction.save();
 
         const updatedTransaction =
@@ -369,7 +707,9 @@ export const updateTransaction = async (
                 transaction._id
             )
                 .populate("category")
-                .populate("investmentId");
+                .populate("investmentId")
+                .populate("loanId")
+                .populate("insuranceId");
 
         res.json(
             updatedTransaction
@@ -382,12 +722,10 @@ export const updateTransaction = async (
             error
         );
 
-        res
-            .status(500)
-            .json({
-                message:
-                    error.message,
-            });
+        res.status(500).json({
+            message:
+                error.message,
+        });
 
     }
 
@@ -430,12 +768,10 @@ export const deleteTransaction = async (
             error
         );
 
-        res
-            .status(500)
-            .json({
-                message:
-                    error.message,
-            });
+        res.status(500).json({
+            message:
+                error.message,
+        });
 
     }
 

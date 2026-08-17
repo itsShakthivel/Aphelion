@@ -1,34 +1,60 @@
-import { useSelector, useDispatch } from "react-redux";
+import {
+    useSelector,
+    useDispatch,
+} from "react-redux";
 
-import NotificationCard from "./NotificationCard";
+import NotificationCard
+    from "./NotificationCard";
 
 import {
-
     fetchNotifications,
-
     markAllNotificationsRead,
-
 } from "../../features/notifications/notificationSlice";
 
-const NotificationDropdown = () => {
+const NotificationDropdown = ({
+    close,
+    position = {
+        top: 80,
+        right: 24,
+    },
+}) => {
 
-    const dispatch = useDispatch();
+    const dispatch =
+        useDispatch();
 
-    const {
+    const notificationsState =
+        useSelector(
+            (state) =>
+                state.notifications || {}
+        );
 
-        notifications,
-
-    } = useSelector(
-
-        state => state.notifications
-
-    );
+    const notifications =
+        Array.isArray(
+            notificationsState.notifications
+        )
+            ? notificationsState.notifications
+            : [];
 
     return (
 
-        <div className="absolute right-0 mt-3 w-[420px] bg-white dark:bg-gray-900 rounded-xl shadow-2xl z-50">
+        <div
+            className="fixed bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[9999]"
+            style={{
+                top:
+                    `${position.top}px`,
 
-            <div className="p-5 border-b">
+                right:
+                    `${position.right}px`,
+
+                width:
+                    "min(420px, calc(100vw - 32px))",
+
+                maxHeight:
+                    "calc(100vh - 90px)",
+            }}
+        >
+
+            <div className="p-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
 
                 <h2 className="font-bold text-lg">
 
@@ -36,13 +62,26 @@ const NotificationDropdown = () => {
 
                 </h2>
 
+                <button
+                    type="button"
+                    onClick={
+                        close
+                    }
+                    className="text-gray-500 hover:text-gray-900 dark:hover:text-white text-2xl leading-none"
+                    aria-label="Close notifications"
+                >
+
+                    ×
+
+                </button>
+
             </div>
 
             <div className="max-h-[500px] overflow-y-auto p-4 space-y-4">
 
                 {
-
-                    notifications.length === 0 ? (
+                    notifications.length ===
+                    0 ? (
 
                         <div className="text-center py-10 text-gray-500">
 
@@ -53,53 +92,54 @@ const NotificationDropdown = () => {
                     ) : (
 
                         notifications
+                            .slice(
+                                0,
+                                5
+                            )
+                            .map(
+                                (
+                                    notification
+                                ) => (
 
-                            .slice(0, 5)
+                                    <NotificationCard
+                                        key={
+                                            notification._id
+                                        }
+                                        notification={
+                                            notification
+                                        }
+                                    />
 
-                            .map((notification) => (
-
-                                <NotificationCard
-
-                                    key={notification._id}
-
-                                    notification={notification}
-
-                                />
-
-                            ))
+                                )
+                            )
 
                     )
-
                 }
 
             </div>
 
             {
+                notifications.length >
+                0 && (
 
-                notifications.length > 0 && (
-
-                    <div className="border-t p-4">
+                    <div className="border-t border-gray-200 dark:border-gray-700 p-4">
 
                         <button
+                            type="button"
+                            onClick={
+                                async () => {
 
-                            onClick={async () => {
+                                    await dispatch(
+                                        markAllNotificationsRead()
+                                    );
 
-                                await dispatch(
+                                    dispatch(
+                                        fetchNotifications()
+                                    );
 
-                                    markAllNotificationsRead()
-
-                                );
-
-                                dispatch(
-
-                                    fetchNotifications()
-
-                                );
-
-                            }}
-
+                                }
+                            }
                             className="w-full bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-700 transition"
-
                         >
 
                             Mark All Read
@@ -109,7 +149,6 @@ const NotificationDropdown = () => {
                     </div>
 
                 )
-
             }
 
         </div>

@@ -16,7 +16,11 @@ const DashboardLayout = ({ children }) => {
             }}
         >
 
-            <Sidebar />
+            <div className="relative z-50 shrink-0">
+
+                <Sidebar />
+
+            </div>
 
             <div
                 className="
@@ -24,13 +28,20 @@ const DashboardLayout = ({ children }) => {
                     flex
                     flex-col
                     min-h-screen
+                    min-w-0
                 "
             >
 
-                <Navbar />
+                <div className="relative z-50 shrink-0">
+
+                    <Navbar />
+
+                </div>
 
                 <main
                     className="
+                        relative
+                        z-0
                         flex-1
                         overflow-auto
                         p-6
