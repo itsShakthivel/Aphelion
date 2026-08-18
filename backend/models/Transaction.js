@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema(
     {
+
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
@@ -30,22 +31,40 @@ const transactionSchema = new mongoose.Schema(
         category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
-            required: function () {
-                return (
-                    this.type !== "loan" &&
-                    this.type !== "insurance"
-                );
-            },
             default: null,
+
+            required: function () {
+                return ![
+                    "loan",
+                    "insurance",
+                ].includes(this.type);
+            },
         },
+
+        description: {
+            type: String,
+            trim: true,
+            default: "",
+        },
+
+        date: {
+            type: Date,
+            default: Date.now,
+        },
+
+
+        // ======================================================
+        // INVESTMENT RELATIONSHIP
+        // ======================================================
 
         investmentId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Investment",
+            default: null,
+
             required: function () {
                 return this.type === "investment";
             },
-            default: null,
         },
 
         investmentMode: {
@@ -53,43 +72,61 @@ const transactionSchema = new mongoose.Schema(
             enum: [
                 "sip",
                 "one_time",
+                "",
+                null,
             ],
+            default: "",
+
             required: function () {
                 return this.type === "investment";
             },
-            default: null,
         },
+
+
+        // ======================================================
+        // LOAN RELATIONSHIP
+        // ======================================================
 
         loanId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Loan",
+            default: null,
+
             required: function () {
                 return this.type === "loan";
             },
-            default: null,
         },
 
         loanTransactionType: {
             type: String,
             enum: [
-                "disbursement",
                 "emi",
                 "principal",
                 "interest",
+                "disbursement",
+                "",
+                null,
             ],
+            default: "",
+
             required: function () {
                 return this.type === "loan";
             },
-            default: null,
         },
+
+
+        // ======================================================
+        // INSURANCE RELATIONSHIP
+        // ======================================================
 
         insuranceId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Insurance",
+            default: null,
+
             required: function () {
                 return this.type === "insurance";
             },
-            default: null,
         },
 
         insuranceTransactionType: {
@@ -97,52 +134,21 @@ const transactionSchema = new mongoose.Schema(
             enum: [
                 "premium",
                 "policy_expense",
+                "",
+                null,
             ],
+            default: "",
+
             required: function () {
                 return this.type === "insurance";
             },
-            default: null,
         },
 
-        description: {
-            type: String,
-            trim: true,
-        },
-
-        date: {
-            type: Date,
-            default: Date.now,
-        },
     },
     {
         timestamps: true,
     }
 );
-
-transactionSchema.index({
-    user: 1,
-    date: -1,
-});
-
-transactionSchema.index({
-    user: 1,
-    type: 1,
-});
-
-transactionSchema.index({
-    user: 1,
-    investmentId: 1,
-});
-
-transactionSchema.index({
-    user: 1,
-    loanId: 1,
-});
-
-transactionSchema.index({
-    user: 1,
-    insuranceId: 1,
-});
 
 export default mongoose.model(
     "Transaction",
