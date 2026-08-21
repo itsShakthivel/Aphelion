@@ -4,6 +4,7 @@ export const getTransactionSummary = (transactions = []) => {
 
     let income = 0;
     let expenses = 0;
+
     let manualSavings = 0;
     let investmentTransactions = 0;
 
@@ -23,59 +24,38 @@ export const getTransactionSummary = (transactions = []) => {
 
         switch (transaction.type) {
 
-            // ==================================================
-            // INCOME
-            // ==================================================
-
             case "income":
 
                 income += amount;
-
                 availableSavings += amount;
 
                 break;
 
 
-            // ==================================================
-            // EXPENSE
-            // ==================================================
-
             case "expense":
 
                 expenses += amount;
-
                 availableSavings -= amount;
 
                 break;
 
 
-            // ==================================================
-            // LEGACY / MANUAL SAVING
-            // ==================================================
-
             case "saving":
 
+                // Keep old explicit saving records separately.
+                // They are not counted as a second cash movement.
                 manualSavings += amount;
 
                 break;
 
 
-            // ==================================================
-            // INVESTMENT
-            // ==================================================
-
             case "investment":
 
                 investmentTransactions += amount;
-
                 availableSavings -= amount;
 
                 break;
 
-
-            // ==================================================
-            // LOAN
-            // ==================================================
 
             case "loan":
 
@@ -85,7 +65,6 @@ export const getTransactionSummary = (transactions = []) => {
                 ) {
 
                     loanDisbursements += amount;
-
                     availableSavings += amount;
 
                 } else if (
@@ -99,17 +78,12 @@ export const getTransactionSummary = (transactions = []) => {
                 ) {
 
                     loanPayments += amount;
-
                     availableSavings -= amount;
 
                 }
 
                 break;
 
-
-            // ==================================================
-            // INSURANCE
-            // ==================================================
 
             case "insurance":
 
@@ -123,7 +97,6 @@ export const getTransactionSummary = (transactions = []) => {
                 ) {
 
                     insuranceExpenses += amount;
-
                     availableSavings -= amount;
 
                 }
@@ -132,7 +105,6 @@ export const getTransactionSummary = (transactions = []) => {
 
 
             default:
-
                 break;
 
         }
@@ -140,25 +112,17 @@ export const getTransactionSummary = (transactions = []) => {
     });
 
 
-    // ======================================================
-    // CASH FLOW
-    //
-    // This represents all recorded cash movement.
-    // ======================================================
-
+    // Net cash remaining from all recorded movements.
     const cashFlow =
         availableSavings;
 
 
-    // ======================================================
-    // SAVINGS RATE
-    //
-    // Available cash remaining as a percentage of income.
-    // ======================================================
-
+    // Savings rate is based on actual income only.
     const savingsRate =
         income > 0
-            ? (availableSavings / income) * 100
+            ? (
+                availableSavings / income
+            ) * 100
             : 0;
 
 
@@ -170,11 +134,10 @@ export const getTransactionSummary = (transactions = []) => {
         expenses:
             roundAmount(expenses),
 
-        // Existing explicit "saving" transactions.
         manualSavings:
             roundAmount(manualSavings),
 
-        // Backward-compatible field for current frontend usage.
+        // Keep this for existing backend consumers.
         savings:
             roundAmount(availableSavings),
 
